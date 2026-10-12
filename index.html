@@ -61,6 +61,13 @@ label{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px}
 dialog input,dialog select,dialog textarea{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:#fff}
 .row{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
 #toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:8px;font-size:14px;display:none;max-width:92vw}
+.topics{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.tp-h{font-size:13px;color:var(--mute);margin-bottom:4px}
+.tp{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:14px}
+.tp-t{flex:1}
+.tp.taken .tp-t{color:var(--mute)}
+.tp-n{font-size:13px;color:var(--ok);font-weight:600}
+.tp .btn{padding:4px 10px;font-size:13px}
 @media(max-width:760px){
 .app{grid-template-columns:1fr}
 aside{border-right:0;border-bottom:1px solid var(--line);padding:16px}
@@ -85,7 +92,7 @@ main{padding:16px 16px 60px}
 </aside>
 <main>
   <div class="top"><h2 id="ttl">Все дисциплины</h2>
-   <div class="topb adm-only"><button class="btn" id="rensubj" hidden>Переименовать</button><button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button><button class="btn pri" id="new">Добавить задание</button></div></div>
+   <div class="topb adm-only"><button class="btn" id="apibtn">Бронирование</button><button class="btn" id="rensubj" hidden>Переименовать</button><button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button><button class="btn pri" id="new">Добавить задание</button></div></div>
   <div id="list"></div>
 </main>
 </div>
@@ -97,6 +104,7 @@ main{padding:16px 16px 60px}
   <label for="f-s">Дисциплина</label><select id="f-s" required></select>
   <label for="f-d">Срок сдачи</label><input id="f-d" type="datetime-local">
   <label for="f-n">Заметка</label><textarea id="f-n" rows="3"></textarea>
+  <label for="f-p">Темы для бронирования (по одной в строке, необязательно)</label><textarea id="f-p" rows="4"></textarea>
   <label for="f-f">Файлы к заданию</label><input id="f-f" type="file" multiple>
   <div class="row"><button class="btn" type="button" id="cancel">Отмена</button><button class="btn pri" type="submit" id="dsub">Опубликовать</button></div>
 </form>
@@ -188,11 +196,53 @@ function render(){
     <div class="meta"><span>${esc(s.name)}</span><span class="due ${dn?"":i.cls}">${i.txt}</span></div>
     ${t.note?`<div class="note">${esc(t.note)}</div>`:""}
     <div class="files">${t.files.map(f=>`<span class="file"><button data-open="${t.id}|${f.id}" title="Скачать">${esc(f.name)} · ${size(f.size)}</button><button class="x adm-only" data-rm="${t.id}|${f.id}" aria-label="Удалить файл">×</button></span>`).join("")}</div>
+    ${topicsHtml(t)}
    </div>
    <div class="acts adm-only"><button class="ico" data-edit="${t.id}">Изменить</button><button class="ico" data-att="${t.id}">+ файл</button><button class="ico" data-del="${t.id}">Удалить</button></div>
   </article>`}).join("")+`</section>`}
  $("#list").innerHTML=h||`<div class="empty">${cfg?"Добавьте дисциплину слева, затем первое задание.":"Заданий пока нет."}</div>`;
 }
+
+/* ---- бронирование тем ---- */
+let BK=[],bkErr=false,mine=ls.get("dl-mine",{});
+const rnd=()=>[...crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,"0")).join("");
+function topicsHtml(t){
+ if(!t.topics||!t.topics.length)return"";
+ const on=!!S.api&&!bkErr,free=t.topics.filter(p=>!BK.some(b=>b.task===t.id&&b.topic===p.id)).length;
+ const note=!S.api?" · бронирование пока не настроено":bkErr?" · бронирование сейчас недоступно":" · свободно "+free+" из "+t.topics.length;
+ return `<div class="topics"><div class="tp-h">Темы${note}</div>`+t.topics.map(p=>{
+  const k=t.id+"|"+p.id,b=BK.find(x=>x.task===t.id&&x.topic===p.id);let r="";
+  if(b)r=`<span class="tp-n">${esc(b.name)}</span>`+(mine[k]?`<button class="ico" data-unbook="${k}">Отменить</button>`:`<button class="ico adm-only" data-unbook="${k}">Освободить</button>`);
+  else if(on)r=`<button class="btn" data-book="${k}">Занять</button>`;
+  return `<div class="tp ${b?"taken":""}"><span class="tp-t">${esc(p.text)}</span>${r}</div>`}).join("")+`</div>`}
+async function loadBookings(){
+ if(!S.api)return;
+ try{const r=await fetch(S.api+"/api/bookings",{cache:"no-store"});if(!r.ok)throw 0;BK=(await r.json()).bookings;bkErr=false}catch(e){bkErr=true}
+ render()}
+async function book(tid,pid){
+ let name=prompt("Ваши фамилия и имя (так их увидит группа)",ls.get("dl-name",""));name=(name||"").trim().replace(/\s+/g," ");
+ if(name.length<2)return;ls.set("dl-name",name);const owner=rnd();
+ try{const r=await fetch(S.api+"/api/book",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({task:tid,topic:pid,name,owner})});
+  const j=await r.json().catch(()=>({}));
+  if(r.ok){mine[tid+"|"+pid]=owner;ls.set("dl-mine",mine);toast("Тема за вами")}
+  else if(j.error==="taken")toast("Эту тему уже заняли")
+  else if(j.error==="has_other")toast("Вы уже заняли другую тему в этом задании")
+  else toast("Не удалось занять тему")}catch(e){toast("Сервис бронирования недоступен")}
+ loadBookings()}
+async function unbook(k){
+ const[tid,pid]=k.split("|"),hdr={"content-type":"application/json"},body={task:tid,topic:pid};
+ if(mine[k])body.owner=mine[k];
+ else{let ak=ls.get("dl-akey","");if(!ak){ak=(prompt("Ключ администратора бронирования (ADMIN_KEY)")||"").trim();if(!ak)return}hdr["x-admin-key"]=ak}
+ try{const r=await fetch(S.api+"/api/book",{method:"DELETE",headers:hdr,body:JSON.stringify(body)});
+  if(r.ok){delete mine[k];ls.set("dl-mine",mine);if(hdr["x-admin-key"])ls.set("dl-akey",hdr["x-admin-key"]);toast("Бронь снята")}
+  else if(r.status===403){if(hdr["x-admin-key"])ls.del("dl-akey");toast("Нет прав снять эту бронь")}
+  else toast("Не удалось снять бронь")}catch(e){toast("Сервис бронирования недоступен")}
+ loadBookings()}
+$("#apibtn").onclick=()=>{
+ const v=prompt("Адрес сервиса бронирования из Cloudflare, например https://deadlines-book.имя.workers.dev",S.api||"");
+ if(v===null)return;const u=v.trim().replace(/\/+$/,"");
+ if(u&&!/^https:\/\//.test(u)){toast("Адрес должен начинаться с https://");return}
+ S.api=u;run(async()=>{}).then(loadBookings)};
 
 /* ---- действия ---- */
 async function openFile(m){try{const r=await fetch("files/"+m.id);if(!r.ok)throw 0;const a=document.createElement("a");a.href=URL.createObjectURL(await r.blob());a.download=m.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}catch(e){toast("Не удалось скачать файл")}}
@@ -204,6 +254,8 @@ document.addEventListener("click",e=>{
  const b=e.target.closest("button");if(!b)return;const d=b.dataset,T=id=>S.tasks.find(t=>t.id===id);
  if(d.s){cur=d.s;render()}
  if(d.edit)openForm(T(d.edit));
+ if(d.book){const[a,b]=d.book.split("|");book(a,b)}
+ if(d.unbook)unbook(d.unbook);
  if(d.open){const[t,f]=d.open.split("|");openFile(T(t).files.find(x=>x.id===f))}
  if(d.att){attachTo=T(d.att);$("#addf").click()}
  if(d.rm){const[t,f]=d.rm.split("|"),tk=T(t);if(confirm("Удалить файл?"))run(async()=>{try{await delFile("files/"+f)}catch(x){}tk.files=tk.files.filter(x=>x.id!==f)})}
@@ -224,12 +276,12 @@ function openForm(t){
  editing=t;$("#tf").reset();
  $("#f-s").innerHTML=S.subjects.map(s=>`<option value="${s.id}" ${s.id===(t?t.subj:cur)?"selected":""}>${esc(s.name)}</option>`).join("");
  $("#dh").textContent=t?"Изменить задание":"Новое задание";$("#dsub").textContent=t?"Сохранить":"Опубликовать";
- if(t){$("#f-t").value=t.title;$("#f-d").value=t.due||"";$("#f-n").value=t.note||""}
+ if(t){$("#f-t").value=t.title;$("#f-d").value=t.due||"";$("#f-n").value=t.note||"";$("#f-p").value=(t.topics||[]).map(x=>x.text).join("\n")}
  $("#dlg").showModal();$("#f-t").focus()}
 $("#new").onclick=()=>openForm(null);
 $("#cancel").onclick=()=>$("#dlg").close();
 $("#tf").onsubmit=()=>{
- const v={title:$("#f-t").value.trim(),subj:$("#f-s").value,due:$("#f-d").value,note:$("#f-n").value.trim()},fl=[...$("#f-f").files],t=editing||{id:uid(),files:[]};
+ const v={title:$("#f-t").value.trim(),subj:$("#f-s").value,due:$("#f-d").value,note:$("#f-n").value.trim(),topics:$("#f-p").value.split("\n").map(s=>s.trim()).filter(Boolean).map(x=>((editing&&editing.topics)||[]).find(o=>o.text===x)||{id:uid(),text:x})},fl=[...$("#f-f").files],t=editing||{id:uid(),files:[]};
  run(async()=>{Object.assign(t,v);await upload(t,fl);if(!editing)S.tasks.push(t)})};
 
 /* ---- вход админа ---- */
@@ -242,7 +294,7 @@ $("#af").onsubmit=async()=>{
 $("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");render()};
 
 cfg=ls.get("dl-admin",null);
-(cfg?pull().catch(loadData):loadData()).then(render);
+(cfg?pull().catch(loadData):loadData()).then(()=>{render();loadBookings()});setInterval(()=>{if(S.api)loadBookings()},30000);
 </script>
 </body>
 </html>
