@@ -85,7 +85,7 @@ main{padding:16px 16px 60px}
 </aside>
 <main>
   <div class="top"><h2 id="ttl">Все дисциплины</h2>
-   <div class="topb adm-only"><button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button><button class="btn pri" id="new">Добавить задание</button></div></div>
+   <div class="topb adm-only"><button class="btn" id="rensubj" hidden>Переименовать</button><button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button><button class="btn pri" id="new">Добавить задание</button></div></div>
   <div id="list"></div>
 </main>
 </div>
@@ -174,7 +174,7 @@ function render(){
  $("#subjs").innerHTML=`<button class="subj ${cur==="all"?"on":""}" data-s="all"><i></i>Все дисциплины<b>${cnt("all")}</b></button>`+
   S.subjects.map(s=>`<button class="subj ${cur===s.id?"on":""}" data-s="${s.id}" style="--c:${s.c}"><i></i>${esc(s.name)}<b>${cnt(s.id)}</b></button>`).join("");
  const sub=S.subjects.find(s=>s.id===cur);
- $("#ttl").textContent=sub?sub.name:"Все дисциплины";$("#delsubj").hidden=!sub;
+ $("#ttl").textContent=sub?sub.name:"Все дисциплины";$("#delsubj").hidden=!sub;$("#rensubj").hidden=!sub;
  const by={};GROUPS.forEach(g=>by[g[0]]=[]);
  S.tasks.filter(t=>cur==="all"||t.subj===cur).forEach(t=>{const i=dueInfo(t);by[DONE.has(t.id)?"done":i.g].push({t,i})});
  for(const k in by)by[k].sort((a,b)=>(a.t.due||"9")<(b.t.due||"9")?-1:1);
@@ -213,6 +213,8 @@ document.addEventListener("change",e=>{const id=e.target.dataset.done;if(!id)ret
 $("#addf").onchange=e=>{const fl=[...e.target.files],t=attachTo;e.target.value="";if(t&&fl.length)run(()=>upload(t,fl))};
 $("#sf").onsubmit=e=>{e.preventDefault();const n=$("#sn").value.trim();if(!n)return;
  S.subjects.push({id:uid(),name:n,c:COLORS[S.subjects.length%COLORS.length]});$("#sn").value="";run(async()=>{})};
+$("#rensubj").onclick=()=>{const s=S.subjects.find(x=>x.id===cur);if(!s)return;
+ const n=(prompt("Новое название дисциплины",s.name)||"").trim();if(!n||n===s.name)return;run(async()=>{s.name=n})};
 $("#delsubj").onclick=()=>{const s=S.subjects.find(x=>x.id===cur);if(!s||!confirm("Удалить дисциплину «"+s.name+"» и все её задания?"))return;
  run(async()=>{for(const t of S.tasks.filter(t=>t.subj===s.id))for(const f of t.files){try{await delFile("files/"+f.id)}catch(x){}}
   S.tasks=S.tasks.filter(t=>t.subj!==s.id);S.subjects=S.subjects.filter(x=>x!==s);cur="all"})};
