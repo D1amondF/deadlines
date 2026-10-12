@@ -92,13 +92,13 @@ main{padding:16px 16px 60px}
 
 <dialog id="dlg">
 <form method="dialog" id="tf">
-  <h2>Новое задание</h2>
+  <h2 id="dh">Новое задание</h2>
   <label for="f-t">Что нужно сделать</label><input id="f-t" required maxlength="140">
   <label for="f-s">Дисциплина</label><select id="f-s" required></select>
   <label for="f-d">Срок сдачи</label><input id="f-d" type="datetime-local">
   <label for="f-n">Заметка</label><textarea id="f-n" rows="3"></textarea>
   <label for="f-f">Файлы к заданию</label><input id="f-f" type="file" multiple>
-  <div class="row"><button class="btn" type="button" id="cancel">Отмена</button><button class="btn pri" type="submit">Опубликовать</button></div>
+  <div class="row"><button class="btn" type="button" id="cancel">Отмена</button><button class="btn pri" type="submit" id="dsub">Опубликовать</button></div>
 </form>
 </dialog>
 
@@ -189,7 +189,7 @@ function render(){
     ${t.note?`<div class="note">${esc(t.note)}</div>`:""}
     <div class="files">${t.files.map(f=>`<span class="file"><button data-open="${t.id}|${f.id}" title="Скачать">${esc(f.name)} · ${size(f.size)}</button><button class="x adm-only" data-rm="${t.id}|${f.id}" aria-label="Удалить файл">×</button></span>`).join("")}</div>
    </div>
-   <div class="acts adm-only"><button class="ico" data-att="${t.id}">+ файл</button><button class="ico" data-del="${t.id}">Удалить</button></div>
+   <div class="acts adm-only"><button class="ico" data-edit="${t.id}">Изменить</button><button class="ico" data-att="${t.id}">+ файл</button><button class="ico" data-del="${t.id}">Удалить</button></div>
   </article>`}).join("")+`</section>`}
  $("#list").innerHTML=h||`<div class="empty">${cfg?"Добавьте дисциплину слева, затем первое задание.":"Заданий пока нет."}</div>`;
 }
@@ -203,6 +203,7 @@ async function upload(t,files){for(const f of files){
 document.addEventListener("click",e=>{
  const b=e.target.closest("button");if(!b)return;const d=b.dataset,T=id=>S.tasks.find(t=>t.id===id);
  if(d.s){cur=d.s;render()}
+ if(d.edit)openForm(T(d.edit));
  if(d.open){const[t,f]=d.open.split("|");openFile(T(t).files.find(x=>x.id===f))}
  if(d.att){attachTo=T(d.att);$("#addf").click()}
  if(d.rm){const[t,f]=d.rm.split("|"),tk=T(t);if(confirm("Удалить файл?"))run(async()=>{try{await delFile("files/"+f)}catch(x){}tk.files=tk.files.filter(x=>x.id!==f)})}
@@ -215,14 +216,19 @@ $("#sf").onsubmit=e=>{e.preventDefault();const n=$("#sn").value.trim();if(!n)ret
 $("#delsubj").onclick=()=>{const s=S.subjects.find(x=>x.id===cur);if(!s||!confirm("Удалить дисциплину «"+s.name+"» и все её задания?"))return;
  run(async()=>{for(const t of S.tasks.filter(t=>t.subj===s.id))for(const f of t.files){try{await delFile("files/"+f.id)}catch(x){}}
   S.tasks=S.tasks.filter(t=>t.subj!==s.id);S.subjects=S.subjects.filter(x=>x!==s);cur="all"})};
-$("#new").onclick=()=>{
+let editing=null;
+function openForm(t){
  if(!S.subjects.length){toast("Сначала добавьте дисциплину слева");return}
- $("#tf").reset();$("#f-s").innerHTML=S.subjects.map(s=>`<option value="${s.id}" ${s.id===cur?"selected":""}>${esc(s.name)}</option>`).join("");
- $("#dlg").showModal();$("#f-t").focus()};
+ editing=t;$("#tf").reset();
+ $("#f-s").innerHTML=S.subjects.map(s=>`<option value="${s.id}" ${s.id===(t?t.subj:cur)?"selected":""}>${esc(s.name)}</option>`).join("");
+ $("#dh").textContent=t?"Изменить задание":"Новое задание";$("#dsub").textContent=t?"Сохранить":"Опубликовать";
+ if(t){$("#f-t").value=t.title;$("#f-d").value=t.due||"";$("#f-n").value=t.note||""}
+ $("#dlg").showModal();$("#f-t").focus()}
+$("#new").onclick=()=>openForm(null);
 $("#cancel").onclick=()=>$("#dlg").close();
 $("#tf").onsubmit=()=>{
- const t={id:uid(),title:$("#f-t").value.trim(),subj:$("#f-s").value,due:$("#f-d").value,note:$("#f-n").value.trim(),files:[]},fl=[...$("#f-f").files];
- run(async()=>{await upload(t,fl);S.tasks.push(t)})};
+ const v={title:$("#f-t").value.trim(),subj:$("#f-s").value,due:$("#f-d").value,note:$("#f-n").value.trim()},fl=[...$("#f-f").files],t=editing||{id:uid(),files:[]};
+ run(async()=>{Object.assign(t,v);await upload(t,fl);if(!editing)S.tasks.push(t)})};
 
 /* ---- вход админа ---- */
 $("#login").onclick=()=>{if(!loaded){toast("Сначала нужно открыть сайт по ссылке с хостинга");return}$("#adlg").showModal()};
