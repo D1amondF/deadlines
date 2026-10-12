@@ -68,6 +68,10 @@ dialog input,dialog select,dialog textarea{width:100%;padding:9px;border:1px sol
 .tp.taken .tp-t{color:var(--mute)}
 .tp-n{font-size:13px;color:var(--ok);font-weight:600}
 .tp .btn{padding:4px 10px;font-size:13px}
+#stbl{width:100%;border-collapse:collapse;font-size:14px}
+#stbl th,#stbl td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+#stbl th{color:var(--mute);font-weight:600;font-size:13px}
+#stbl td.free{color:var(--mute)}#stbl td.ok{font-weight:600;color:var(--ok)}
 @media(max-width:760px){
 .app{grid-template-columns:1fr}
 aside{border-right:0;border-bottom:1px solid var(--line);padding:16px}
@@ -92,7 +96,7 @@ main{padding:16px 16px 60px}
 </aside>
 <main>
   <div class="top"><h2 id="ttl">Все дисциплины</h2>
-   <div class="topb adm-only"><button class="btn" id="apibtn">Бронирование</button><button class="btn" id="rensubj" hidden>Переименовать</button><button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button><button class="btn pri" id="new">Добавить задание</button></div></div>
+   <div class="topb adm-only"><button class="btn" id="sumbtn">Сводка броней</button><button class="btn" id="apibtn">Бронирование</button><button class="btn" id="rensubj" hidden>Переименовать</button><button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button><button class="btn pri" id="new">Добавить задание</button></div></div>
   <div id="list"></div>
 </main>
 </div>
@@ -119,6 +123,12 @@ main{padding:16px 16px 60px}
   <label for="a-s">Токен доступа</label><input id="a-s" type="password" required autocomplete="off">
   <div class="row"><button class="btn" type="button" id="acancel">Отмена</button><button class="btn pri" type="submit">Войти</button></div>
 </form>
+</dialog>
+
+<dialog id="sdlg" style="width:min(860px,94vw)">
+  <h2>Сводка броней</h2>
+  <div style="overflow:auto;max-height:60vh"><table id="stbl"><thead><tr><th>Дисциплина</th><th>Задание</th><th>Тема</th><th>Занял(а)</th></tr></thead><tbody id="sbody"></tbody></table></div>
+  <div class="row"><button class="btn" type="button" id="scsv">Скачать для Excel</button><button class="btn pri" type="button" id="sclose">Закрыть</button></div>
 </dialog>
 
 <div id="toast" role="status"></div>
@@ -243,6 +253,17 @@ $("#apibtn").onclick=()=>{
  if(v===null)return;const u=v.trim().replace(/\/+$/,"");
  if(u&&!/^https:\/\//.test(u)){toast("Адрес должен начинаться с https://");return}
  S.api=u;run(async()=>{}).then(loadBookings)};
+
+/* ---- сводка броней ---- */
+function sumRows(){const rows=[];S.tasks.forEach(t=>(t.topics||[]).forEach(p=>{
+ const b=BK.find(x=>x.task===t.id&&x.topic===p.id),s=S.subjects.find(x=>x.id===t.subj);
+ rows.push([s?s.name:"—",t.title,p.text,b?b.name:""])}));return rows}
+$("#sumbtn").onclick=async()=>{await loadBookings();const r=sumRows();
+ $("#sbody").innerHTML=r.length?r.map(x=>`<tr><td>${esc(x[0])}</td><td>${esc(x[1])}</td><td>${esc(x[2])}</td><td class="${x[3]?"ok":"free"}">${x[3]?esc(x[3]):"свободно"}</td></tr>`).join(""):'<tr><td colspan="4">Тем для бронирования пока нет</td></tr>';
+ $("#sdlg").showModal()};
+$("#sclose").onclick=()=>$("#sdlg").close();
+$("#scsv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"',rows=[["Дисциплина","Задание","Тема","Занял(а)"],...sumRows()];
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+rows.map(r=>r.map(q).join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"}));a.download="bronirovanie.csv";a.click()};
 
 /* ---- действия ---- */
 async function openFile(m){try{const r=await fetch("files/"+m.id);if(!r.ok)throw 0;const a=document.createElement("a");a.href=URL.createObjectURL(await r.blob());a.download=m.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}catch(e){toast("Не удалось скачать файл")}}
