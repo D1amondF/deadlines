@@ -32,10 +32,32 @@
   font-family:'Manrope',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   color:var(--ink);
 }
+/* ==== Тёмная тема ==== */
+body.dark{
+  --ink:#E9E8F1;
+  --mute:#9AA1B0;
+  --bg:#0F1826;
+  --surf:#1A2332;
+  --line:#2A3446;
+  --acc:#E85C7F;
+  --navy:#8BB0E0;
+  --blue:#5B8FC4;
+  --bad:#FF6B7A;
+  --ok:#3DD68C;
+  --warn:#FFB454;
+}
+body.dark .subj:hover{background:#232E42}
+body.dark .grp h3:hover{background:rgba(139,176,224,.08)}
+body.dark .grp h3 .chev{background:#232E42;color:#8BB0E0}
+body.dark .file{background:#232E42}
+body.dark .task:hover{box-shadow:0 2px 10px rgba(0,0,0,.35)}
+body.dark dialog{background:#1A2332;color:var(--ink)}
+body.dark dialog input,body.dark dialog select,body.dark dialog textarea{background:#232E42;color:var(--ink);border-color:var(--line)}
+body.dark .btn.pri{color:#fff}
 *{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
 .app>*{min-width:0}
-body{margin:0;background:var(--bg);line-height:1.45}
+body{margin:0;background:var(--bg);line-height:1.45;transition:background .2s,color .2s}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
@@ -67,6 +89,11 @@ main{padding:24px 24px 60px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
 .top h2{margin:0;font-size:20px;color:var(--navy);font-weight:800}
 .topb{display:flex;gap:8px}
+
+/* Кнопки для всех (не админ) — фильтр + календарь */
+.topb-public{display:flex;gap:6px;flex-wrap:wrap}
+.topb-public .btn{padding:7px 11px;font-size:13px;font-weight:600}
+.filter-btn.active{background:var(--acc);border-color:var(--acc);color:#fff}
 
 /* ===== Группы (сворачиваемые) ===== */
 .grp{margin-top:26px}
@@ -181,8 +208,10 @@ h1{font-size:18px;margin:0 0 10px}
 .foot-btns{gap:8px 12px;margin-top:8px}
 .brand-slogan{margin-top:10px;padding-top:8px;font-size:12px}
 main{padding:12px 10px 60px;max-width:100%}
-.top{margin-bottom:6px}
+.top{margin-bottom:6px;gap:8px}
 .top h2{font-size:17px}
+.topb-public{width:100%}
+.topb-public .btn{flex:1 1 auto;padding:9px 10px;font-size:13px;text-align:center}
 .topb{width:100%;flex-wrap:wrap;gap:6px}
 .topb .btn{flex:1 1 auto;padding:9px 10px;font-size:14px;text-align:center}
 .grp{margin-top:18px}
@@ -230,16 +259,22 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
     <span class="adm-only">Режим администратора. <button class="link" id="logout">Выйти</button></span>
     <button class="link" id="login">Вход для администратора</button>
     <div class="foot-btns">
+      <button class="link" id="themebtn">🌓 Тема</button>
       <button class="link" id="soundbtn">🔊 Звук вкл.</button>
-      <!-- Уведомления отключены. Чтобы вернуть — уберите hidden -->
       <button class="link" id="pushbtn" hidden>🔔 Уведомления</button>
     </div>
   </div>
   <div class="brand-slogan">Будь лучшим. <span>Во всём.</span></div>
 </aside>
 <main>
-  <div class="top"><h2 id="ttl">Все дисциплины</h2>
-   <div class="topb adm-only"><button class="btn" id="sumbtn">Сводка броней</button><button class="btn" id="apibtn">Бронирование</button><button class="btn" id="rensubj" hidden>Переименовать</button><button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button><button class="btn pri" id="new">Добавить задание</button></div></div>
+  <div class="top">
+    <h2 id="ttl">Все дисциплины</h2>
+    <div class="topb-public">
+      <button class="btn filter-btn" id="minebtn">👤 Только мои</button>
+      <button class="btn" id="icsbtn">📅 В календарь</button>
+    </div>
+    <div class="topb adm-only"><button class="btn" id="sumbtn">Сводка броней</button><button class="btn" id="apibtn">Бронирование</button><button class="btn" id="rensubj" hidden>Переименовать</button><button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button><button class="btn pri" id="new">Добавить задание</button></div>
+  </div>
   <div id="list"></div>
 </main>
 </div>
@@ -295,15 +330,34 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
 let DONE=new Set(ls.get("dl-done",[]));
+let ONLY_MINE=ls.get("dl-only-mine",false);
 
 /* ===== Свёрнутые группы — у каждой вкладки своя память ===== */
-// Ключ строится от текущей вкладки: dl-collapsed-groups-all, dl-collapsed-groups-<id>...
 function collapsedKey(){ return "dl-collapsed-groups-" + cur; }
 function loadCollapsed(){ try{ return new Set(ls.get(collapsedKey(), [])); }catch(e){ return new Set(); } }
 function saveCollapsed(){ ls.set(collapsedKey(), [...COLLAPSED_GROUPS]); }
 let COLLAPSED_GROUPS = loadCollapsed();
 
-/* ===== Система уведомлений: очередь, кнопки, звук ===== */
+/* ===== Тёмная тема ===== */
+let THEME_DARK = ls.get("dl-dark", null);
+if(THEME_DARK === null){
+  THEME_DARK = !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+}
+function applyTheme(){ document.body.classList.toggle("dark", !!THEME_DARK); }
+function updateThemeLabel(){
+  const b = $("#themebtn");
+  if(b) b.textContent = THEME_DARK ? "☀️ Светлая" : "🌓 Тёмная";
+}
+$("#themebtn").onclick = () => {
+  THEME_DARK = !THEME_DARK;
+  ls.set("dl-dark", THEME_DARK);
+  applyTheme();
+  updateThemeLabel();
+};
+applyTheme();
+updateThemeLabel();
+
+/* ===== Система уведомлений ===== */
 const NOTE_QUEUE=[];
 let noteShowing=false,currentNote=null;
 let NOTE_SOUND=ls.get("dl-sound",true);
@@ -429,18 +483,32 @@ function dueInfo(t){
 const GROUPS=[["over","Просрочено","bad"],["today","Сегодня",""],["week","Ближайшая неделя",""],["later","Позже",""],["nodue","Без срока",""],["done","Сделано",""]];
 const size=n=>n>1048576?(n/1048576).toFixed(1)+" МБ":Math.max(1,Math.round(n/1024))+" КБ";
 
+function hasMyBooking(t){
+  if(!t.topics||!t.topics.length) return false;
+  return t.topics.some(p => mine[t.id + "|" + p.id]);
+}
+
 function render(){
  document.body.classList.toggle("adm",!!cfg);
  $("#login").hidden=!!cfg;
+ // Обновляем вид кнопки фильтра
+ const mb=$("#minebtn");
+ if(mb) mb.classList.toggle("active", ONLY_MINE);
+
  const cnt=id=>S.tasks.filter(t=>!DONE.has(t.id)&&(id==="all"||t.subj===id)).length;
  if(cur!=="all"&&!S.subjects.some(s=>s.id===cur))cur="all";
  $("#subjs").innerHTML=`<button class="subj ${cur==="all"?"on":""}" data-s="all"><i></i>Все дисциплины<b>${cnt("all")}</b></button>`+
   S.subjects.map(s=>`<button class="subj ${cur===s.id?"on":""}" data-s="${s.id}" style="--c:${s.c}"><i></i>${esc(s.name)}<b>${cnt(s.id)}</b></button>`).join("");
  const sub=S.subjects.find(s=>s.id===cur);
  $("#ttl").textContent=sub?sub.name:"Все дисциплины";$("#delsubj").hidden=!sub;$("#rensubj").hidden=!sub;
+
  const by={};GROUPS.forEach(g=>by[g[0]]=[]);
- S.tasks.filter(t=>cur==="all"||t.subj===cur).forEach(t=>{const i=dueInfo(t);by[DONE.has(t.id)?"done":i.g].push({t,i})});
+ S.tasks
+   .filter(t=>cur==="all"||t.subj===cur)
+   .filter(t=> !ONLY_MINE || hasMyBooking(t))
+   .forEach(t=>{const i=dueInfo(t);by[DONE.has(t.id)?"done":i.g].push({t,i})});
  for(const k in by)by[k].sort((a,b)=>(a.t.due||"9")<(b.t.due||"9")?-1:1);
+
  let h="";
  for(const[k,name,cls]of GROUPS){if(!by[k].length)continue;
   const collapsed=COLLAPSED_GROUPS.has(k)?" collapsed":"";
@@ -457,6 +525,12 @@ function render(){
    </div>
    <div class="acts adm-only"><button class="ico" data-edit="${t.id}">Изменить</button><button class="ico" data-att="${t.id}">+ файл</button><button class="ico" data-del="${t.id}">Удалить</button></div>
   </article>`}).join("")+`</div></section>`}
+
+ // Если фильтр «только мои» и ничего не нашлось — подсказка
+ if(ONLY_MINE && !h){
+   h = `<div class="empty">У вас пока нет забронированных тем${cur!=="all"?" в этой дисциплине":""}.<br>Нажмите «👤 Только мои» ещё раз, чтобы увидеть все задания.</div>`;
+ }
+
  $("#list").innerHTML=h||`<div class="empty">${cfg?"Добавьте дисциплину слева, затем первое задание.":"Заданий пока нет."}</div>`;
 }
 
@@ -493,7 +567,6 @@ async function loadBookings(){
   if(!r.ok)throw 0;
   BK=await r.json();
 
-  // Синхронизируем локальный «след» брони с сервером
   const takenNow = new Set(BK.map(b => b.task + "|" + b.topic));
   Object.keys(mine).forEach(k => { if (!takenNow.has(k)) delete mine[k]; });
   ls.set("dl-mine", mine);
@@ -548,6 +621,74 @@ async function unbook(k){
 $("#apibtn").onclick=()=>{
  toast("Бронирование работает через Supabase. Настраивать ничего не нужно.",4000)};
 
+/* ---- Экспорт в календарь (.ics) ---- */
+$("#minebtn").onclick = () => {
+  ONLY_MINE = !ONLY_MINE;
+  ls.set("dl-only-mine", ONLY_MINE);
+  render();
+  if(ONLY_MINE) toast("Показаны только задания с вашими темами", 3000, "info");
+};
+
+function icsPad(n){ return String(n).padStart(2,"0"); }
+function icsDate(d){
+  return d.getUTCFullYear() + icsPad(d.getUTCMonth()+1) + icsPad(d.getUTCDate())
+       + "T" + icsPad(d.getUTCHours()) + icsPad(d.getUTCMinutes()) + "00Z";
+}
+function icsEsc(s){
+  return String(s||"")
+    .replace(/\\/g,"\\\\")
+    .replace(/,/g,"\\,")
+    .replace(/;/g,"\\;")
+    .replace(/\r?\n/g,"\\n");
+}
+function downloadICS(){
+  const list = S.tasks.filter(t => t.due && !DONE.has(t.id) && (cur==="all" || t.subj===cur) && (!ONLY_MINE || hasMyBooking(t)));
+  if(!list.length){ toast("Нет заданий с дедлайном для экспорта", 3500, "warn"); return; }
+
+  const stamp = icsDate(new Date());
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Дедлайны ОБ26-2//RU",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "X-WR-CALNAME:Дедлайны ОБ26-2"
+  ];
+
+  list.forEach(t => {
+    const d = new Date(t.due);
+    if(isNaN(d.getTime())) return;
+    const end = new Date(d.getTime() + 30*60*1000);
+    const s = S.subjects.find(x => x.id === t.subj);
+    const summary = (t.title || "Задание").slice(0,200);
+    const descParts = [s ? s.name : "", t.note || ""].filter(Boolean);
+    lines.push("BEGIN:VEVENT");
+    lines.push("UID:" + t.id + "@deadlines-ob26-2");
+    lines.push("DTSTAMP:" + stamp);
+    lines.push("DTSTART:" + icsDate(d));
+    lines.push("DTEND:" + icsDate(end));
+    lines.push("SUMMARY:" + icsEsc(summary));
+    if(descParts.length) lines.push("DESCRIPTION:" + icsEsc(descParts.join(" · ")));
+    lines.push("BEGIN:VALARM");
+    lines.push("TRIGGER:-PT1H");
+    lines.push("ACTION:DISPLAY");
+    lines.push("DESCRIPTION:" + icsEsc(summary));
+    lines.push("END:VALARM");
+    lines.push("END:VEVENT");
+  });
+  lines.push("END:VCALENDAR");
+
+  const blob = new Blob([lines.join("\r\n")], {type:"text/calendar;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "deadlines.ics";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+
+  toast("Файл календаря скачан · " + list.length + " заданий", 5000, "ok");
+}
+$("#icsbtn").onclick = downloadICS;
+
 /* ---- сводка броней ---- */
 function sumRows(){const rows=[];S.tasks.forEach(t=>(t.topics||[]).forEach(p=>{
  const b=BK.find(x=>x.task===t.id&&x.topic===p.id),s=S.subjects.find(x=>x.id===t.subj);
@@ -571,7 +712,6 @@ document.addEventListener("click",e=>{
  const d=b.dataset,T=id=>S.tasks.find(t=>t.id===id);
  if(d.s){
   cur=d.s;
-  // Переключаем вкладку — подгружаем своё состояние свёрнутых групп
   COLLAPSED_GROUPS=loadCollapsed();
   render();
   return;
@@ -628,7 +768,7 @@ $("#af").onsubmit=async()=>{
  try{await pull();await publish();ls.set("dl-admin",cfg);render();toast("Вы вошли как администратор",3500,"ok")}catch(e){cfg=null;render();toast(errMsg(e),6000,"bad")}};
 $("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");render()};
 
-/* ---- PUSH: код оставлен на случай возврата (кнопки скрыты) ---- */
+/* ---- PUSH (код оставлен, кнопка скрыта) ---- */
 function urlB64ToUint8Array(base64String){
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
@@ -655,8 +795,7 @@ async function enablePush(){
     if(!sub){ sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY) }); }
     const j = sub.toJSON();
     await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), {
-      method: "DELETE",
-      headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY }
+      method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY }
     });
     const r = await fetch(SB_URL + "/rest/v1/push_subs", {
       method: "POST",
@@ -714,7 +853,6 @@ function startWarnings(){
     setTimeout(()=>toast(`Просрочено заданий: ${over}`,7000,"warn",{
       action:"Показать",
       onAction:()=>{
-        // Разворачиваем группу в текущей вкладке и сохраняем именно её
         COLLAPSED_GROUPS.delete("over");
         saveCollapsed();
         render();
