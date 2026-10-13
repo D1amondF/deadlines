@@ -295,7 +295,13 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
 let DONE=new Set(ls.get("dl-done",[]));
-let COLLAPSED_GROUPS=new Set(ls.get("dl-collapsed-groups",[]));
+
+/* ===== Свёрнутые группы — у каждой вкладки своя память ===== */
+// Ключ строится от текущей вкладки: dl-collapsed-groups-all, dl-collapsed-groups-<id>...
+function collapsedKey(){ return "dl-collapsed-groups-" + cur; }
+function loadCollapsed(){ try{ return new Set(ls.get(collapsedKey(), [])); }catch(e){ return new Set(); } }
+function saveCollapsed(){ ls.set(collapsedKey(), [...COLLAPSED_GROUPS]); }
+let COLLAPSED_GROUPS = loadCollapsed();
 
 /* ===== Система уведомлений: очередь, кнопки, звук ===== */
 const NOTE_QUEUE=[];
@@ -563,11 +569,17 @@ document.addEventListener("click",e=>{
  const b=e.target.closest("button, h3[data-toggle-grp], .tp-toggle");
  if(!b)return;
  const d=b.dataset,T=id=>S.tasks.find(t=>t.id===id);
- if(d.s){cur=d.s;render();return}
+ if(d.s){
+  cur=d.s;
+  // Переключаем вкладку — подгружаем своё состояние свёрнутых групп
+  COLLAPSED_GROUPS=loadCollapsed();
+  render();
+  return;
+ }
  if(d.toggleGrp){
   const g=d.toggleGrp;
   if(COLLAPSED_GROUPS.has(g))COLLAPSED_GROUPS.delete(g);else COLLAPSED_GROUPS.add(g);
-  ls.set("dl-collapsed-groups",[...COLLAPSED_GROUPS]);
+  saveCollapsed();
   render();return;
  }
  if(d.toggleTopics){
@@ -592,7 +604,7 @@ $("#rensubj").onclick=()=>{const s=S.subjects.find(x=>x.id===cur);if(!s)return;
  const n=(prompt("Новое название дисциплины",s.name)||"").trim();if(!n||n===s.name)return;run(async()=>{s.name=n})};
 $("#delsubj").onclick=()=>{const s=S.subjects.find(x=>x.id===cur);if(!s||!confirm("Удалить дисциплину «"+s.name+"» и все её задания?"))return;
  run(async()=>{for(const t of S.tasks.filter(t=>t.subj===s.id))for(const f of t.files){try{await delFile("files/"+f.id)}catch(x){}}
-  S.tasks=S.tasks.filter(t=>t.subj!==s.id);S.subjects=S.subjects.filter(x=>x!==s);cur="all"})};
+  S.tasks=S.tasks.filter(t=>t.subj!==s.id);S.subjects=S.subjects.filter(x=>x!==s);cur="all";COLLAPSED_GROUPS=loadCollapsed()})};
 let editing=null;
 function openForm(t){
  if(!S.subjects.length){toast("Сначала добавьте дисциплину слева",3500,"bad");return}
@@ -625,9 +637,7 @@ function urlB64ToUint8Array(base64String){
   for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
   return outputArray;
 }
-function pushSupported(){
-  return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
-}
+function pushSupported(){ return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
 function updatePushBtn(){
   const b = $("#pushbtn");
   if(!b) return;
@@ -666,8 +676,7 @@ async function disablePush(){
     if(sub){
       const j = sub.toJSON();
       await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), {
-        method: "DELETE",
-        headers: {"apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY}
+        method: "DELETE", headers: {"apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY}
       });
       await sub.unsubscribe();
     }
@@ -705,8 +714,9 @@ function startWarnings(){
     setTimeout(()=>toast(`Просрочено заданий: ${over}`,7000,"warn",{
       action:"Показать",
       onAction:()=>{
+        // Разворачиваем группу в текущей вкладке и сохраняем именно её
         COLLAPSED_GROUPS.delete("over");
-        ls.set("dl-collapsed-groups",[...COLLAPSED_GROUPS]);
+        saveCollapsed();
         render();
         const el=document.querySelector(".grp.bad");
         if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
@@ -718,7 +728,7 @@ function startWarnings(){
       action:"Показать",
       onAction:()=>{
         COLLAPSED_GROUPS.delete("today");
-        ls.set("dl-collapsed-groups",[...COLLAPSED_GROUPS]);
+        saveCollapsed();
         render();
         window.scrollTo({top:0,behavior:"smooth"});
       }
