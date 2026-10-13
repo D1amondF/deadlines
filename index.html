@@ -440,8 +440,7 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
     <button class="btn" id="sel-star">⭐ В важное</button>
     <button class="btn" id="sel-unstar">☆ Убрать метку</button>
     <button class="btn bad" id="sel-delete">🗑 Удалить</button>
-    <button class="btn" id="sel-cancel">Отмена</button>
-    <div class="hint">Клик по карточке — выделить или снять выделение. Галочка «выполнено» в этом режиме скрыта.</div>
+    <div class="hint">Клик по карточке — выделить или снять выделение. Чтобы закрыть панель, нажмите «☑️ Выбрать» ещё раз.</div>
   </div>
 
   <div id="list"></div>
@@ -698,7 +697,7 @@ function render(){
  $("#delsubj").hidden=!sub;$("#rensubj").hidden=!sub;
  $("#new").hidden=isArch;
 
- // Панель массовых действий: показываем только в режиме выделения, управляем напрямую через style.display
+ // Панель массовых действий: показываем только в режиме выделения
  const bar=$("#selbar");
  if(bar) bar.style.display = (SELECT_MODE && cfg) ? "flex" : "none";
  const sc=$("#selcount"); if(sc) sc.textContent = SELECTED.size;
@@ -827,7 +826,7 @@ $("#starbtn").onclick=()=>{ ONLY_STAR=!ONLY_STAR; ls.set("dl-only-star",ONLY_STA
 $("#q").addEventListener("input", e => { Q = e.target.value.trim(); render(); });
 $("#qclear").onclick = () => { Q=""; $("#q").value=""; render(); };
 
-/* ===== Режим выделения ===== */
+/* ===== Режим выделения (переключается кнопкой «Выбрать») ===== */
 $("#selbtn").onclick = () => {
   SELECT_MODE = !SELECT_MODE;
   if(!SELECT_MODE) SELECTED.clear();
@@ -842,7 +841,6 @@ function exitSelectMode(){
   render();
 }
 
-$("#sel-cancel").onclick = exitSelectMode;
 $("#sel-none").onclick = () => { SELECTED.clear(); render(); };
 $("#sel-all").onclick = () => {
   getVisibleTasks().forEach(t => SELECTED.add(t.id));
