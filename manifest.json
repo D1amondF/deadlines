@@ -1,13 +1,13 @@
 {
   "name": "Дедлайны ОБ26-2",
   "short_name": "ОБ26-2",
-  "description": "Учебные задания и бронирование тем · группа ОБ26-2",
+  "description": "Учебные задания и бронирование тем · группа ОБ26-2 · Президентская академия",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#eef1f6",
-  "theme_color": "#2C3E50",
+  "background_color": "#E9E8F1",
+  "theme_color": "#002b5b",
   "lang": "ru",
   "icons": [
     { "src": "icon.svg",     "sizes": "any",     "type": "image/svg+xml", "purpose": "any" },
