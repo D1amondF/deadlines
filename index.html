@@ -231,7 +231,8 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
     <button class="link" id="login">Вход для администратора</button>
     <div class="foot-btns">
       <button class="link" id="soundbtn">🔊 Звук вкл.</button>
-      <button class="link" id="pushbtn">🔔 Уведомления</button>
+      <!-- Уведомления временно отключены. Чтобы вернуть — уберите атрибут hidden ниже -->
+      <button class="link" id="pushbtn" hidden>🔔 Уведомления</button>
     </div>
   </div>
   <div class="brand-slogan">Будь лучшим. <span>Во всём.</span></div>
@@ -499,6 +500,13 @@ async function loadBookings(){
   });
   if(!r.ok)throw 0;
   BK=await r.json();
+
+  // Синхронизируем локальный «след» брони с сервером:
+  // если в базе моего ключа больше нет — удаляем его из localStorage.
+  const takenNow = new Set(BK.map(b => b.task + "|" + b.topic));
+  Object.keys(mine).forEach(k => { if (!takenNow.has(k)) delete mine[k]; });
+  ls.set("dl-mine", mine);
+
   bkErr=false
  }catch(e){bkErr=true}
  render()}
@@ -514,6 +522,9 @@ async function book(tid,pid){
   });
   const result=await r.json().catch(()=>"");
   if(result==="ok"){
+   // Один студент = одна тема на задание.
+   // Перед записью новой темы стираем все старые записи по этому заданию.
+   Object.keys(mine).forEach(k => { if (k.startsWith(tid + "|")) delete mine[k]; });
    mine[tid+"|"+pid]=owner;ls.set("dl-mine",mine);
    EXPANDED.add(tid);ls.set("dl-expanded",[...EXPANDED]);
    toast("Тема за вами",6000,"ok",{
@@ -671,7 +682,7 @@ $("#af").onsubmit=async()=>{
  try{await pull();await publish();ls.set("dl-admin",cfg);render();toast("Вы вошли как администратор",3500,"ok")}catch(e){cfg=null;render();toast(errMsg(e),6000,"bad")}};
 $("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");render()};
 
-/* ---- PUSH: подписка и логика ---- */
+/* ---- PUSH: подписка и логика (кнопка скрыта) ---- */
 function urlB64ToUint8Array(base64String){
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
