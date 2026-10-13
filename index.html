@@ -701,7 +701,7 @@ function render(){
  $("#new").hidden=isArch;
 
  const bar=$("#selbar");
- if(bar) bar.hidden = !(SELECT_MODE && cfg);
+ if(bar) bar.style.display = (SELECT_MODE && cfg) ? "" : "none";
  const sc=$("#selcount"); if(sc) sc.textContent = SELECTED.size;
 
  const by={};GROUPS.forEach(g=>by[g[0]]=[]);
