@@ -64,6 +64,7 @@ h1{font-size:21px;margin:0 0 20px;letter-spacing:-.01em;color:var(--navy);font-w
 .btn.bad{color:var(--bad)}
 .btn.bad:hover{border-color:var(--bad);background:rgba(200,18,64,.08)}
 .btn.active{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn.sm{padding:5px 10px;font-size:13px}
 .foot{margin-top:24px;font-size:13px;color:var(--mute)}
 .foot-btns{margin-top:10px;display:flex;flex-wrap:wrap;gap:10px 14px}
 .brand-slogan{margin-top:18px;padding:12px 0 0;border-top:1px solid var(--line);font-size:13px;color:var(--navy);letter-spacing:.02em;line-height:1.4}
@@ -73,7 +74,7 @@ h1{font-size:21px;margin:0 0 20px;letter-spacing:-.01em;color:var(--navy);font-w
 main{padding:24px 24px 60px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
 .top h2{margin:0;font-size:20px;color:var(--navy);font-weight:800}
-.topb{display:flex;gap:8px}
+.topb{display:flex;gap:8px;flex-wrap:wrap}
 .topb-public{display:flex;gap:6px;flex-wrap:wrap}
 .topb-public .btn{padding:7px 11px;font-size:13px;font-weight:600}
 .filter-btn.active{background:var(--acc);border-color:var(--acc);color:#fff}
@@ -95,7 +96,6 @@ main{padding:24px 24px 60px}
 .top-search.has-value .ico-clear{display:block}
 .top-search.has-value .ico-lupe{color:var(--acc)}
 
-/* ===== Панель массовых действий ===== */
 .selbar{
   display:flex;flex-wrap:wrap;gap:8px;align-items:center;
   padding:10px 12px;background:var(--surf);border:1px solid var(--line);
@@ -105,6 +105,10 @@ main{padding:24px 24px 60px}
 .selbar .selcount{font-weight:700;color:var(--navy);margin-right:auto;font-size:14px}
 .selbar .selcount b{color:var(--acc)}
 .selbar .btn{padding:6px 12px;font-size:13px}
+.selbar .hint{
+  font-size:12px;color:var(--mute);flex:1 1 100%;
+  padding-top:2px;line-height:1.35;
+}
 
 .arch-block{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
 .archive-item{
@@ -133,8 +137,8 @@ main{padding:24px 24px 60px}
   padding:12px 14px 12px 12px;
   border-left:4px solid var(--c);
   border-radius:4px 10px 10px 4px;
-  margin-bottom:8px;transition:box-shadow .15s,transform .1s;
-  cursor:pointer;position:relative;
+  margin-bottom:8px;transition:box-shadow .15s,transform .1s,background .15s,outline-color .15s;
+  cursor:pointer;position:relative;outline:2px solid transparent;outline-offset:-2px;
 }
 .task:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
 body.dark .task:hover{box-shadow:0 2px 12px rgba(0,0,0,.4)}
@@ -142,12 +146,23 @@ body.dark .task:hover{box-shadow:0 2px 12px rgba(0,0,0,.4)}
 .task.starred{box-shadow:inset 0 0 0 1px var(--star)}
 .task.done{opacity:.55}
 .task.done .tt{text-decoration:line-through}
-.task.selected{background:rgba(200,18,64,.08);box-shadow:inset 0 0 0 2px var(--acc)}
-body.dark .task.selected{background:rgba(232,92,127,.12)}
+.task.selected{background:rgba(200,18,64,.10);outline-color:var(--acc)}
+body.dark .task.selected{background:rgba(232,92,127,.14)}
+.task.selected::after{
+  content:"✓";
+  position:absolute;top:6px;right:8px;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--acc);color:#fff;font-weight:700;font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+body.selmode .task{cursor:copy}
+body.selmode .task:hover{box-shadow:0 2px 12px rgba(200,18,64,.15)}
+body.selmode .task .acts{display:none}
+body.selmode .task .star-btn{display:none}
+
 .chk{width:20px;height:20px;margin-top:2px;accent-color:var(--ok);cursor:pointer}
-.chkwrap{display:flex;flex-direction:column;gap:6px;align-items:center;margin-top:2px}
-.chkwrap .chk{margin-top:0}
-.selchk{width:20px;height:20px;accent-color:var(--acc);cursor:pointer;margin:0}
+.selchk{width:20px;height:20px;margin-top:2px;accent-color:var(--acc);cursor:pointer}
 .tt{font-weight:700;color:var(--navy);flex:1;min-width:0}
 .tt-row{display:flex;align-items:flex-start;gap:6px}
 .star-btn{
@@ -191,6 +206,33 @@ label{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px;font-weig
 dialog input,dialog select,dialog textarea{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--surf2);color:var(--ink)}
 dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--acc);outline:none}
 .row{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+
+/* Шаблон в форме задания */
+.tpl-row{display:flex;gap:8px;align-items:flex-end;margin-top:0}
+.tpl-row .tpl-field{flex:1;min-width:0}
+.tpl-row .btn{flex:none;padding:9px 12px}
+
+/* Диалог управления шаблонами */
+#tpllg{padding:0;width:min(560px,94vw);max-height:88vh;display:none;flex-direction:column;overflow:hidden}
+#tpllg[open]{display:flex}
+.tpl-head{padding:20px 22px 12px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:10px}
+.tpl-head h2{margin:0;font-size:18px;color:var(--navy);flex:1}
+.tpl-close{border:0;background:none;font-size:22px;line-height:1;color:var(--mute);padding:4px 8px;border-radius:6px;flex:none}
+.tpl-close:hover{background:var(--hover);color:var(--ink)}
+.tpl-body{padding:14px 22px;overflow-y:auto;flex:1}
+.tpl-item{
+  padding:10px 12px;background:var(--surf2);border:1px solid var(--line);
+  border-radius:8px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;
+}
+.tpl-item-main{flex:1;min-width:0}
+.tpl-item-name{font-weight:700;color:var(--navy);font-size:14px}
+.tpl-item-preview{font-size:12px;color:var(--mute);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tpl-item-actions{display:flex;gap:4px;flex:none}
+.tpl-empty{padding:20px;text-align:center;color:var(--mute);font-size:13px;font-style:italic}
+.tpl-form{padding:14px 22px;border-top:1px solid var(--line);background:var(--surf2)}
+.tpl-form h3{margin:0 0 8px;font-size:13px;color:var(--navy);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.tpl-form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:520px){.tpl-form-row{grid-template-columns:1fr}}
 
 #tdlg{padding:0;width:min(680px,94vw);max-height:88vh;overflow:hidden;display:none;flex-direction:column}
 #tdlg[open]{display:flex}
@@ -337,6 +379,11 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 .td-foot{padding:10px 16px;flex-direction:column}
 .td-foot-left,.td-foot-right{width:100%}
 .td-foot .btn,.td-btn-star{flex:1 1 auto;justify-content:center;text-align:center}
+#tpllg{width:96vw}
+.tpl-head{padding:16px 16px 10px}
+.tpl-body{padding:12px 16px}
+.tpl-form{padding:12px 16px}
+.tpl-row{flex-direction:column;align-items:stretch}
 }
 @media(max-width:400px){
 .topb .btn{font-size:12px;padding:8px}
@@ -378,6 +425,7 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
     </div>
     <div class="topb adm-only">
       <button class="btn" id="sumbtn">Сводка броней</button>
+      <button class="btn" id="tplbtn">📋 Шаблоны</button>
       <button class="btn" id="selbtn">☑️ Выбрать</button>
       <button class="btn" id="rensubj" hidden>Переименовать</button>
       <button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button>
@@ -387,12 +435,15 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 
   <div class="selbar adm-only" id="selbar" hidden>
     <span class="selcount">Выбрано: <b id="selcount">0</b></span>
+    <button class="btn" id="sel-all">✅ Все</button>
+    <button class="btn" id="sel-none">◻️ Ничего</button>
     <button class="btn" id="sel-archive">📦 В архив</button>
     <button class="btn" id="sel-unarchive">↩️ Из архива</button>
     <button class="btn" id="sel-star">⭐ В важное</button>
     <button class="btn" id="sel-unstar">☆ Убрать метку</button>
     <button class="btn bad" id="sel-delete">🗑 Удалить</button>
     <button class="btn" id="sel-cancel">Отмена</button>
+    <div class="hint">Клик по карточке — выделить или снять выделение. Галочка «выполнено» в этом режиме скрыта.</div>
   </div>
 
   <div id="list"></div>
@@ -402,6 +453,12 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 <dialog id="dlg">
 <form method="dialog" id="tf">
   <h2 id="dh">Новое задание</h2>
+  <div class="tpl-row">
+    <div class="tpl-field">
+      <label for="f-tpl">Шаблон (необязательно)</label>
+      <select id="f-tpl"></select>
+    </div>
+  </div>
   <label for="f-t">Что нужно сделать</label><input id="f-t" required maxlength="140">
   <label for="f-s">Дисциплина</label><select id="f-s" required></select>
   <label for="f-d">Срок сдачи</label><input id="f-d" type="datetime-local">
@@ -429,6 +486,29 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
   <div class="row"><button class="btn" type="button" id="scsv">Скачать для Excel</button><button class="btn pri" type="button" id="sclose">Закрыть</button></div>
 </dialog>
 
+<dialog id="tpllg">
+  <div class="tpl-head">
+    <h2>Шаблоны заданий</h2>
+    <button class="tpl-close" id="tpl-close" aria-label="Закрыть">✕</button>
+  </div>
+  <div class="tpl-body" id="tpl-list"></div>
+  <div class="tpl-form">
+    <h3 id="tpl-form-title">Новый шаблон</h3>
+    <label for="tpl-name">Название шаблона</label>
+    <input id="tpl-name" maxlength="60" placeholder="Например: Реферат с презентацией">
+    <label for="tpl-title">Заголовок задания</label>
+    <input id="tpl-title" maxlength="140" placeholder="Реферат + презентация">
+    <label for="tpl-note">Заметка</label>
+    <textarea id="tpl-note" rows="3" placeholder="Скинуть одним файлом, ФИО в имени файла"></textarea>
+    <label for="tpl-topics">Темы (по одной в строке)</label>
+    <textarea id="tpl-topics" rows="3" placeholder="Тема 1&#10;Тема 2&#10;Тема 3"></textarea>
+    <div class="row">
+      <button class="btn" type="button" id="tpl-reset">Очистить</button>
+      <button class="btn pri" type="button" id="tpl-save">Сохранить шаблон</button>
+    </div>
+  </div>
+</dialog>
+
 <dialog id="tdlg"><div id="tdetail"></div></dialog>
 
 <div id="toast" role="status"></div>
@@ -443,7 +523,7 @@ const VAPID_PUBLIC_KEY="BOWSoOZSRNMCwALWj5su_LHDBxq8i1XPQu_MCjE5fLVmsva2jNjNL4LT
 const PUSH_FN_URL = SB_URL + "/functions/v1/send-push";
 const ARCHIVE_DAYS = 30;
 
-let S={subjects:[],tasks:[]},cur="all",cfg=null,attachTo=null,loaded=false;
+let S={subjects:[],tasks:[],templates:[]},cur="all",cfg=null,attachTo=null,loaded=false;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
@@ -456,6 +536,7 @@ let ONLY_STAR=ls.get("dl-only-star",false);
 let Q="";
 let SELECT_MODE=false;
 let SELECTED=new Set();
+let editingTpl=null;
 
 function collapsedKey(){ return "dl-collapsed-groups-" + cur; }
 function loadCollapsed(){ try{ return new Set(ls.get(collapsedKey(), [])); }catch(e){ return new Set(); } }
@@ -539,9 +620,11 @@ async function delFile(p){const s=await shaOf(p);if(!s)return;const r=await gh("
 const putFile=async(p,f)=>put(p,await fileB64(f));
 const publish=()=>put("data.json",b64s(enc.encode(JSON.stringify(S))));
 async function pull(){const r=await gh("GET","data.json");
- if(r.status===404){S={subjects:[],tasks:[]};loaded=true;return}
+ if(r.status===404){S={subjects:[],tasks:[],templates:[]};loaded=true;return}
  if(!r.ok)throw new Error("HTTP "+r.status);const j=await r.json();
- S=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.content.replace(/\n/g,"")),c=>c.charCodeAt(0))));loaded=true}
+ S=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.content.replace(/\n/g,"")),c=>c.charCodeAt(0))));
+ if(!Array.isArray(S.templates)) S.templates=[];
+ loaded=true}
 function errMsg(e){return e instanceof TypeError?"Нет связи с GitHub — проверьте интернет":
  /401/.test(e.message)?"Ошибка 401 — токен неверный или просрочен":
  /40[34]/.test(e.message)?"Ошибка "+e.message.slice(5)+" — нет прав на запись или репозиторий не найден":"Не удалось опубликовать ("+e.message+")"}
@@ -549,7 +632,8 @@ async function run(fn){toast("Публикую…",0,"loading");try{await fn();a
 
 async function loadData(){
  try{const r=await fetch("data.json?"+Date.now(),{cache:"no-store"});
-  if(r.ok)S=await r.json();else if(r.status!==404)throw 0;
+  if(r.ok){S=await r.json(); if(!Array.isArray(S.templates)) S.templates=[];}
+  else if(r.status!==404)throw 0;
   loaded=true}catch(e){$("#list").innerHTML='<div class="empty">Не удалось загрузить задания. Откройте сайт по ссылке с хостинга, а не как файл с компьютера.</div>';return false}
  return true}
 
@@ -581,14 +665,25 @@ function matchQuery(t){
   return false;
 }
 
+function getVisibleTasks(){
+  return S.tasks
+    .filter(t=>{
+      if(cur==="_archive") return isArchived(t);
+      if(cur==="all") return !isArchived(t);
+      return t.subj===cur && !isArchived(t);
+    })
+    .filter(t=> !ONLY_MINE || hasMyBooking(t))
+    .filter(t=> !ONLY_STAR || STARRED.has(t.id))
+    .filter(matchQuery);
+}
+
 function render(){
  document.body.classList.toggle("adm",!!cfg);
+ document.body.classList.toggle("selmode", SELECT_MODE && !!cfg);
  $("#login").hidden=!!cfg;
  const mb=$("#minebtn"); if(mb) mb.classList.toggle("active", ONLY_MINE);
  const sb=$("#starbtn"); if(sb) sb.classList.toggle("active", ONLY_STAR);
  const qw=$("#qwrap"); if(qw) qw.classList.toggle("has-value", !!Q);
-
- // Кнопка "Выбрать" активна в режиме выделения
  const selb=$("#selbtn"); if(selb) selb.classList.toggle("active", SELECT_MODE);
 
  const cnt=id=>S.tasks.filter(t=>!DONE.has(t.id)&&!isArchived(t)&&(id==="all"||t.subj===id)).length;
@@ -605,22 +700,12 @@ function render(){
  $("#delsubj").hidden=!sub;$("#rensubj").hidden=!sub;
  $("#new").hidden=isArch;
 
- // Панель массовых действий — только когда мы в админ-режиме и включён SELECT_MODE
  const bar=$("#selbar");
  if(bar) bar.hidden = !(SELECT_MODE && cfg);
  const sc=$("#selcount"); if(sc) sc.textContent = SELECTED.size;
 
  const by={};GROUPS.forEach(g=>by[g[0]]=[]);
- S.tasks
-   .filter(t=>{
-     if(cur==="_archive") return isArchived(t);
-     if(cur==="all") return !isArchived(t);
-     return t.subj===cur && !isArchived(t);
-   })
-   .filter(t=> !ONLY_MINE || hasMyBooking(t))
-   .filter(t=> !ONLY_STAR || STARRED.has(t.id))
-   .filter(matchQuery)
-   .forEach(t=>{const i=dueInfo(t);by[DONE.has(t.id)?"done":i.g].push({t,i})});
+ getVisibleTasks().forEach(t=>{const i=dueInfo(t);by[DONE.has(t.id)?"done":i.g].push({t,i})});
  for(const k in by)by[k].sort((a,b)=>{
    const da=a.t.due||"9", db=b.t.due||"9";
    if(cur==="_archive") return da>db?-1:1;
@@ -635,7 +720,7 @@ function render(){
    const s=S.subjects.find(x=>x.id===t.subj)||{name:"—",c:"#999"},dn=DONE.has(t.id),st=STARRED.has(t.id);
    const selected = SELECTED.has(t.id);
    const checkboxBlock = (SELECT_MODE && cfg)
-     ? `<div class="chkwrap"><input type="checkbox" class="selchk" data-sel="${t.id}" ${selected?"checked":""} aria-label="Выделить"><input type="checkbox" class="chk" data-done="${t.id}" ${dn?"checked":""} aria-label="Отметить выполненным"></div>`
+     ? `<input type="checkbox" class="selchk" data-sel="${t.id}" ${selected?"checked":""} aria-label="Выделить">`
      : `<input type="checkbox" class="chk" data-done="${t.id}" ${dn?"checked":""} aria-label="Отметить выполненным">`;
    return `<article class="task ${dn?"done":""}${st?" starred":""}${selected?" selected":""}" data-id="${t.id}" style="--c:${s.c}">
    ${checkboxBlock}
@@ -737,18 +822,31 @@ async function unbook(k){
  loadBookings();
 }
 
-/* ===== Фильтры ===== */
+/* ===== Фильтры и поиск ===== */
 $("#minebtn").onclick=()=>{ ONLY_MINE=!ONLY_MINE; ls.set("dl-only-mine",ONLY_MINE); render(); };
 $("#starbtn").onclick=()=>{ ONLY_STAR=!ONLY_STAR; ls.set("dl-only-star",ONLY_STAR); render(); if(ONLY_STAR) toast("Показаны только важные",2500,"info"); };
-
-/* ===== Поиск ===== */
 $("#q").addEventListener("input", e => { Q = e.target.value.trim(); render(); });
 $("#qclear").onclick = () => { Q=""; $("#q").value=""; render(); };
 
-/* ===== Массовые действия ===== */
+/* ===== Режим выделения ===== */
 $("#selbtn").onclick = () => {
   SELECT_MODE = !SELECT_MODE;
   if(!SELECT_MODE) SELECTED.clear();
+  document.body.classList.toggle("selmode", SELECT_MODE && !!cfg);
+  render();
+};
+
+function exitSelectMode(){
+  SELECTED.clear();
+  SELECT_MODE = false;
+  document.body.classList.remove("selmode");
+  render();
+}
+
+$("#sel-cancel").onclick = exitSelectMode;
+$("#sel-none").onclick = () => { SELECTED.clear(); render(); };
+$("#sel-all").onclick = () => {
+  getVisibleTasks().forEach(t => SELECTED.add(t.id));
   render();
 };
 
@@ -757,6 +855,8 @@ function massAction(action){
   const ids = [...SELECTED];
   SELECT_MODE = false;
   SELECTED.clear();
+  document.body.classList.remove("selmode");
+  render(); // панель и подсветка скрываются сразу, до публикации
   run(async () => {
     if(action === "delete"){
       for(const id of ids){
@@ -789,7 +889,6 @@ $("#sel-delete").onclick = () => {
   if(!SELECTED.size){ toast("Ничего не выбрано", 3000, "warn"); return; }
   if(confirm(`Удалить ${SELECTED.size} заданий? Файлы тоже будут удалены.`)) massAction("delete");
 };
-$("#sel-cancel").onclick = () => { SELECTED.clear(); SELECT_MODE = false; render(); };
 
 /* ===== Календарь ===== */
 function icsPad(n){ return String(n).padStart(2,"0"); }
@@ -829,7 +928,67 @@ function downloadICS(){
 }
 $("#icsbtn").onclick = downloadICS;
 
-/* ===== Подробности ===== */
+/* ===== Шаблоны заданий ===== */
+function renderTemplates(){
+  const list = S.templates || [];
+  const box = $("#tpl-list");
+  if(!list.length){
+    box.innerHTML = `<div class="tpl-empty">Шаблонов пока нет. Добавьте первый в форме ниже.</div>`;
+  } else {
+    box.innerHTML = list.map(tp => `
+      <div class="tpl-item">
+        <div class="tpl-item-main">
+          <div class="tpl-item-name">${esc(tp.name || "Без названия")}</div>
+          <div class="tpl-item-preview">${esc(tp.title || "")}${tp.note ? " · "+esc(tp.note.slice(0,60)) : ""}</div>
+        </div>
+        <div class="tpl-item-actions">
+          <button class="btn sm" data-tpl-edit="${tp.id}">Изменить</button>
+          <button class="btn sm bad" data-tpl-del="${tp.id}">Удалить</button>
+        </div>
+      </div>`).join("");
+  }
+}
+
+function resetTplForm(){
+  editingTpl = null;
+  $("#tpl-form-title").textContent = "Новый шаблон";
+  $("#tpl-name").value = "";
+  $("#tpl-title").value = "";
+  $("#tpl-note").value = "";
+  $("#tpl-topics").value = "";
+}
+
+$("#tplbtn").onclick = () => {
+  resetTplForm();
+  renderTemplates();
+  $("#tpllg").showModal();
+};
+$("#tpl-close").onclick = () => $("#tpllg").close();
+$("#tpl-reset").onclick = () => resetTplForm();
+
+$("#tpl-save").onclick = () => {
+  const name = $("#tpl-name").value.trim();
+  const title = $("#tpl-title").value.trim();
+  const note = $("#tpl-note").value.trim();
+  const topics = $("#tpl-topics").value.trim();
+  if(!name){ toast("Укажите название шаблона", 3000, "warn"); return; }
+  if(!title && !note && !topics){ toast("Заполните хотя бы одно поле для автозаполнения", 3000, "warn"); return; }
+
+  run(async () => {
+    if(!Array.isArray(S.templates)) S.templates = [];
+    if(editingTpl){
+      const tp = S.templates.find(x => x.id === editingTpl);
+      if(tp){ tp.name = name; tp.title = title; tp.note = note; tp.topics = topics; }
+    } else {
+      S.templates.push({ id: uid(), name, title, note, topics });
+    }
+  });
+  resetTplForm();
+  setTimeout(renderTemplates, 500);
+  toast("Шаблон сохранён", 3000, "ok");
+};
+
+/* ===== Подробности задачи ===== */
 let curDetailId = null;
 function openTaskDetail(id, silent=false){
   const t = S.tasks.find(x => x.id === id);
@@ -896,7 +1055,12 @@ function closeTaskDetail(){
 }
 
 $("#tdlg").addEventListener("click", (e) => { if(e.target === $("#tdlg")) closeTaskDetail(); });
-document.addEventListener("keydown", e => { if(e.key === "Escape" && $("#tdlg").open) closeTaskDetail(); });
+document.addEventListener("keydown", e => {
+  if(e.key === "Escape"){
+    if($("#tdlg").open) closeTaskDetail();
+    if($("#tpllg").open) $("#tpllg").close();
+  }
+});
 
 $("#tdetail").addEventListener("click", e => {
   const id = curDetailId;
@@ -965,13 +1129,39 @@ async function upload(t,files){for(const f of files){
 
 /* ===== Клики ===== */
 document.addEventListener("click",e=>{
+  // Шаблоны — кнопки в диалоге
+  const tplEditBtn = e.target.closest("[data-tpl-edit]");
+  if(tplEditBtn){
+    const id = tplEditBtn.dataset.tplEdit;
+    const tp = (S.templates||[]).find(x => x.id === id);
+    if(tp){
+      editingTpl = tp.id;
+      $("#tpl-form-title").textContent = "Редактировать шаблон";
+      $("#tpl-name").value = tp.name || "";
+      $("#tpl-title").value = tp.title || "";
+      $("#tpl-note").value = tp.note || "";
+      $("#tpl-topics").value = tp.topics || "";
+      $("#tpl-name").focus();
+    }
+    return;
+  }
+  const tplDelBtn = e.target.closest("[data-tpl-del]");
+  if(tplDelBtn){
+    const id = tplDelBtn.dataset.tplDel;
+    const tp = (S.templates||[]).find(x => x.id === id);
+    if(!tp) return;
+    if(!confirm("Удалить шаблон «" + tp.name + "»?")) return;
+    run(async () => { S.templates = (S.templates||[]).filter(x => x.id !== id); });
+    setTimeout(renderTemplates, 500);
+    return;
+  }
+
   // Клик по карточке задания
   const taskEl = e.target.closest(".task");
   if(taskEl && !e.target.closest("button, input, .file, .tp-toggle, .tp, .acts, .topics")){
     const sel = window.getSelection && window.getSelection().toString();
     if(!sel){
       if(SELECT_MODE && cfg){
-        // В режиме выделения клик по карточке переключает её выбор
         const id = taskEl.dataset.id;
         if(SELECTED.has(id)) SELECTED.delete(id); else SELECTED.add(id);
         render();
@@ -1021,7 +1211,6 @@ document.addEventListener("change",e=>{
   const sid=e.target.dataset.sel;
   if(sid){
     if(e.target.checked)SELECTED.add(sid);else SELECTED.delete(sid);
-    // Обновляем только счётчик и подсветку — не перерисовываем весь список
     const sc=$("#selcount"); if(sc) sc.textContent = SELECTED.size;
     const card = e.target.closest(".task");
     if(card) card.classList.toggle("selected", SELECTED.has(sid));
@@ -1037,9 +1226,30 @@ $("#delsubj").onclick=()=>{const s=S.subjects.find(x=>x.id===cur);if(!s||!confir
  run(async()=>{for(const t of S.tasks.filter(t=>t.subj===s.id))for(const f of t.files){try{await delFile("files/"+f.id)}catch(x){}}
   S.tasks=S.tasks.filter(t=>t.subj!==s.id);S.subjects=S.subjects.filter(x=>x!==s);cur="all";COLLAPSED_GROUPS=loadCollapsed()})};
 let editing=null;
+
+function fillTemplateSelect(currentValue){
+  const sel = $("#f-tpl");
+  if(!sel) return;
+  const list = S.templates || [];
+  sel.innerHTML = `<option value="">— Без шаблона —</option>` +
+    list.map(tp => `<option value="${tp.id}" ${currentValue===tp.id?"selected":""}>${esc(tp.name)}</option>`).join("");
+}
+
+$("#f-tpl").addEventListener("change", e => {
+  const id = e.target.value;
+  if(!id) return;
+  const tp = (S.templates||[]).find(x => x.id === id);
+  if(!tp) return;
+  if(tp.title) $("#f-t").value = tp.title;
+  if(tp.note) $("#f-n").value = tp.note;
+  if(tp.topics) $("#f-p").value = tp.topics;
+  toast("Шаблон применён", 2000, "info");
+});
+
 function openForm(t){
  if(!S.subjects.length){toast("Сначала добавьте дисциплину слева",3500,"bad");return}
  editing=t;$("#tf").reset();
+ fillTemplateSelect("");
  $("#f-s").innerHTML=S.subjects.map(s=>`<option value="${s.id}" ${s.id===(t?t.subj:cur)?"selected":""}>${esc(s.name)}</option>`).join("");
  $("#dh").textContent=t?"Изменить задание":"Новое задание";$("#dsub").textContent=t?"Сохранить":"Опубликовать";
  if(t){$("#f-t").value=t.title;$("#f-d").value=t.due||"";$("#f-n").value=t.note||"";$("#f-p").value=(t.topics||[]).map(x=>x.text).join("\n")}
@@ -1057,7 +1267,7 @@ $("#af").onsubmit=async()=>{
  cfg={o:$("#a-b").value.trim(),r:$("#a-k").value.trim(),t:$("#a-s").value.trim()};
  toast("Проверяю доступ…",0,"loading");
  try{await pull();await publish();ls.set("dl-admin",cfg);render();toast("Вы вошли как администратор",3500,"ok")}catch(e){cfg=null;render();toast(errMsg(e),6000,"bad")}};
-$("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");SELECT_MODE=false;SELECTED.clear();render()};
+$("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");exitSelectMode();render()};
 
 /* ===== PUSH ===== */
 function urlB64ToUint8Array(base64String){
