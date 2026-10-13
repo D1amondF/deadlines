@@ -1,4 +1,4 @@
-const CACHE = 'deadlines-v1';
+const CACHE = 'deadlines-v2';
 const ASSETS = ['./', './index.html', './manifest.json', './icon.svg', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -39,5 +39,38 @@ self.addEventListener('fetch', e => {
       caches.open(CACHE).then(c => c.put(e.request, copy));
       return r;
     }))
+
+
+
+
+
+    /* ---- Push-уведомления ---- */
+self.addEventListener('push', event => {
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; } catch(_) {}
+  const title = data.title || 'Дедлайны ОБ26-2';
+  const options = {
+    body: data.body || 'Новое уведомление',
+    icon: 'icon-192.png',
+    badge: 'icon-192.png',
+    tag: data.tag || 'deadline',
+    data: { url: data.url || './' },
+    vibrate: [80, 40, 80]
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || './';
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+      for (const c of list) {
+        if (c.url.includes(location.origin)) return c.focus();
+      }
+      return clients.openWindow(url);
+    })
+  );
+});
   );
 });
