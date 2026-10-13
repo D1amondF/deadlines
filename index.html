@@ -513,7 +513,9 @@ const GROUPS=[["over","Просрочено","bad"],["today","Сегодня",""
 const size=n=>n>1048576?(n/1048576).toFixed(1)+" МБ":Math.max(1,Math.round(n/1024))+" КБ";
 
 function hasMyBooking(t){
-  if(!t.topics||!t.topics.length) return false;
+  // Задания без тем — обязательные для всех, значит, «мои»
+  if(!t.topics || !t.topics.length) return true;
+  // Если темы есть — проверяем, занял ли ты одну из них
   return t.topics.some(p => mine[t.id + "|" + p.id]);
 }
 
