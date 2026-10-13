@@ -431,7 +431,7 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
     </div>
   </div>
 
-  <div class="selbar adm-only" id="selbar" style="display:none">
+  <div class="selbar adm-only" id="selbar" style="display:none!important">
     <span class="selcount">Выбрано: <b id="selcount">0</b></span>
     <button class="btn" id="sel-all">✅ Все</button>
     <button class="btn" id="sel-none">◻️ Ничего</button>
@@ -698,9 +698,8 @@ function render(){
  $("#new").hidden=isArch;
 
  // Панель массовых действий: показываем только в режиме выделения
- const bar=$("#selbar");
- if(bar) bar.style.display = (SELECT_MODE && cfg) ? "flex" : "none";
- const sc=$("#selcount"); if(sc) sc.textContent = SELECTED.size;
+  const bar=$("#selbar");
+ if(bar) bar.style.setProperty("display", (SELECT_MODE && cfg) ? "flex" : "none", "important");
 
  const by={};GROUPS.forEach(g=>by[g[0]]=[]);
  getVisibleTasks().forEach(t=>{const i=dueInfo(t);by[DONE.has(t.id)?"done":i.g].push({t,i})});
