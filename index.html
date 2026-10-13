@@ -3,7 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Дедлайны — учебные задания</title>
+<title>Дедлайны ОБ26-2</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2C3E50">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ОБ26-2">
+<meta name="application-name" content="Дедлайны ОБ26-2">
 <style>
 :root{--ink:#1c2333;--mute:#667085;--bg:#eef1f6;--surf:#fff;--line:#d9dfea;--acc:#2f4bff;--bad:#d93a3a;--ok:#1f8f5f;--warn:#b86b00;
 font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink)}
@@ -131,7 +139,7 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 <body>
 <div class="app">
 <aside>
-  <h1>Дедлайны</h1>
+  <h1>Дедлайны <span style="font-size:13px;color:var(--mute);font-weight:500;letter-spacing:.04em">ОБ26-2</span></h1>
   <div id="subjs"></div>
   <div class="adm-only"><form class="addsubj" id="sf"><input id="sn" placeholder="Новая дисциплина" aria-label="Название дисциплины" maxlength="60"><button class="btn">Добавить</button></form></div>
   <div class="foot">
@@ -410,6 +418,13 @@ $("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");render()};
 cfg=ls.get("dl-admin",null);
 (cfg?pull().catch(loadData):loadData()).then(()=>{render();loadBookings()});
 setInterval(()=>{if(SB_URL)loadBookings()},30000);
+
+/* ---- PWA ---- */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
 </script>
 </body>
 </html>
