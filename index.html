@@ -17,183 +17,139 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ============ СВЕТЛАЯ ТЕМА (по умолчанию) ============ */
 :root{
-  --ink:#171F29;
-  --mute:#8B8A8F;
-  --bg:#E9E8F1;
-  --surf:#FFFFFF;
-  --surf2:#F5F6FA;
-  --hover:#DDE2F0;
-  --line:#D3E0E4;
-  --acc:#C81240;
-  --acc-hover:#A80F34;
-  --navy:#002b5b;
-  --blue:#004C79;
-  --bad:#A00F33;
-  --ok:#1F8F5F;
-  --warn:#EF5803;
+  --ink:#171F29; --mute:#8B8A8F; --bg:#E9E8F1; --surf:#FFFFFF;
+  --surf2:#F5F6FA; --hover:#DDE2F0; --line:#D3E0E4;
+  --acc:#C81240; --acc-hover:#A80F34;
+  --navy:#002b5b; --blue:#004C79;
+  --bad:#A00F33; --ok:#1F8F5F; --warn:#EF5803;
+  --star:#F5A623;
   font-family:'Manrope',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   color:var(--ink);
 }
-
-/* ============ ТЁМНАЯ ТЕМА ============ */
 body.dark{
-  --ink:#E9E8F1;
-  --mute:#9BA3B4;
-  --bg:#0F1826;
-  --surf:#1A2332;
-  --surf2:#232E42;
-  --hover:#28344B;
-  --line:#2E3A50;
-  --acc:#E85C7F;
-  --acc-hover:#F27A99;
-  --navy:#A8C4E8;
-  --blue:#7AB2E8;
-  --bad:#FF7A8A;
-  --ok:#4FD99A;
-  --warn:#FFB454;
+  --ink:#E9E8F1; --mute:#9BA3B4; --bg:#0F1826; --surf:#1A2332;
+  --surf2:#232E42; --hover:#28344B; --line:#2E3A50;
+  --acc:#E85C7F; --acc-hover:#F27A99;
+  --navy:#A8C4E8; --blue:#7AB2E8;
+  --bad:#FF7A8A; --ok:#4FD99A; --warn:#FFB454;
+  --star:#FFC95A;
   color-scheme: dark;
 }
-
 *{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
 .app>*{min-width:0}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-  line-height:1.45;
-  transition:background .25s ease,color .25s ease;
-}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.45;transition:background .25s ease,color .25s ease}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .adm-only{display:none!important}
 body.adm .adm-only{display:revert!important}
 body.adm .topb.adm-only,body.adm .acts.adm-only{display:flex!important}
-
 .app{display:grid;grid-template-columns:260px 1fr;min-height:100vh;max-width:1100px;margin:0 auto}
 aside{padding:24px 16px;border-right:1px solid var(--line)}
 h1{font-size:21px;margin:0 0 20px;letter-spacing:-.01em;color:var(--navy);font-weight:800}
-
-.subj{
-  display:flex;align-items:center;gap:10px;width:100%;
-  padding:9px 10px;border:0;background:none;border-radius:8px;
-  text-align:left;font-weight:500;color:var(--ink);
-  transition:background .15s;
-}
+.subj{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:0;background:none;border-radius:8px;text-align:left;font-weight:500;color:var(--ink);transition:background .15s}
 .subj:hover{background:var(--hover)}
 .subj.on{background:var(--surf);font-weight:700;box-shadow:inset 3px 0 0 var(--c,var(--acc));color:var(--navy)}
 .subj i{width:10px;height:10px;border-radius:50%;background:var(--c,var(--mute));flex:none}
 .subj b{margin-left:auto;font-weight:600;color:var(--mute);font-size:13px}
-
 .addsubj{display:flex;gap:6px;margin-top:14px}
-.addsubj input{
-  flex:1;min-width:0;padding:8px;
-  border:1px solid var(--line);border-radius:8px;
-  background:var(--surf);color:var(--ink);
-}
+.addsubj input{flex:1;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--surf);color:var(--ink)}
 .addsubj input::placeholder{color:var(--mute)}
-
-.btn{
-  border:1px solid var(--line);background:var(--surf);color:var(--ink);
-  padding:8px 12px;border-radius:8px;font-weight:500;
-  transition:border-color .15s,background .15s,color .15s;
-}
+.btn{border:1px solid var(--line);background:var(--surf);color:var(--ink);padding:8px 12px;border-radius:8px;font-weight:500;transition:border-color .15s,background .15s,color .15s}
 .btn:hover{border-color:var(--acc);background:var(--hover)}
 .btn.pri{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
 .btn.pri:hover{background:var(--acc-hover);border-color:var(--acc-hover)}
 .btn.bad{color:var(--bad)}
 .btn.bad:hover{border-color:var(--bad)}
-
 .foot{margin-top:24px;font-size:13px;color:var(--mute)}
 .foot-btns{margin-top:10px;display:flex;flex-wrap:wrap;gap:10px 14px}
-.brand-slogan{
-  margin-top:18px;padding:12px 0 0;border-top:1px solid var(--line);
-  font-size:13px;color:var(--navy);letter-spacing:.02em;line-height:1.4;
-}
+.brand-slogan{margin-top:18px;padding:12px 0 0;border-top:1px solid var(--line);font-size:13px;color:var(--navy);letter-spacing:.02em;line-height:1.4}
 .brand-slogan span{color:var(--acc);font-weight:700}
-
-.link{
-  border:0;background:none;padding:0;text-decoration:underline;
-  color:var(--mute);font-size:13px;transition:color .15s;
-}
+.link{border:0;background:none;padding:0;text-decoration:underline;color:var(--mute);font-size:13px;transition:color .15s}
 .link:hover{color:var(--navy)}
-
 main{padding:24px 24px 60px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
 .top h2{margin:0;font-size:20px;color:var(--navy);font-weight:800}
 .topb{display:flex;gap:8px}
-
 .topb-public{display:flex;gap:6px;flex-wrap:wrap}
 .topb-public .btn{padding:7px 11px;font-size:13px;font-weight:600}
 .filter-btn.active{background:var(--acc);border-color:var(--acc);color:#fff}
 
-/* ===== Группы ===== */
+/* ===== Поиск ===== */
+.top-search{display:flex;align-items:center;gap:6px;flex:1 1 220px;min-width:180px;position:relative}
+.top-search input{
+  width:100%;padding:8px 32px 8px 34px;
+  border:1px solid var(--line);border-radius:8px;
+  background:var(--surf);color:var(--ink);
+  font-size:14px;transition:border-color .15s,background .15s;
+}
+.top-search input:focus{border-color:var(--acc);outline:none}
+.top-search input::placeholder{color:var(--mute)}
+.top-search .ico-lupe{position:absolute;left:10px;font-size:14px;color:var(--mute);pointer-events:none;line-height:1}
+.top-search .ico-clear{
+  position:absolute;right:6px;border:0;background:none;
+  padding:4px 8px;color:var(--mute);font-size:14px;line-height:1;
+  display:none;
+}
+.top-search.has-value .ico-clear{display:block}
+.top-search.has-value .ico-lupe{color:var(--acc)}
+
 .grp{margin-top:26px}
-.grp h3{
-  margin:0 0 8px;font-size:13px;color:var(--mute);font-weight:700;
-  letter-spacing:.04em;text-transform:uppercase;
-  cursor:pointer;user-select:none;
-  display:flex;align-items:center;gap:8px;
-  padding:8px 4px;border-radius:8px;
-  -webkit-tap-highlight-color:transparent;
-  transition:color .15s,background .15s;
-}
+.grp h3{margin:0 0 8px;font-size:13px;color:var(--mute);font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;padding:8px 4px;border-radius:8px;-webkit-tap-highlight-color:transparent;transition:color .15s,background .15s}
 .grp h3:hover{color:var(--navy);background:var(--hover)}
-.grp h3 .chev{
-  font-size:20px;color:var(--navy);line-height:1;
-  display:inline-flex;align-items:center;justify-content:center;
-  width:28px;height:28px;text-align:center;flex:none;
-  background:var(--hover);border-radius:50%;
-  transition:transform .2s ease,background .15s,color .15s;
-}
+.grp h3 .chev{font-size:20px;color:var(--navy);line-height:1;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;text-align:center;flex:none;background:var(--hover);border-radius:50%;transition:transform .2s ease,background .15s,color .15s}
 .grp h3:hover .chev{background:var(--acc);color:#fff}
 .grp.collapsed h3 .chev{transform:rotate(-90deg)}
 .grp.collapsed h3{opacity:.75}
 .grp.collapsed .grp-body{display:none}
 .grp.bad h3{color:var(--bad)}
 
-/* ===== Карточки ===== */
+/* ===== Карточка задания ===== */
 .task{
   display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;
   background:var(--surf);color:var(--ink);
   padding:12px 14px 12px 12px;
   border-left:4px solid var(--c);
   border-radius:4px 10px 10px 4px;
-  margin-bottom:8px;transition:box-shadow .15s;
+  margin-bottom:8px;transition:box-shadow .15s,transform .1s;
+  cursor:pointer;position:relative;
 }
 .task:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
 body.dark .task:hover{box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.task:active{transform:scale(.998)}
+.task.starred{box-shadow:inset 0 0 0 1px var(--star)}
 .task.done{opacity:.55}
 .task.done .tt{text-decoration:line-through}
-.chk{width:20px;height:20px;margin-top:2px;accent-color:var(--ok)}
-.tt{font-weight:700;color:var(--navy)}
+.chk{width:20px;height:20px;margin-top:2px;accent-color:var(--ok);cursor:pointer}
+.tt{font-weight:700;color:var(--navy);flex:1;min-width:0}
+.tt-row{display:flex;align-items:flex-start;gap:6px}
+.star-btn{
+  background:none;border:0;padding:2px 4px;font-size:16px;line-height:1;
+  color:var(--mute);opacity:.35;cursor:pointer;flex:none;
+  transition:opacity .15s,color .15s,transform .15s;
+}
+.star-btn:hover{opacity:1;transform:scale(1.1)}
+.star-btn.on{opacity:1;color:var(--star)}
 .meta{font-size:13px;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:2px}
 .due.bad{color:var(--bad);font-weight:700}
 .due.soon{color:var(--warn);font-weight:700}
-.note{font-size:14px;margin-top:6px;white-space:pre-wrap;color:var(--ink)}
+.note{
+  font-size:14px;margin-top:6px;white-space:pre-wrap;color:var(--ink);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;text-overflow:ellipsis;
+}
 .note,.tt,.meta,.tp-t,.tp-toggle span{overflow-wrap:anywhere;word-break:break-word}
-
 .files,.file{max-width:100%}
 .file button{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .files{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.file{
-  display:inline-flex;align-items:center;
-  border:1px solid var(--line);border-radius:999px;
-  font-size:13px;background:var(--surf2);
-}
+.file{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;font-size:13px;background:var(--surf2)}
 .file button{border:0;background:none;padding:3px 9px;color:var(--blue)}
 .file .x{color:var(--mute);padding-left:2px}
-
-.acts{display:flex;gap:4px}
-.ico{
-  border:0;background:none;padding:4px 8px;border-radius:6px;
-  color:var(--mute);font-size:13px;font-weight:500;
-}
+.acts{display:flex;gap:4px;align-self:flex-start}
+.ico{border:0;background:none;padding:4px 8px;border-radius:6px;color:var(--mute);font-size:13px;font-weight:500}
 .ico:hover{background:var(--hover);color:var(--navy)}
-
 .empty{padding:40px 16px;text-align:center;color:var(--mute)}
 
 /* ===== Диалоги ===== */
@@ -208,26 +164,72 @@ dialog::backdrop{background:rgba(0,20,40,.55)}
 dialog h2{margin:0 0 14px;font-size:18px;color:var(--navy)}
 dialog p{font-size:13px;color:var(--mute);margin:0 0 4px}
 label{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px;font-weight:500}
-dialog input,dialog select,dialog textarea{
-  width:100%;padding:9px;
-  border:1px solid var(--line);border-radius:8px;
-  background:var(--surf2);color:var(--ink);
-}
-dialog input:focus,dialog select:focus,dialog textarea:focus{
-  border-color:var(--acc);outline:none;
-}
+dialog input,dialog select,dialog textarea{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--surf2);color:var(--ink)}
+dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--acc);outline:none}
 .row{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+
+/* ===== Диалог подробностей задачи ===== */
+#tdlg{padding:0;width:min(680px,94vw);max-height:88vh;overflow:hidden;display:none;flex-direction:column}
+#tdlg[open]{display:flex}
+.td-head{
+  padding:20px 22px 12px;border-bottom:1px solid var(--line);
+  display:flex;align-items:flex-start;gap:10px;
+}
+.td-head h2{margin:0;font-size:20px;flex:1;min-width:0;line-height:1.3}
+.td-close{
+  border:0;background:none;font-size:22px;line-height:1;color:var(--mute);
+  padding:4px 8px;border-radius:6px;flex:none;
+}
+.td-close:hover{background:var(--hover);color:var(--ink)}
+.td-body{padding:16px 22px 8px;overflow-y:auto;flex:1}
+.td-meta{font-size:13px;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 14px;margin-bottom:12px}
+.td-note{
+  white-space:pre-wrap;font-size:15px;line-height:1.55;
+  padding:12px 14px;background:var(--surf2);border-radius:10px;
+  margin-bottom:14px;border-left:3px solid var(--acc);
+}
+.td-section-title{
+  font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--mute);margin:14px 0 6px;
+}
+.td-files{display:flex;flex-direction:column;gap:6px}
+.td-file{
+  display:flex;align-items:center;gap:8px;padding:8px 12px;
+  background:var(--surf2);border:1px solid var(--line);border-radius:8px;
+  cursor:pointer;text-align:left;font-size:14px;width:100%;
+  color:var(--ink);transition:border-color .15s,background .15s;
+}
+.td-file:hover{border-color:var(--acc);background:var(--hover)}
+.td-file .td-fname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.td-file .td-fsize{color:var(--mute);font-size:12px;flex:none}
+.td-topics{display:flex;flex-direction:column;gap:4px}
+.td-topic{
+  display:flex;align-items:center;gap:10px;padding:8px 12px;
+  background:var(--surf2);border-radius:8px;font-size:14px;
+}
+.td-topic.taken .td-tt{color:var(--mute)}
+.td-topic .td-tt{flex:1}
+.td-topic .td-tn{font-size:13px;font-weight:700;color:var(--blue)}
+.td-foot{
+  padding:12px 22px;border-top:1px solid var(--line);
+  display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;
+}
+.td-foot-left,.td-foot-right{display:flex;gap:8px;flex-wrap:wrap}
+.td-btn-star{
+  border:1px solid var(--line);background:var(--surf);color:var(--ink);
+  padding:8px 14px;border-radius:8px;font-weight:600;font-size:14px;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.td-btn-star:hover{border-color:var(--star)}
+.td-btn-star.on{background:var(--star);border-color:var(--star);color:#1A1A1A}
+.td-empty{padding:20px;text-align:center;color:var(--mute);font-size:13px;font-style:italic}
 
 /* ===== Toast ===== */
 #toast{
-  position:fixed;top:16px;left:50%;
-  transform:translateX(-50%) translateY(-24px);
-  background:var(--navy);color:#fff;
-  padding:13px 18px;border-radius:12px;
-  font-size:15px;font-weight:600;
-  display:none;max-width:min(620px,92vw);z-index:100;
-  box-shadow:0 12px 36px rgba(0,0,0,.35);
-  cursor:pointer;line-height:1.35;letter-spacing:.01em;
+  position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-24px);
+  background:var(--navy);color:#fff;padding:13px 18px;border-radius:12px;
+  font-size:15px;font-weight:600;display:none;max-width:min(620px,92vw);z-index:100;
+  box-shadow:0 12px 36px rgba(0,0,0,.35);cursor:pointer;line-height:1.35;letter-spacing:.01em;
   transition:transform .28s cubic-bezier(.2,.9,.3,1.2),opacity .22s ease;
   opacity:0;align-items:center;gap:10px;
 }
@@ -238,28 +240,13 @@ dialog input:focus,dialog select:focus,dialog textarea:focus{
 #toast.info{background:var(--navy);color:var(--bg)}
 body.dark #toast.info{color:#0F1826}
 #toast.loading{background:var(--navy);color:#fff}
-#toast.loading::before{
-  content:"";width:14px;height:14px;border-radius:50%;
-  border:2px solid rgba(255,255,255,.35);border-top-color:#fff;
-  animation:toastspin .8s linear infinite;flex:none;
-}
+#toast.loading::before{content:"";width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:toastspin .8s linear infinite;flex:none}
 @keyframes toastspin{to{transform:rotate(360deg)}}
-.toast-action{
-  background:rgba(255,255,255,.2);border:0;color:#fff;
-  font:inherit;font-weight:700;padding:6px 14px;border-radius:8px;
-  cursor:pointer;white-space:nowrap;margin-left:6px;
-  transition:background .15s;
-}
+.toast-action{background:rgba(255,255,255,.2);border:0;color:#fff;font:inherit;font-weight:700;padding:6px 14px;border-radius:8px;cursor:pointer;white-space:nowrap;margin-left:6px;transition:background .15s}
 .toast-action:hover{background:rgba(255,255,255,.32)}
 
-/* ===== Темы в задании ===== */
 .topics{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}
-.tp-toggle{
-  background:none;border:0;padding:4px 0;
-  font:inherit;font-size:13px;color:var(--mute);
-  cursor:pointer;display:flex;align-items:center;gap:6px;
-  width:100%;text-align:left;font-weight:600;
-}
+.tp-toggle{background:none;border:0;padding:4px 0;font:inherit;font-size:13px;color:var(--mute);cursor:pointer;display:flex;align-items:center;gap:6px;width:100%;text-align:left;font-weight:600}
 .tp-toggle:hover{color:var(--navy)}
 .tp-toggle .chev{margin-left:auto;font-size:14px;color:var(--mute);line-height:1}
 .tp-list{margin-top:2px}
@@ -268,15 +255,12 @@ body.dark #toast.info{color:#0F1826}
 .tp.taken .tp-t{color:var(--mute)}
 .tp-n{font-size:13px;color:var(--blue);font-weight:700}
 .tp .btn{padding:4px 10px;font-size:13px}
-
-/* ===== Таблица сводки ===== */
 #stbl{width:100%;border-collapse:collapse;font-size:14px;color:var(--ink)}
 #stbl th,#stbl td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
 #stbl th{color:var(--mute);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
 #stbl td.free{color:var(--mute)}
 #stbl td.ok{font-weight:700;color:var(--blue)}
 
-/* ===== Мобильная адаптация ===== */
 @media(max-width:760px){
 .app{grid-template-columns:1fr;max-width:100%}
 aside{border-right:0;border-bottom:1px solid var(--line);padding:12px 10px}
@@ -291,6 +275,7 @@ h1{font-size:18px;margin:0 0 10px}
 main{padding:12px 10px 60px;max-width:100%}
 .top{margin-bottom:6px;gap:8px}
 .top h2{font-size:17px}
+.top-search{flex:1 1 100%;order:-1}
 .topb-public{width:100%}
 .topb-public .btn{flex:1 1 auto;padding:9px 10px;font-size:13px;text-align:center}
 .topb{width:100%;flex-wrap:wrap;gap:6px}
@@ -322,6 +307,14 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 #toast.show{transform:translateY(0)}
 #stbl{font-size:13px}
 #stbl th,#stbl td{padding:5px 6px}
+#tdlg{width:96vw;max-height:92vh}
+.td-head{padding:16px 16px 10px}
+.td-head h2{font-size:17px}
+.td-body{padding:14px 16px 8px}
+.td-note{font-size:14px;padding:10px 12px}
+.td-foot{padding:10px 16px;flex-direction:column}
+.td-foot-left,.td-foot-right{width:100%}
+.td-foot .btn,.td-btn-star{flex:1 1 auto;justify-content:center;text-align:center}
 }
 @media(max-width:400px){
 .topb .btn{font-size:13px;padding:8px}
@@ -350,8 +343,14 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 <main>
   <div class="top">
     <h2 id="ttl">Все дисциплины</h2>
+    <div class="top-search" id="qwrap">
+      <span class="ico-lupe">🔍</span>
+      <input type="search" id="q" placeholder="Поиск заданий, тем, заметок..." autocomplete="off">
+      <button type="button" class="ico-clear" id="qclear" aria-label="Очистить">✕</button>
+    </div>
     <div class="topb-public">
       <button class="btn filter-btn" id="minebtn">👤 Только мои</button>
+      <button class="btn filter-btn" id="starbtn">⭐ Важные</button>
       <button class="btn" id="icsbtn">📅 В календарь</button>
     </div>
     <div class="topb adm-only"><button class="btn" id="sumbtn">Сводка броней</button><button class="btn" id="apibtn">Бронирование</button><button class="btn" id="rensubj" hidden>Переименовать</button><button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button><button class="btn pri" id="new">Добавить задание</button></div>
@@ -390,16 +389,16 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
   <div class="row"><button class="btn" type="button" id="scsv">Скачать для Excel</button><button class="btn pri" type="button" id="sclose">Закрыть</button></div>
 </dialog>
 
+<dialog id="tdlg"><div id="tdetail"></div></dialog>
+
 <div id="toast" role="status"></div>
 <input type="file" id="addf" multiple hidden>
 
 <script>
 const COLORS=["#C81240","#002b5b","#004c79","#A00F33","#4D56BC","#5ba7d5","#E63542","#EF5803"];
 const MAXF=25*1024*1024;
-
 const SB_URL="https://xmbanshmxcmylvjsrgol.supabase.co";
 const SB_KEY="sb_publishable_AOPVaQq28i30ZBLNtw289g_mSVZWj5v";
-
 const VAPID_PUBLIC_KEY="BOWSoOZSRNMCwALWj5su_LHDBxq8i1XPQu_MCjE5fLVmsva2jNjNL4LTgetGZh28CWKrQEtZiUeHmk4dGTb9dAc";
 const PUSH_FN_URL = SB_URL + "/functions/v1/send-push";
 
@@ -408,8 +407,12 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+
 let DONE=new Set(ls.get("dl-done",[]));
+let STARRED=new Set(ls.get("dl-starred",[]));
 let ONLY_MINE=ls.get("dl-only-mine",false);
+let ONLY_STAR=ls.get("dl-only-star",false);
+let Q="";
 
 function collapsedKey(){ return "dl-collapsed-groups-" + cur; }
 function loadCollapsed(){ try{ return new Set(ls.get(collapsedKey(), [])); }catch(e){ return new Set(); } }
@@ -418,28 +421,15 @@ let COLLAPSED_GROUPS = loadCollapsed();
 
 /* ===== Тёмная тема ===== */
 let THEME_DARK = ls.get("dl-dark", null);
-if(THEME_DARK === null){
-  THEME_DARK = !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-}
+if(THEME_DARK === null) THEME_DARK = !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
 function applyTheme(){ document.body.classList.toggle("dark", !!THEME_DARK); }
-function updateThemeLabel(){
-  const b = $("#themebtn");
-  if(b) b.textContent = THEME_DARK ? "☀️ Светлая" : "🌓 Тёмная";
-}
-$("#themebtn").onclick = () => {
-  THEME_DARK = !THEME_DARK;
-  ls.set("dl-dark", THEME_DARK);
-  applyTheme();
-  updateThemeLabel();
-};
-applyTheme();
-updateThemeLabel();
+function updateThemeLabel(){ const b=$("#themebtn"); if(b) b.textContent = THEME_DARK ? "☀️ Светлая" : "🌓 Тёмная"; }
+$("#themebtn").onclick=()=>{ THEME_DARK=!THEME_DARK; ls.set("dl-dark",THEME_DARK); applyTheme(); updateThemeLabel(); };
+applyTheme(); updateThemeLabel();
 
-/* ===== Система уведомлений ===== */
-const NOTE_QUEUE=[];
-let noteShowing=false,currentNote=null;
+/* ===== Toast ===== */
+const NOTE_QUEUE=[]; let noteShowing=false,currentNote=null;
 let NOTE_SOUND=ls.get("dl-sound",true);
-
 let audioCtx=null;
 function beep(type){
   if(!NOTE_SOUND)return;
@@ -459,70 +449,32 @@ function beep(type){
     o.start(now);o.stop(now+dur+0.02);
   }catch(e){}
 }
-
 function toast(t,ms=3500,type="info",opts={}){
-  for(let i=NOTE_QUEUE.length-1;i>=0;i--){
-    if(NOTE_QUEUE[i].type==="loading")NOTE_QUEUE.splice(i,1);
-  }
+  for(let i=NOTE_QUEUE.length-1;i>=0;i--){ if(NOTE_QUEUE[i].type==="loading")NOTE_QUEUE.splice(i,1); }
   if(currentNote&&currentNote.type==="loading")hideNote();
   NOTE_QUEUE.push({text:t,ms,type,actionLabel:opts.action,onAction:opts.onAction});
   if(!noteShowing)showNextNote();
 }
-
 function showNextNote(){
   if(noteShowing||!NOTE_QUEUE.length)return;
-  const note=NOTE_QUEUE.shift();
-  currentNote=note;noteShowing=true;
-
-  const e=$("#toast");
-  e.innerHTML="";
-
-  const txt=document.createElement("span");
-  txt.textContent=note.text;
-  txt.style.flex="1";txt.style.minWidth="0";
-  e.appendChild(txt);
-
+  const note=NOTE_QUEUE.shift(); currentNote=note; noteShowing=true;
+  const e=$("#toast"); e.innerHTML="";
+  const txt=document.createElement("span"); txt.textContent=note.text; txt.style.flex="1"; txt.style.minWidth="0"; e.appendChild(txt);
   if(note.actionLabel&&note.onAction){
-    const btn=document.createElement("button");
-    btn.textContent=note.actionLabel;
-    btn.className="toast-action";
-    btn.onclick=ev=>{
-      ev.stopPropagation();
-      try{note.onAction();}catch(_){}
-      hideNote();
-    };
+    const btn=document.createElement("button"); btn.textContent=note.actionLabel; btn.className="toast-action";
+    btn.onclick=ev=>{ ev.stopPropagation(); try{note.onAction();}catch(_){} hideNote(); };
     e.appendChild(btn);
   }
-
-  e.className="show "+note.type;
-  beep(note.type);
-
+  e.className="show "+note.type; beep(note.type);
   clearTimeout(showNextNote.t);
   if(note.ms>0)showNextNote.t=setTimeout(hideNote,note.ms);
 }
-
-function hideNote(){
-  const e=$("#toast");
-  e.className="";
-  clearTimeout(showNextNote.t);
-  currentNote=null;noteShowing=false;
-  setTimeout(showNextNote,220);
-}
-
-function updateSoundLabel(){
-  const b=$("#soundbtn");
-  if(!b)return;
-  b.textContent=NOTE_SOUND?"🔊 Звук вкл.":"🔇 Звук выкл.";
-}
-$("#soundbtn").onclick=()=>{
-  NOTE_SOUND=!NOTE_SOUND;
-  ls.set("dl-sound",NOTE_SOUND);
-  updateSoundLabel();
-  if(NOTE_SOUND)beep("ok");
-};
+function hideNote(){ const e=$("#toast"); e.className=""; clearTimeout(showNextNote.t); currentNote=null; noteShowing=false; setTimeout(showNextNote,220); }
+function updateSoundLabel(){ const b=$("#soundbtn"); if(b) b.textContent = NOTE_SOUND?"🔊 Звук вкл.":"🔇 Звук выкл."; }
+$("#soundbtn").onclick=()=>{ NOTE_SOUND=!NOTE_SOUND; ls.set("dl-sound",NOTE_SOUND); updateSoundLabel(); if(NOTE_SOUND)beep("ok"); };
 updateSoundLabel();
 
-/* ---- GitHub API ---- */
+/* ===== GitHub ===== */
 const enc=new TextEncoder();
 const gh=(m,p,b)=>fetch(`https://api.github.com/repos/${cfg.o}/${cfg.r}/contents/${p}`,{method:m,headers:{Authorization:"Bearer "+cfg.t,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"},body:b?JSON.stringify(b):undefined});
 const b64s=b=>{let s="";for(let i=0;i<b.length;i+=8192)s+=String.fromCharCode.apply(null,b.subarray(i,i+8192));return btoa(s)};
@@ -539,7 +491,7 @@ async function pull(){const r=await gh("GET","data.json");
 function errMsg(e){return e instanceof TypeError?"Нет связи с GitHub — проверьте интернет":
  /401/.test(e.message)?"Ошибка 401 — токен неверный или просрочен":
  /40[34]/.test(e.message)?"Ошибка "+e.message.slice(5)+" — нет прав на запись или репозиторий не найден":"Не удалось опубликовать ("+e.message+")"}
-async function run(fn){toast("Публикую…",0,"loading");try{await fn();await publish();render();toast("Опубликовано. У остальных появится примерно через минуту",5000,"ok")}catch(e){toast(errMsg(e),6000,"bad")}}
+async function run(fn){toast("Публикую…",0,"loading");try{await fn();await publish();render();toast("Опубликовано",4000,"ok")}catch(e){toast(errMsg(e),6000,"bad")}}
 
 async function loadData(){
  try{const r=await fetch("data.json?"+Date.now(),{cache:"no-store"});
@@ -547,6 +499,7 @@ async function loadData(){
   loaded=true}catch(e){$("#list").innerHTML='<div class="empty">Не удалось загрузить задания. Откройте сайт по ссылке с хостинга, а не как файл с компьютера.</div>';return false}
  return true}
 
+/* ===== Даты ===== */
 const tm=d=>d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
 const fmt=d=>new Date(d).toLocaleString("ru-RU",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"});
 function dueInfo(t){
@@ -564,11 +517,23 @@ function hasMyBooking(t){
   return t.topics.some(p => mine[t.id + "|" + p.id]);
 }
 
+function matchQuery(t){
+  if(!Q) return true;
+  const q = Q.toLowerCase();
+  if((t.title||"").toLowerCase().includes(q)) return true;
+  if((t.note||"").toLowerCase().includes(q)) return true;
+  if((t.topics||[]).some(p => (p.text||"").toLowerCase().includes(q))) return true;
+  const s = S.subjects.find(x => x.id === t.subj);
+  if(s && (s.name||"").toLowerCase().includes(q)) return true;
+  return false;
+}
+
 function render(){
  document.body.classList.toggle("adm",!!cfg);
  $("#login").hidden=!!cfg;
- const mb=$("#minebtn");
- if(mb) mb.classList.toggle("active", ONLY_MINE);
+ const mb=$("#minebtn"); if(mb) mb.classList.toggle("active", ONLY_MINE);
+ const sb=$("#starbtn"); if(sb) sb.classList.toggle("active", ONLY_STAR);
+ const qw=$("#qwrap"); if(qw) qw.classList.toggle("has-value", !!Q);
 
  const cnt=id=>S.tasks.filter(t=>!DONE.has(t.id)&&(id==="all"||t.subj===id)).length;
  if(cur!=="all"&&!S.subjects.some(s=>s.id===cur))cur="all";
@@ -581,6 +546,8 @@ function render(){
  S.tasks
    .filter(t=>cur==="all"||t.subj===cur)
    .filter(t=> !ONLY_MINE || hasMyBooking(t))
+   .filter(t=> !ONLY_STAR || STARRED.has(t.id))
+   .filter(matchQuery)
    .forEach(t=>{const i=dueInfo(t);by[DONE.has(t.id)?"done":i.g].push({t,i})});
  for(const k in by)by[k].sort((a,b)=>(a.t.due||"9")<(b.t.due||"9")?-1:1);
 
@@ -589,10 +556,10 @@ function render(){
   const collapsed=COLLAPSED_GROUPS.has(k)?" collapsed":"";
   h+=`<section class="grp ${cls}${collapsed}"><h3 class="grp-toggle" data-toggle-grp="${k}"><span class="chev">▾</span><span>${name} · ${by[k].length}</span></h3><div class="grp-body">`+
    by[k].map(({t,i})=>{
-   const s=S.subjects.find(x=>x.id===t.subj)||{name:"—",c:"#999"},dn=DONE.has(t.id);
-   return `<article class="task ${dn?"done":""}" style="--c:${s.c}">
+   const s=S.subjects.find(x=>x.id===t.subj)||{name:"—",c:"#999"},dn=DONE.has(t.id),st=STARRED.has(t.id);
+   return `<article class="task ${dn?"done":""}${st?" starred":""}" data-id="${t.id}" style="--c:${s.c}">
    <input type="checkbox" class="chk" data-done="${t.id}" ${dn?"checked":""} aria-label="Отметить выполненным">
-   <div><div class="tt">${esc(t.title)}</div>
+   <div><div class="tt-row"><div class="tt">${esc(t.title)}</div><button class="star-btn ${st?"on":""}" data-star="${t.id}" aria-label="Важное">${st?"★":"☆"}</button></div>
     <div class="meta"><span>${esc(s.name)}</span><span class="due ${dn?"":i.cls}">${i.txt}</span></div>
     ${t.note?`<div class="note">${esc(t.note)}</div>`:""}
     <div class="files">${t.files.map(f=>`<span class="file"><button data-open="${t.id}|${f.id}" title="Скачать">${esc(f.name)} · ${size(f.size)}</button><button class="x adm-only" data-rm="${t.id}|${f.id}" aria-label="Удалить файл">×</button></span>`).join("")}</div>
@@ -601,13 +568,13 @@ function render(){
    <div class="acts adm-only"><button class="ico" data-edit="${t.id}">Изменить</button><button class="ico" data-att="${t.id}">+ файл</button><button class="ico" data-del="${t.id}">Удалить</button></div>
   </article>`}).join("")+`</div></section>`}
 
- if(ONLY_MINE && !h){
-   h = `<div class="empty">У вас пока нет забронированных тем${cur!=="all"?" в этой дисциплине":""}.<br>Нажмите «👤 Только мои» ещё раз, чтобы увидеть все задания.</div>`;
+ if((ONLY_MINE||ONLY_STAR||Q) && !h){
+   h = `<div class="empty">Ничего не найдено${Q?` по запросу «${esc(Q)}»`:""}.</div>`;
  }
-
  $("#list").innerHTML=h||`<div class="empty">${cfg?"Добавьте дисциплину слева, затем первое задание.":"Заданий пока нет."}</div>`;
 }
 
+/* ===== Брони ===== */
 let BK=[],bkErr=false,mine=ls.get("dl-mine",{}),EXPANDED=new Set(ls.get("dl-expanded",[]));
 const rnd=()=>[...crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,"0")).join("");
 
@@ -639,14 +606,14 @@ async function loadBookings(){
   });
   if(!r.ok)throw 0;
   BK=await r.json();
-
   const takenNow = new Set(BK.map(b => b.task + "|" + b.topic));
   Object.keys(mine).forEach(k => { if (!takenNow.has(k)) delete mine[k]; });
   ls.set("dl-mine", mine);
-
-  bkErr=false
+  bkErr=false;
  }catch(e){bkErr=true}
- render()}
+ render();
+ if($("#tdlg").open) openTaskDetail(curDetailId, true);
+}
 
 async function book(tid,pid){
  let name=prompt("Ваше имя (так его увидит группа)",ls.get("dl-name",""));name=(name||"").trim().replace(/\s+/g," ");
@@ -662,17 +629,15 @@ async function book(tid,pid){
    Object.keys(mine).forEach(k => { if (k.startsWith(tid + "|")) delete mine[k]; });
    mine[tid+"|"+pid]=owner;ls.set("dl-mine",mine);
    EXPANDED.add(tid);ls.set("dl-expanded",[...EXPANDED]);
-   toast("Тема за вами",6000,"ok",{
-     action:"Отменить",
-     onAction:()=>unbook(tid+"|"+pid)
-   })
+   toast("Тема за вами",6000,"ok",{ action:"Отменить", onAction:()=>unbook(tid+"|"+pid) });
   }
-  else if(result==="taken")toast("Эту тему уже заняли",3500,"bad")
-  else if(result==="has_other")toast("Вы уже заняли другую тему в этом задании",3500,"bad")
-  else if(result==="bad_request")toast("Проверьте введённые данные",3500,"bad")
-  else toast("Не удалось занять тему",3500,"bad")
+  else if(result==="taken")toast("Эту тему уже заняли",3500,"bad");
+  else if(result==="has_other")toast("Вы уже заняли другую тему",3500,"bad");
+  else if(result==="bad_request")toast("Проверьте введённые данные",3500,"bad");
+  else toast("Не удалось занять тему",3500,"bad");
  }catch(e){toast("Сервис бронирования недоступен",3500,"bad")}
- loadBookings()}
+ loadBookings();
+}
 
 async function unbook(k){
  const[tid,pid]=k.split("|"),body={p_task:tid,p_topic:pid};
@@ -687,50 +652,35 @@ async function unbook(k){
   const result=await r.json().catch(()=>"");
   if(result==="ok"){delete mine[k];ls.set("dl-mine",mine);if(body.p_admin)ls.set("dl-akey",body.p_admin);toast("Бронь снята",3500,"ok")}
   else if(result==="forbidden"){if(body.p_admin)ls.del("dl-akey");toast("Нет прав снять эту бронь",3500,"bad")}
-  else toast("Не удалось снять бронь",3500,"bad")
+  else toast("Не удалось снять бронь",3500,"bad");
  }catch(e){toast("Сервис бронирования недоступен",3500,"bad")}
- loadBookings()}
+ loadBookings();
+}
 
-$("#apibtn").onclick=()=>{
- toast("Бронирование работает через Supabase. Настраивать ничего не нужно.",4000)};
+$("#apibtn").onclick=()=>{ toast("Бронирование работает через Supabase.",3500) };
 
-/* ---- Календарь ---- */
-$("#minebtn").onclick = () => {
-  ONLY_MINE = !ONLY_MINE;
-  ls.set("dl-only-mine", ONLY_MINE);
-  render();
-  if(ONLY_MINE) toast("Показаны только задания с вашими темами", 3000, "info");
-};
+/* ===== Фильтры ===== */
+$("#minebtn").onclick=()=>{ ONLY_MINE=!ONLY_MINE; ls.set("dl-only-mine",ONLY_MINE); render(); };
+$("#starbtn").onclick=()=>{ ONLY_STAR=!ONLY_STAR; ls.set("dl-only-star",ONLY_STAR); render(); if(ONLY_STAR) toast("Показаны только важные",2500,"info"); };
 
+/* ===== Поиск ===== */
+$("#q").addEventListener("input", e => { Q = e.target.value.trim(); render(); });
+$("#qclear").onclick = () => { Q=""; $("#q").value=""; render(); };
+
+/* ===== Календарь ===== */
 function icsPad(n){ return String(n).padStart(2,"0"); }
 function icsDate(d){
   return d.getUTCFullYear() + icsPad(d.getUTCMonth()+1) + icsPad(d.getUTCDate())
        + "T" + icsPad(d.getUTCHours()) + icsPad(d.getUTCMinutes()) + "00Z";
 }
-function icsEsc(s){
-  return String(s||"")
-    .replace(/\\/g,"\\\\")
-    .replace(/,/g,"\\,")
-    .replace(/;/g,"\\;")
-    .replace(/\r?\n/g,"\\n");
-}
+function icsEsc(s){ return String(s||"").replace(/\\/g,"\\\\").replace(/,/g,"\\,").replace(/;/g,"\\;").replace(/\r?\n/g,"\\n"); }
 function downloadICS(){
   const list = S.tasks.filter(t => t.due && !DONE.has(t.id) && (cur==="all" || t.subj===cur) && (!ONLY_MINE || hasMyBooking(t)));
-  if(!list.length){ toast("Нет заданий с дедлайном для экспорта", 3500, "warn"); return; }
-
+  if(!list.length){ toast("Нет заданий с дедлайном", 3500, "warn"); return; }
   const stamp = icsDate(new Date());
-  const lines = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Дедлайны ОБ26-2//RU",
-    "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
-    "X-WR-CALNAME:Дедлайны ОБ26-2"
-  ];
-
+  const lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Дедлайны ОБ26-2//RU","CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:Дедлайны ОБ26-2"];
   list.forEach(t => {
-    const d = new Date(t.due);
-    if(isNaN(d.getTime())) return;
+    const d = new Date(t.due); if(isNaN(d.getTime())) return;
     const end = new Date(d.getTime() + 30*60*1000);
     const s = S.subjects.find(x => x.id === t.subj);
     const summary = (t.title || "Задание").slice(0,200);
@@ -742,27 +692,141 @@ function downloadICS(){
     lines.push("DTEND:" + icsDate(end));
     lines.push("SUMMARY:" + icsEsc(summary));
     if(descParts.length) lines.push("DESCRIPTION:" + icsEsc(descParts.join(" · ")));
-    lines.push("BEGIN:VALARM");
-    lines.push("TRIGGER:-PT1H");
-    lines.push("ACTION:DISPLAY");
-    lines.push("DESCRIPTION:" + icsEsc(summary));
-    lines.push("END:VALARM");
+    lines.push("BEGIN:VALARM"); lines.push("TRIGGER:-PT1H"); lines.push("ACTION:DISPLAY"); lines.push("DESCRIPTION:" + icsEsc(summary)); lines.push("END:VALARM");
     lines.push("END:VEVENT");
   });
   lines.push("END:VCALENDAR");
-
   const blob = new Blob([lines.join("\r\n")], {type:"text/calendar;charset=utf-8"});
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "deadlines.ics";
+  a.href = URL.createObjectURL(blob); a.download = "deadlines.ics";
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
-
-  toast("Файл календаря скачан · " + list.length + " заданий", 5000, "ok");
+  toast("Календарь скачан · " + list.length + " заданий", 5000, "ok");
 }
 $("#icsbtn").onclick = downloadICS;
 
-/* ---- Сводка ---- */
+/* ===== Подробная карточка задания ===== */
+let curDetailId = null;
+function openTaskDetail(id, silent=false){
+  const t = S.tasks.find(x => x.id === id);
+  if(!t){ return; }
+  curDetailId = id;
+  const s = S.subjects.find(x => x.id === t.subj) || {name:"—"};
+  const dn = DONE.has(t.id), st = STARRED.has(t.id);
+  const i = dueInfo(t);
+
+  let html = `<div class="td-head"><h2>${esc(t.title)}</h2><button class="td-close" aria-label="Закрыть">✕</button></div>`;
+  html += `<div class="td-body">`;
+  html += `<div class="td-meta"><span>${esc(s.name)}</span><span class="due ${dn?"":i.cls}">${i.txt}</span>${st?`<span style="color:var(--star);font-weight:700">★ Важное</span>`:""}</div>`;
+
+  if(t.note){
+    html += `<div class="td-note">${esc(t.note)}</div>`;
+  } else {
+    html += `<div class="td-empty">Заметки нет</div>`;
+  }
+
+  // Файлы
+  if(t.files && t.files.length){
+    html += `<div class="td-section-title">Файлы · ${t.files.length}</div><div class="td-files">`;
+    t.files.forEach(f => {
+      html += `<button class="td-file" data-open="${t.id}|${f.id}">
+        <span>📎</span>
+        <span class="td-fname">${esc(f.name)}</span>
+        <span class="td-fsize">${size(f.size)}</span>
+      </button>`;
+    });
+    html += `</div>`;
+  }
+
+  // Темы
+  if(t.topics && t.topics.length){
+    html += `<div class="td-section-title">Темы · ${t.topics.length}</div><div class="td-topics">`;
+    t.topics.forEach(p => {
+      const k = t.id + "|" + p.id;
+      const b = BK.find(x => x.task === t.id && x.topic === p.id);
+      const isMine = !!mine[k];
+      html += `<div class="td-topic ${b?"taken":""}">
+        <span class="td-tt">${esc(p.text)}</span>
+        ${b ? `<span class="td-tn">${esc(b.name)}${isMine?" (вы)":""}</span>` : `<span class="td-tn" style="color:var(--mute)">свободно</span>`}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  html += `</div>`; // end td-body
+
+  html += `<div class="td-foot">`;
+  html += `<div class="td-foot-left">`;
+  html += `<button class="td-btn-star ${st?"on":""}" id="td-star">${st?"★ Убрать из важных":"☆ В важное"}</button>`;
+  html += `<button class="btn" id="td-copy">🔗 Ссылка</button>`;
+  html += `</div>`;
+  html += `<div class="td-foot-right">`;
+  if(cfg){
+    html += `<button class="btn" id="td-edit">✏️ Изменить</button>`;
+  }
+  html += `<button class="btn pri" id="td-close2">Закрыть</button>`;
+  html += `</div>`;
+  html += `</div>`;
+
+  $("#tdetail").innerHTML = html;
+  if(!$("#tdlg").open) $("#tdlg").showModal();
+  if(!silent){
+    // Обновляем hash в адресе, чтобы ссылкой можно было поделиться
+    try{ history.replaceState(null,"", "#task-" + t.id); }catch(e){}
+  }
+}
+
+function closeTaskDetail(){
+  curDetailId = null;
+  $("#tdlg").close();
+  try{ history.replaceState(null,"", location.pathname + location.search); }catch(e){}
+}
+
+$("#tdlg").addEventListener("click", (e) => {
+  if(e.target === $("#tdlg")) closeTaskDetail();
+});
+document.addEventListener("keydown", e => {
+  if(e.key === "Escape" && $("#tdlg").open) closeTaskDetail();
+});
+
+/* Кнопки внутри диалога */
+$("#tdetail").addEventListener("click", e => {
+  const id = curDetailId;
+  if(!id) return;
+  if(e.target.closest(".td-close") || e.target.closest("#td-close2")){ closeTaskDetail(); return; }
+  if(e.target.closest("#td-star")){
+    if(STARRED.has(id)) STARRED.delete(id); else STARRED.add(id);
+    ls.set("dl-starred", [...STARRED]);
+    render(); openTaskDetail(id, true); return;
+  }
+  if(e.target.closest("#td-copy")){
+    const url = location.origin + location.pathname + "#task-" + id;
+    const okMsg = () => toast("Ссылка скопирована",2500,"ok");
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(okMsg).catch(()=>{
+        prompt("Скопируйте ссылку:", url);
+      });
+    } else {
+      prompt("Скопируйте ссылку:", url);
+    }
+    return;
+  }
+  if(e.target.closest("#td-edit")){
+    const t = S.tasks.find(x => x.id === id);
+    closeTaskDetail();
+    if(t) openForm(t);
+    return;
+  }
+  if(e.target.closest("[data-open]")){
+    const b = e.target.closest("[data-open]");
+    const [tid, fid] = b.dataset.open.split("|");
+    const tk = S.tasks.find(x => x.id === tid);
+    if(tk) openFile(tk.files.find(x => x.id === fid));
+    return;
+  }
+});
+
+/* ===== Сводка ===== */
 function sumRows(){const rows=[];S.tasks.forEach(t=>(t.topics||[]).forEach(p=>{
  const b=BK.find(x=>x.task===t.id&&x.topic===p.id),s=S.subjects.find(x=>x.id===t.subj);
  rows.push([s?s.name:"—",t.title,p.text,b?b.name:""])}));return rows}
@@ -773,35 +837,59 @@ $("#sclose").onclick=()=>$("#sdlg").close();
 $("#scsv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"',rows=[["Дисциплина","Задание","Тема","Занял(а)"],...sumRows()];
  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+rows.map(r=>r.map(q).join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"}));a.download="bronirovanie.csv";a.click()};
 
-async function openFile(m){try{const r=await fetch("files/"+m.id);if(!r.ok)throw 0;const a=document.createElement("a");a.href=URL.createObjectURL(await r.blob());a.download=m.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}catch(e){toast("Не удалось скачать файл",3500,"bad")}}
+/* ===== Файлы и загрузка ===== */
+async function openFile(m){
+  if(!m) return;
+  try{
+    const r=await fetch("files/"+m.id);if(!r.ok)throw 0;
+    const a=document.createElement("a");a.href=URL.createObjectURL(await r.blob());a.download=m.name;a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  }catch(e){toast("Не удалось скачать файл",3500,"bad")}
+}
 async function upload(t,files){for(const f of files){
  if(f.size>MAXF){toast("«"+f.name+"» больше 25 МБ — пропущен",3500,"bad");continue}
  const id=uid();await putFile("files/"+id,f);t.files.push({id,name:f.name,size:f.size})}}
 
+/* ===== Обработка кликов ===== */
 document.addEventListener("click",e=>{
- const b=e.target.closest("button, h3[data-toggle-grp], .tp-toggle");
- if(!b)return;
- const d=b.dataset,T=id=>S.tasks.find(t=>t.id===id);
- if(d.s){ cur=d.s; COLLAPSED_GROUPS=loadCollapsed(); render(); return; }
- if(d.toggleGrp){
-  const g=d.toggleGrp;
-  if(COLLAPSED_GROUPS.has(g))COLLAPSED_GROUPS.delete(g);else COLLAPSED_GROUPS.add(g);
-  saveCollapsed();
-  render();return;
- }
- if(d.toggleTopics){
-  const id=d.toggleTopics;
-  if(EXPANDED.has(id))EXPANDED.delete(id);else EXPANDED.add(id);
-  ls.set("dl-expanded",[...EXPANDED]);
-  render();return;
- }
- if(d.edit)openForm(T(d.edit));
- if(d.book){const[a,b]=d.book.split("|");book(a,b)}
- if(d.unbook)unbook(d.unbook);
- if(d.open){const[t,f]=d.open.split("|");openFile(T(t).files.find(x=>x.id===f))}
- if(d.att){attachTo=T(d.att);$("#addf").click()}
- if(d.rm){const[t,f]=d.rm.split("|"),tk=T(t);if(confirm("Удалить файл?"))run(async()=>{try{await delFile("files/"+f)}catch(x){}tk.files=tk.files.filter(x=>x.id!==f)})}
- if(d.del){const tk=T(d.del);if(confirm("Удалить «"+tk.title+"» вместе с файлами?"))run(async()=>{for(const f of tk.files){try{await delFile("files/"+f.id)}catch(x){}}S.tasks=S.tasks.filter(x=>x!==tk)})}
+  // Проверяем клик по карточке (открытие подробностей)
+  const taskEl = e.target.closest(".task");
+  if(taskEl && !e.target.closest("button, input, .file, .tp-toggle, .tp, .acts, .topics")){
+    // Не открываем если выделен текст
+    const sel = window.getSelection && window.getSelection().toString();
+    if(!sel){
+      openTaskDetail(taskEl.dataset.id);
+      return;
+    }
+  }
+
+  const b=e.target.closest("button, h3[data-toggle-grp], .tp-toggle");
+  if(!b)return;
+  const d=b.dataset,T=id=>S.tasks.find(t=>t.id===id);
+  if(d.s){ cur=d.s; COLLAPSED_GROUPS=loadCollapsed(); render(); return; }
+  if(d.toggleGrp){
+    const g=d.toggleGrp;
+    if(COLLAPSED_GROUPS.has(g))COLLAPSED_GROUPS.delete(g);else COLLAPSED_GROUPS.add(g);
+    saveCollapsed();render();return;
+  }
+  if(d.toggleTopics){
+    const id=d.toggleTopics;
+    if(EXPANDED.has(id))EXPANDED.delete(id);else EXPANDED.add(id);
+    ls.set("dl-expanded",[...EXPANDED]);render();return;
+  }
+  if(d.star){
+    const id = d.star;
+    if(STARRED.has(id))STARRED.delete(id);else STARRED.add(id);
+    ls.set("dl-starred",[...STARRED]);
+    render();return;
+  }
+  if(d.edit)openForm(T(d.edit));
+  if(d.book){const[a,b]=d.book.split("|");book(a,b)}
+  if(d.unbook)unbook(d.unbook);
+  if(d.open){const[t,f]=d.open.split("|");openFile(T(t).files.find(x=>x.id===f))}
+  if(d.att){attachTo=T(d.att);$("#addf").click()}
+  if(d.rm){const[t,f]=d.rm.split("|"),tk=T(t);if(confirm("Удалить файл?"))run(async()=>{try{await delFile("files/"+f)}catch(x){}tk.files=tk.files.filter(x=>x.id!==f)})}
+  if(d.del){const tk=T(d.del);if(confirm("Удалить «"+tk.title+"» вместе с файлами?"))run(async()=>{for(const f of tk.files){try{await delFile("files/"+f.id)}catch(x){}}S.tasks=S.tasks.filter(x=>x!==tk)})}
 });
 document.addEventListener("change",e=>{const id=e.target.dataset.done;if(!id)return;e.target.checked?DONE.add(id):DONE.delete(id);ls.set("dl-done",[...DONE]);render()});
 $("#addf").onchange=e=>{const fl=[...e.target.files],t=attachTo;e.target.value="";if(t&&fl.length)run(()=>upload(t,fl))};
@@ -826,7 +914,8 @@ $("#tf").onsubmit=()=>{
  const v={title:$("#f-t").value.trim(),subj:$("#f-s").value,due:$("#f-d").value,note:$("#f-n").value.trim(),topics:$("#f-p").value.split("\n").map(s=>s.trim()).filter(Boolean).map(x=>((editing&&editing.topics)||[]).find(o=>o.text===x)||{id:uid(),text:x})},fl=[...$("#f-f").files],t=editing||{id:uid(),files:[]};
  run(async()=>{Object.assign(t,v);await upload(t,fl);if(!editing)S.tasks.push(t)})};
 
-$("#login").onclick=()=>{if(!loaded){toast("Сначала нужно открыть сайт по ссылке с хостинга",3500,"bad");return}$("#adlg").showModal()};
+/* ===== Вход админа ===== */
+$("#login").onclick=()=>{if(!loaded){toast("Сначала откройте сайт по ссылке с хостинга",3500,"bad");return}$("#adlg").showModal()};
 $("#acancel").onclick=()=>$("#adlg").close();
 $("#af").onsubmit=async()=>{
  cfg={o:$("#a-b").value.trim(),r:$("#a-k").value.trim(),t:$("#a-s").value.trim()};
@@ -834,25 +923,23 @@ $("#af").onsubmit=async()=>{
  try{await pull();await publish();ls.set("dl-admin",cfg);render();toast("Вы вошли как администратор",3500,"ok")}catch(e){cfg=null;render();toast(errMsg(e),6000,"bad")}};
 $("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");render()};
 
-/* PUSH — код оставлен на случай возврата */
+/* ===== PUSH (код оставлен, кнопка скрыта) ===== */
 function urlB64ToUint8Array(base64String){
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
-  const rawData = atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
+  const rawData = atob(base64); const outputArray = new Uint8Array(rawData.length);
   for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
   return outputArray;
 }
 function pushSupported(){ return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
 function updatePushBtn(){
-  const b = $("#pushbtn");
-  if(!b) return;
-  if(!pushSupported()){ b.textContent = "🔕 Уведомления не поддерживаются"; b.disabled = true; return; }
-  if(Notification.permission === "denied"){ b.textContent = "🔕 Уведомления заблокированы"; return; }
-  b.textContent = ls.get("dl-push-enabled", false) ? "🔔 Уведомления включены" : "🔔 Включить уведомления";
+  const b = $("#pushbtn"); if(!b) return;
+  if(!pushSupported()){ b.textContent = "🔕 Не поддерживается"; b.disabled = true; return; }
+  if(Notification.permission === "denied"){ b.textContent = "🔕 Заблокированы"; return; }
+  b.textContent = ls.get("dl-push-enabled", false) ? "🔔 Включены" : "🔔 Уведомления";
 }
 async function enablePush(){
-  if(!pushSupported()){ toast("Браузер не поддерживает push-уведомления", 4000, "bad"); return; }
+  if(!pushSupported()){ toast("Браузер не поддерживает push", 4000, "bad"); return; }
   try{
     const perm = await Notification.requestPermission();
     if(perm !== "granted"){ toast("Разрешение не выдано", 4500, "warn"); return; }
@@ -861,43 +948,27 @@ async function enablePush(){
     if(!sub){ sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY) }); }
     const j = sub.toJSON();
     await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY } });
-    const r = await fetch(SB_URL + "/rest/v1/push_subs", {
-      method: "POST",
-      headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" },
-      body: JSON.stringify({ endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth, name: ls.get("dl-name", null), user_agent: navigator.userAgent.slice(0, 200) })
-    });
-    if(!r.ok){ throw new Error("HTTP " + r.status); }
-    ls.set("dl-push-enabled", true);
-    updatePushBtn();
-    toast("Уведомления включены", 4000, "ok");
-  }catch(e){ toast("Не удалось включить: " + e.message, 5000, "bad"); }
+    const r = await fetch(SB_URL + "/rest/v1/push_subs", { method:"POST", headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" }, body: JSON.stringify({ endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth, name: ls.get("dl-name", null), user_agent: navigator.userAgent.slice(0, 200) }) });
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    ls.set("dl-push-enabled", true); updatePushBtn(); toast("Уведомления включены", 4000, "ok");
+  }catch(e){ toast("Не удалось включить", 5000, "bad"); }
 }
 async function disablePush(){
   try{
     const reg = await navigator.serviceWorker.ready;
     const sub = await reg.pushManager.getSubscription();
-    if(sub){
-      const j = sub.toJSON();
-      await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), { method: "DELETE", headers: {"apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY} });
-      await sub.unsubscribe();
-    }
-    ls.set("dl-push-enabled", false);
-    updatePushBtn();
-    toast("Уведомления отключены", 3500, "info");
+    if(sub){ const j = sub.toJSON(); await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), { method: "DELETE", headers: {"apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY} }); await sub.unsubscribe(); }
+    ls.set("dl-push-enabled", false); updatePushBtn(); toast("Уведомления отключены", 3500, "info");
   }catch(e){ toast("Ошибка отключения", 4500, "bad"); }
 }
-$("#pushbtn").onclick = () => {
-  if(ls.get("dl-push-enabled", false)) { if(confirm("Отключить уведомления?")) disablePush(); }
-  else { enablePush(); }
-};
+$("#pushbtn").onclick = () => { if(ls.get("dl-push-enabled", false)) { if(confirm("Отключить?")) disablePush(); } else { enablePush(); } };
 
-/* Предупреждения при старте */
+/* ===== Предупреждения ===== */
 function startWarnings(){
   if(!S.tasks.length)return;
   if(sessionStorage.getItem("dl-warned"))return;
   sessionStorage.setItem("dl-warned","1");
-  const now=new Date();
-  const d0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const now=new Date(); const d0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
   let over=0,todayCnt=0;
   S.tasks.forEach(t=>{
     if(DONE.has(t.id)||!t.due)return;
@@ -907,38 +978,32 @@ function startWarnings(){
     if(dd.getTime()===d0.getTime())todayCnt++;
   });
   if(over>0){
-    setTimeout(()=>toast(`Просрочено заданий: ${over}`,7000,"warn",{
-      action:"Показать",
-      onAction:()=>{
-        COLLAPSED_GROUPS.delete("over");
-        saveCollapsed();
-        render();
-        const el=document.querySelector(".grp.bad");
-        if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
-      }
-    }),700);
+    setTimeout(()=>toast(`Просрочено заданий: ${over}`,7000,"warn",{ action:"Показать", onAction:()=>{
+      COLLAPSED_GROUPS.delete("over"); saveCollapsed(); render();
+      const el=document.querySelector(".grp.bad"); if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
+    }}),700);
   }
   if(todayCnt>0){
-    setTimeout(()=>toast(`Сегодня сдавать: ${todayCnt}`,7000,"warn",{
-      action:"Показать",
-      onAction:()=>{
-        COLLAPSED_GROUPS.delete("today");
-        saveCollapsed();
-        render();
-        window.scrollTo({top:0,behavior:"smooth"});
-      }
-    }),over>0?2500:700);
+    setTimeout(()=>toast(`Сегодня сдавать: ${todayCnt}`,7000,"warn",{ action:"Показать", onAction:()=>{
+      COLLAPSED_GROUPS.delete("today"); saveCollapsed(); render(); window.scrollTo({top:0,behavior:"smooth"});
+    }}),over>0?2500:700);
   }
 }
 
+/* ===== Старт ===== */
 cfg=ls.get("dl-admin",null);
-(cfg?pull().catch(loadData):loadData()).then(()=>{render();loadBookings();startWarnings()});
+(cfg?pull().catch(loadData):loadData()).then(()=>{
+  render(); loadBookings(); startWarnings();
+  // Открываем задание из ссылки, если есть хэш
+  if(location.hash.startsWith("#task-")){
+    const id = location.hash.slice(6);
+    setTimeout(()=>openTaskDetail(id), 600);
+  }
+});
 setInterval(()=>{if(SB_URL)loadBookings()},30000);
 
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('service-worker.js').then(()=>{ updatePushBtn(); }).catch(()=>{});
-  });
+  window.addEventListener('load',()=>{ navigator.serviceWorker.register('service-worker.js').then(()=>{ updatePushBtn(); }).catch(()=>{}); });
 }
 </script>
 </body>
