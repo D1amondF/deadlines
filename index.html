@@ -17,85 +17,120 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* ============ СВЕТЛАЯ ТЕМА (по умолчанию) ============ */
 :root{
   --ink:#171F29;
   --mute:#8B8A8F;
   --bg:#E9E8F1;
   --surf:#FFFFFF;
+  --surf2:#F5F6FA;
+  --hover:#DDE2F0;
   --line:#D3E0E4;
   --acc:#C81240;
+  --acc-hover:#A80F34;
   --navy:#002b5b;
-  --blue:#004c79;
+  --blue:#004C79;
   --bad:#A00F33;
-  --ok:#1f8f5f;
+  --ok:#1F8F5F;
   --warn:#EF5803;
   font-family:'Manrope',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   color:var(--ink);
 }
-/* ==== Тёмная тема ==== */
+
+/* ============ ТЁМНАЯ ТЕМА ============ */
 body.dark{
   --ink:#E9E8F1;
-  --mute:#9AA1B0;
+  --mute:#9BA3B4;
   --bg:#0F1826;
   --surf:#1A2332;
-  --line:#2A3446;
+  --surf2:#232E42;
+  --hover:#28344B;
+  --line:#2E3A50;
   --acc:#E85C7F;
-  --navy:#8BB0E0;
-  --blue:#5B8FC4;
-  --bad:#FF6B7A;
-  --ok:#3DD68C;
+  --acc-hover:#F27A99;
+  --navy:#A8C4E8;
+  --blue:#7AB2E8;
+  --bad:#FF7A8A;
+  --ok:#4FD99A;
   --warn:#FFB454;
+  color-scheme: dark;
 }
-body.dark .subj:hover{background:#232E42}
-body.dark .grp h3:hover{background:rgba(139,176,224,.08)}
-body.dark .grp h3 .chev{background:#232E42;color:#8BB0E0}
-body.dark .file{background:#232E42}
-body.dark .task:hover{box-shadow:0 2px 10px rgba(0,0,0,.35)}
-body.dark dialog{background:#1A2332;color:var(--ink)}
-body.dark dialog input,body.dark dialog select,body.dark dialog textarea{background:#232E42;color:var(--ink);border-color:var(--line)}
-body.dark .btn.pri{color:#fff}
+
 *{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
 .app>*{min-width:0}
-body{margin:0;background:var(--bg);line-height:1.45;transition:background .2s,color .2s}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.45;
+  transition:background .25s ease,color .25s ease;
+}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .adm-only{display:none!important}
 body.adm .adm-only{display:revert!important}
 body.adm .topb.adm-only,body.adm .acts.adm-only{display:flex!important}
+
 .app{display:grid;grid-template-columns:260px 1fr;min-height:100vh;max-width:1100px;margin:0 auto}
 aside{padding:24px 16px;border-right:1px solid var(--line)}
 h1{font-size:21px;margin:0 0 20px;letter-spacing:-.01em;color:var(--navy);font-weight:800}
-.subj{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:0;background:none;border-radius:8px;text-align:left;font-weight:500}
-.subj:hover{background:#dde2f0}
+
+.subj{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:9px 10px;border:0;background:none;border-radius:8px;
+  text-align:left;font-weight:500;color:var(--ink);
+  transition:background .15s;
+}
+.subj:hover{background:var(--hover)}
 .subj.on{background:var(--surf);font-weight:700;box-shadow:inset 3px 0 0 var(--c,var(--acc));color:var(--navy)}
 .subj i{width:10px;height:10px;border-radius:50%;background:var(--c,var(--mute));flex:none}
 .subj b{margin-left:auto;font-weight:600;color:var(--mute);font-size:13px}
+
 .addsubj{display:flex;gap:6px;margin-top:14px}
-.addsubj input{flex:1;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--surf)}
-.btn{border:1px solid var(--line);background:var(--surf);padding:8px 12px;border-radius:8px;font-weight:500;transition:border-color .15s,background .15s,color .15s}
-.btn:hover{border-color:var(--acc)}
+.addsubj input{
+  flex:1;min-width:0;padding:8px;
+  border:1px solid var(--line);border-radius:8px;
+  background:var(--surf);color:var(--ink);
+}
+.addsubj input::placeholder{color:var(--mute)}
+
+.btn{
+  border:1px solid var(--line);background:var(--surf);color:var(--ink);
+  padding:8px 12px;border-radius:8px;font-weight:500;
+  transition:border-color .15s,background .15s,color .15s;
+}
+.btn:hover{border-color:var(--acc);background:var(--hover)}
 .btn.pri{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
-.btn.pri:hover{background:#a80f34;border-color:#a80f34}
+.btn.pri:hover{background:var(--acc-hover);border-color:var(--acc-hover)}
 .btn.bad{color:var(--bad)}
+.btn.bad:hover{border-color:var(--bad)}
+
 .foot{margin-top:24px;font-size:13px;color:var(--mute)}
 .foot-btns{margin-top:10px;display:flex;flex-wrap:wrap;gap:10px 14px}
-.brand-slogan{margin-top:18px;padding:12px 0 0;border-top:1px solid var(--line);font-size:13px;color:var(--navy);letter-spacing:.02em;line-height:1.4}
+.brand-slogan{
+  margin-top:18px;padding:12px 0 0;border-top:1px solid var(--line);
+  font-size:13px;color:var(--navy);letter-spacing:.02em;line-height:1.4;
+}
 .brand-slogan span{color:var(--acc);font-weight:700}
-.link{border:0;background:none;padding:0;text-decoration:underline;color:var(--mute);font-size:13px}
+
+.link{
+  border:0;background:none;padding:0;text-decoration:underline;
+  color:var(--mute);font-size:13px;transition:color .15s;
+}
 .link:hover{color:var(--navy)}
+
 main{padding:24px 24px 60px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
 .top h2{margin:0;font-size:20px;color:var(--navy);font-weight:800}
 .topb{display:flex;gap:8px}
 
-/* Кнопки для всех (не админ) — фильтр + календарь */
 .topb-public{display:flex;gap:6px;flex-wrap:wrap}
 .topb-public .btn{padding:7px 11px;font-size:13px;font-weight:600}
 .filter-btn.active{background:var(--acc);border-color:var(--acc);color:#fff}
 
-/* ===== Группы (сворачиваемые) ===== */
+/* ===== Группы ===== */
 .grp{margin-top:26px}
 .grp h3{
   margin:0 0 8px;font-size:13px;color:var(--mute);font-weight:700;
@@ -106,12 +141,12 @@ main{padding:24px 24px 60px}
   -webkit-tap-highlight-color:transparent;
   transition:color .15s,background .15s;
 }
-.grp h3:hover{color:var(--navy);background:rgba(0,43,91,.04)}
+.grp h3:hover{color:var(--navy);background:var(--hover)}
 .grp h3 .chev{
   font-size:20px;color:var(--navy);line-height:1;
   display:inline-flex;align-items:center;justify-content:center;
   width:28px;height:28px;text-align:center;flex:none;
-  background:#dde2f0;border-radius:50%;
+  background:var(--hover);border-radius:50%;
   transition:transform .2s ease,background .15s,color .15s;
 }
 .grp h3:hover .chev{background:var(--acc);color:#fff}
@@ -120,35 +155,70 @@ main{padding:24px 24px 60px}
 .grp.collapsed .grp-body{display:none}
 .grp.bad h3{color:var(--bad)}
 
-.task{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;background:var(--surf);padding:12px 14px 12px 12px;border-left:4px solid var(--c);border-radius:4px 10px 10px 4px;margin-bottom:8px;transition:box-shadow .15s}
-.task:hover{box-shadow:0 2px 10px rgba(0,43,91,.06)}
+/* ===== Карточки ===== */
+.task{
+  display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;
+  background:var(--surf);color:var(--ink);
+  padding:12px 14px 12px 12px;
+  border-left:4px solid var(--c);
+  border-radius:4px 10px 10px 4px;
+  margin-bottom:8px;transition:box-shadow .15s;
+}
+.task:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
+body.dark .task:hover{box-shadow:0 2px 12px rgba(0,0,0,.4)}
 .task.done{opacity:.55}
 .task.done .tt{text-decoration:line-through}
 .chk{width:20px;height:20px;margin-top:2px;accent-color:var(--ok)}
 .tt{font-weight:700;color:var(--navy)}
 .meta{font-size:13px;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:2px}
-.due.bad{color:var(--bad);font-weight:700}.due.soon{color:var(--warn);font-weight:700}
-.note{font-size:14px;margin-top:6px;white-space:pre-wrap}
+.due.bad{color:var(--bad);font-weight:700}
+.due.soon{color:var(--warn);font-weight:700}
+.note{font-size:14px;margin-top:6px;white-space:pre-wrap;color:var(--ink)}
 .note,.tt,.meta,.tp-t,.tp-toggle span{overflow-wrap:anywhere;word-break:break-word}
+
 .files,.file{max-width:100%}
 .file button{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .files{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.file{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;font-size:13px;background:#f5f6fa}
+.file{
+  display:inline-flex;align-items:center;
+  border:1px solid var(--line);border-radius:999px;
+  font-size:13px;background:var(--surf2);
+}
 .file button{border:0;background:none;padding:3px 9px;color:var(--blue)}
 .file .x{color:var(--mute);padding-left:2px}
+
 .acts{display:flex;gap:4px}
-.ico{border:0;background:none;padding:4px 8px;border-radius:6px;color:var(--mute);font-size:13px;font-weight:500}
-.ico:hover{background:var(--bg);color:var(--navy)}
+.ico{
+  border:0;background:none;padding:4px 8px;border-radius:6px;
+  color:var(--mute);font-size:13px;font-weight:500;
+}
+.ico:hover{background:var(--hover);color:var(--navy)}
+
 .empty{padding:40px 16px;text-align:center;color:var(--mute)}
-dialog{border:0;border-radius:14px;padding:22px;width:min(460px,92vw);box-shadow:0 20px 60px rgba(0,43,91,.3);font-family:inherit}
-dialog::backdrop{background:rgba(0,43,91,.45)}
+
+/* ===== Диалоги ===== */
+dialog{
+  border:0;border-radius:14px;padding:22px;
+  width:min(460px,92vw);
+  background:var(--surf);color:var(--ink);
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+  font-family:inherit;
+}
+dialog::backdrop{background:rgba(0,20,40,.55)}
 dialog h2{margin:0 0 14px;font-size:18px;color:var(--navy)}
 dialog p{font-size:13px;color:var(--mute);margin:0 0 4px}
 label{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px;font-weight:500}
-dialog input,dialog select,dialog textarea{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:#fff}
-dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--acc)}
+dialog input,dialog select,dialog textarea{
+  width:100%;padding:9px;
+  border:1px solid var(--line);border-radius:8px;
+  background:var(--surf2);color:var(--ink);
+}
+dialog input:focus,dialog select:focus,dialog textarea:focus{
+  border-color:var(--acc);outline:none;
+}
 .row{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
 
+/* ===== Toast ===== */
 #toast{
   position:fixed;top:16px;left:50%;
   transform:translateX(-50%) translateY(-24px);
@@ -156,17 +226,18 @@ dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--
   padding:13px 18px;border-radius:12px;
   font-size:15px;font-weight:600;
   display:none;max-width:min(620px,92vw);z-index:100;
-  box-shadow:0 12px 36px rgba(0,43,91,.32);
+  box-shadow:0 12px 36px rgba(0,0,0,.35);
   cursor:pointer;line-height:1.35;letter-spacing:.01em;
   transition:transform .28s cubic-bezier(.2,.9,.3,1.2),opacity .22s ease;
   opacity:0;align-items:center;gap:10px;
 }
 #toast.show{display:flex;transform:translateX(-50%) translateY(0);opacity:1}
-#toast.ok{background:var(--blue)}
-#toast.bad{background:var(--bad)}
-#toast.warn{background:var(--warn)}
-#toast.info{background:var(--navy)}
-#toast.loading{background:var(--navy)}
+#toast.ok{background:var(--blue);color:#fff}
+#toast.bad{background:var(--bad);color:#fff}
+#toast.warn{background:var(--warn);color:#fff}
+#toast.info{background:var(--navy);color:var(--bg)}
+body.dark #toast.info{color:#0F1826}
+#toast.loading{background:var(--navy);color:#fff}
 #toast.loading::before{
   content:"";width:14px;height:14px;border-radius:50%;
   border:2px solid rgba(255,255,255,.35);border-top-color:#fff;
@@ -181,21 +252,31 @@ dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--
 }
 .toast-action:hover{background:rgba(255,255,255,.32)}
 
+/* ===== Темы в задании ===== */
 .topics{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}
-.tp-toggle{background:none;border:0;padding:4px 0;font:inherit;font-size:13px;color:var(--mute);cursor:pointer;display:flex;align-items:center;gap:6px;width:100%;text-align:left;font-weight:600}
+.tp-toggle{
+  background:none;border:0;padding:4px 0;
+  font:inherit;font-size:13px;color:var(--mute);
+  cursor:pointer;display:flex;align-items:center;gap:6px;
+  width:100%;text-align:left;font-weight:600;
+}
 .tp-toggle:hover{color:var(--navy)}
 .tp-toggle .chev{margin-left:auto;font-size:14px;color:var(--mute);line-height:1}
 .tp-list{margin-top:2px}
-.tp{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:14px}
+.tp{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:14px;color:var(--ink)}
 .tp-t{flex:1}
 .tp.taken .tp-t{color:var(--mute)}
 .tp-n{font-size:13px;color:var(--blue);font-weight:700}
 .tp .btn{padding:4px 10px;font-size:13px}
-#stbl{width:100%;border-collapse:collapse;font-size:14px}
+
+/* ===== Таблица сводки ===== */
+#stbl{width:100%;border-collapse:collapse;font-size:14px;color:var(--ink)}
 #stbl th,#stbl td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
 #stbl th{color:var(--mute);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
-#stbl td.free{color:var(--mute)}#stbl td.ok{font-weight:700;color:var(--blue)}
+#stbl td.free{color:var(--mute)}
+#stbl td.ok{font-weight:700;color:var(--blue)}
 
+/* ===== Мобильная адаптация ===== */
 @media(max-width:760px){
 .app{grid-template-columns:1fr;max-width:100%}
 aside{border-right:0;border-bottom:1px solid var(--line);padding:12px 10px}
@@ -316,11 +397,9 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 const COLORS=["#C81240","#002b5b","#004c79","#A00F33","#4D56BC","#5ba7d5","#E63542","#EF5803"];
 const MAXF=25*1024*1024;
 
-/* ====== НАСТРОЙКИ SUPABASE ====== */
 const SB_URL="https://xmbanshmxcmylvjsrgol.supabase.co";
 const SB_KEY="sb_publishable_AOPVaQq28i30ZBLNtw289g_mSVZWj5v";
 
-/* ====== PUSH (VAPID) — код оставлен на случай возврата ====== */
 const VAPID_PUBLIC_KEY="BOWSoOZSRNMCwALWj5su_LHDBxq8i1XPQu_MCjE5fLVmsva2jNjNL4LTgetGZh28CWKrQEtZiUeHmk4dGTb9dAc";
 const PUSH_FN_URL = SB_URL + "/functions/v1/send-push";
 
@@ -332,7 +411,6 @@ const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}
 let DONE=new Set(ls.get("dl-done",[]));
 let ONLY_MINE=ls.get("dl-only-mine",false);
 
-/* ===== Свёрнутые группы — у каждой вкладки своя память ===== */
 function collapsedKey(){ return "dl-collapsed-groups-" + cur; }
 function loadCollapsed(){ try{ return new Set(ls.get(collapsedKey(), [])); }catch(e){ return new Set(); } }
 function saveCollapsed(){ ls.set(collapsedKey(), [...COLLAPSED_GROUPS]); }
@@ -444,7 +522,7 @@ $("#soundbtn").onclick=()=>{
 };
 updateSoundLabel();
 
-/* ---- запись через GitHub API ---- */
+/* ---- GitHub API ---- */
 const enc=new TextEncoder();
 const gh=(m,p,b)=>fetch(`https://api.github.com/repos/${cfg.o}/${cfg.r}/contents/${p}`,{method:m,headers:{Authorization:"Bearer "+cfg.t,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"},body:b?JSON.stringify(b):undefined});
 const b64s=b=>{let s="";for(let i=0;i<b.length;i+=8192)s+=String.fromCharCode.apply(null,b.subarray(i,i+8192));return btoa(s)};
@@ -463,14 +541,12 @@ function errMsg(e){return e instanceof TypeError?"Нет связи с GitHub �
  /40[34]/.test(e.message)?"Ошибка "+e.message.slice(5)+" — нет прав на запись или репозиторий не найден":"Не удалось опубликовать ("+e.message+")"}
 async function run(fn){toast("Публикую…",0,"loading");try{await fn();await publish();render();toast("Опубликовано. У остальных появится примерно через минуту",5000,"ok")}catch(e){toast(errMsg(e),6000,"bad")}}
 
-/* ---- загрузка данных ---- */
 async function loadData(){
  try{const r=await fetch("data.json?"+Date.now(),{cache:"no-store"});
   if(r.ok)S=await r.json();else if(r.status!==404)throw 0;
   loaded=true}catch(e){$("#list").innerHTML='<div class="empty">Не удалось загрузить задания. Откройте сайт по ссылке с хостинга, а не как файл с компьютера.</div>';return false}
  return true}
 
-/* ---- даты ---- */
 const tm=d=>d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
 const fmt=d=>new Date(d).toLocaleString("ru-RU",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"});
 function dueInfo(t){
@@ -491,7 +567,6 @@ function hasMyBooking(t){
 function render(){
  document.body.classList.toggle("adm",!!cfg);
  $("#login").hidden=!!cfg;
- // Обновляем вид кнопки фильтра
  const mb=$("#minebtn");
  if(mb) mb.classList.toggle("active", ONLY_MINE);
 
@@ -526,7 +601,6 @@ function render(){
    <div class="acts adm-only"><button class="ico" data-edit="${t.id}">Изменить</button><button class="ico" data-att="${t.id}">+ файл</button><button class="ico" data-del="${t.id}">Удалить</button></div>
   </article>`}).join("")+`</div></section>`}
 
- // Если фильтр «только мои» и ничего не нашлось — подсказка
  if(ONLY_MINE && !h){
    h = `<div class="empty">У вас пока нет забронированных тем${cur!=="all"?" в этой дисциплине":""}.<br>Нажмите «👤 Только мои» ещё раз, чтобы увидеть все задания.</div>`;
  }
@@ -534,7 +608,6 @@ function render(){
  $("#list").innerHTML=h||`<div class="empty">${cfg?"Добавьте дисциплину слева, затем первое задание.":"Заданий пока нет."}</div>`;
 }
 
-/* ---- бронирование тем (Supabase) ---- */
 let BK=[],bkErr=false,mine=ls.get("dl-mine",{}),EXPANDED=new Set(ls.get("dl-expanded",[]));
 const rnd=()=>[...crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,"0")).join("");
 
@@ -621,7 +694,7 @@ async function unbook(k){
 $("#apibtn").onclick=()=>{
  toast("Бронирование работает через Supabase. Настраивать ничего не нужно.",4000)};
 
-/* ---- Экспорт в календарь (.ics) ---- */
+/* ---- Календарь ---- */
 $("#minebtn").onclick = () => {
   ONLY_MINE = !ONLY_MINE;
   ls.set("dl-only-mine", ONLY_MINE);
@@ -689,7 +762,7 @@ function downloadICS(){
 }
 $("#icsbtn").onclick = downloadICS;
 
-/* ---- сводка броней ---- */
+/* ---- Сводка ---- */
 function sumRows(){const rows=[];S.tasks.forEach(t=>(t.topics||[]).forEach(p=>{
  const b=BK.find(x=>x.task===t.id&&x.topic===p.id),s=S.subjects.find(x=>x.id===t.subj);
  rows.push([s?s.name:"—",t.title,p.text,b?b.name:""])}));return rows}
@@ -700,7 +773,6 @@ $("#sclose").onclick=()=>$("#sdlg").close();
 $("#scsv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"',rows=[["Дисциплина","Задание","Тема","Занял(а)"],...sumRows()];
  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+rows.map(r=>r.map(q).join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"}));a.download="bronirovanie.csv";a.click()};
 
-/* ---- действия ---- */
 async function openFile(m){try{const r=await fetch("files/"+m.id);if(!r.ok)throw 0;const a=document.createElement("a");a.href=URL.createObjectURL(await r.blob());a.download=m.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}catch(e){toast("Не удалось скачать файл",3500,"bad")}}
 async function upload(t,files){for(const f of files){
  if(f.size>MAXF){toast("«"+f.name+"» больше 25 МБ — пропущен",3500,"bad");continue}
@@ -710,12 +782,7 @@ document.addEventListener("click",e=>{
  const b=e.target.closest("button, h3[data-toggle-grp], .tp-toggle");
  if(!b)return;
  const d=b.dataset,T=id=>S.tasks.find(t=>t.id===id);
- if(d.s){
-  cur=d.s;
-  COLLAPSED_GROUPS=loadCollapsed();
-  render();
-  return;
- }
+ if(d.s){ cur=d.s; COLLAPSED_GROUPS=loadCollapsed(); render(); return; }
  if(d.toggleGrp){
   const g=d.toggleGrp;
   if(COLLAPSED_GROUPS.has(g))COLLAPSED_GROUPS.delete(g);else COLLAPSED_GROUPS.add(g);
@@ -759,7 +826,6 @@ $("#tf").onsubmit=()=>{
  const v={title:$("#f-t").value.trim(),subj:$("#f-s").value,due:$("#f-d").value,note:$("#f-n").value.trim(),topics:$("#f-p").value.split("\n").map(s=>s.trim()).filter(Boolean).map(x=>((editing&&editing.topics)||[]).find(o=>o.text===x)||{id:uid(),text:x})},fl=[...$("#f-f").files],t=editing||{id:uid(),files:[]};
  run(async()=>{Object.assign(t,v);await upload(t,fl);if(!editing)S.tasks.push(t)})};
 
-/* ---- вход админа ---- */
 $("#login").onclick=()=>{if(!loaded){toast("Сначала нужно открыть сайт по ссылке с хостинга",3500,"bad");return}$("#adlg").showModal()};
 $("#acancel").onclick=()=>$("#adlg").close();
 $("#af").onsubmit=async()=>{
@@ -768,7 +834,7 @@ $("#af").onsubmit=async()=>{
  try{await pull();await publish();ls.set("dl-admin",cfg);render();toast("Вы вошли как администратор",3500,"ok")}catch(e){cfg=null;render();toast(errMsg(e),6000,"bad")}};
 $("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");render()};
 
-/* ---- PUSH (код оставлен, кнопка скрыта) ---- */
+/* PUSH — код оставлен на случай возврата */
 function urlB64ToUint8Array(base64String){
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
@@ -789,24 +855,22 @@ async function enablePush(){
   if(!pushSupported()){ toast("Браузер не поддерживает push-уведомления", 4000, "bad"); return; }
   try{
     const perm = await Notification.requestPermission();
-    if(perm !== "granted"){ toast("Разрешение не выдано — уведомления не придут", 4500, "warn"); return; }
+    if(perm !== "granted"){ toast("Разрешение не выдано", 4500, "warn"); return; }
     const reg = await navigator.serviceWorker.ready;
     let sub = await reg.pushManager.getSubscription();
     if(!sub){ sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY) }); }
     const j = sub.toJSON();
-    await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), {
-      method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY }
-    });
+    await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY } });
     const r = await fetch(SB_URL + "/rest/v1/push_subs", {
       method: "POST",
       headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" },
       body: JSON.stringify({ endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth, name: ls.get("dl-name", null), user_agent: navigator.userAgent.slice(0, 200) })
     });
-    if(!r.ok){ const t = await r.text().catch(()=>""); throw new Error("HTTP " + r.status + (t ? " — " + t : "")); }
+    if(!r.ok){ throw new Error("HTTP " + r.status); }
     ls.set("dl-push-enabled", true);
     updatePushBtn();
-    toast("Уведомления включены", 4000, "ok", { action: "Тест", onAction: () => testPush() });
-  }catch(e){ console.error(e); toast("Не удалось включить: " + e.message, 5000, "bad"); }
+    toast("Уведомления включены", 4000, "ok");
+  }catch(e){ toast("Не удалось включить: " + e.message, 5000, "bad"); }
 }
 async function disablePush(){
   try{
@@ -814,27 +878,20 @@ async function disablePush(){
     const sub = await reg.pushManager.getSubscription();
     if(sub){
       const j = sub.toJSON();
-      await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), {
-        method: "DELETE", headers: {"apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY}
-      });
+      await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), { method: "DELETE", headers: {"apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY} });
       await sub.unsubscribe();
     }
     ls.set("dl-push-enabled", false);
     updatePushBtn();
     toast("Уведомления отключены", 3500, "info");
-  }catch(e){ toast("Ошибка отключения: " + e.message, 4500, "bad"); }
-}
-async function testPush(){
-  const reg = await navigator.serviceWorker.ready;
-  reg.showNotification("Дедлайны ОБ26-2", { body: "Проверка уведомлений. Всё работает!", icon: "icon-192.png", badge: "icon-192.png", tag: "test" });
+  }catch(e){ toast("Ошибка отключения", 4500, "bad"); }
 }
 $("#pushbtn").onclick = () => {
-  if(!pushSupported()){ toast("Браузер не поддерживает push", 4000, "bad"); return; }
   if(ls.get("dl-push-enabled", false)) { if(confirm("Отключить уведомления?")) disablePush(); }
   else { enablePush(); }
 };
 
-/* ---- Умные предупреждения при старте (раз за сессию) ---- */
+/* Предупреждения при старте */
 function startWarnings(){
   if(!S.tasks.length)return;
   if(sessionStorage.getItem("dl-warned"))return;
@@ -874,17 +931,13 @@ function startWarnings(){
   }
 }
 
-/* ---- Старт ---- */
 cfg=ls.get("dl-admin",null);
 (cfg?pull().catch(loadData):loadData()).then(()=>{render();loadBookings();startWarnings()});
 setInterval(()=>{if(SB_URL)loadBookings()},30000);
 
-/* ---- PWA ---- */
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('service-worker.js').then(()=>{
-      updatePushBtn();
-    }).catch(()=>{});
+    navigator.serviceWorker.register('service-worker.js').then(()=>{ updatePushBtn(); }).catch(()=>{});
   });
 }
 </script>
