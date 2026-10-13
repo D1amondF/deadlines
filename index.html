@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Дедлайны ОБ26-2</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#002b5b">
+<meta name="theme-color" content="#C81240">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -22,12 +22,12 @@
   --bg:#E9E8F1;
   --surf:#FFFFFF;
   --line:#D3E0E4;
-  --acc:#C81240;      /* академический красный */
-  --navy:#002b5b;     /* глубокий синий */
-  --blue:#004c79;     /* насыщенный синий */
-  --bad:#A00F33;      /* бордовый */
-  --ok:#1f8f5f;       /* зелёный для «выполнено» */
-  --warn:#EF5803;     /* оранжевый для «скоро» */
+  --acc:#C81240;
+  --navy:#002b5b;
+  --blue:#004c79;
+  --bad:#A00F33;
+  --ok:#1f8f5f;
+  --warn:#EF5803;
   font-family:'Manrope',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   color:var(--ink);
 }
@@ -57,9 +57,11 @@ h1{font-size:21px;margin:0 0 20px;letter-spacing:-.01em;color:var(--navy);font-w
 .btn.pri:hover{background:#a80f34;border-color:#a80f34}
 .btn.bad{color:var(--bad)}
 .foot{margin-top:24px;font-size:13px;color:var(--mute)}
+.foot-btns{margin-top:10px;display:flex;flex-wrap:wrap;gap:10px 14px}
 .brand-slogan{margin-top:18px;padding:12px 0 0;border-top:1px solid var(--line);font-size:13px;color:var(--navy);letter-spacing:.02em;line-height:1.4}
 .brand-slogan span{color:var(--acc);font-weight:700}
-.link{border:0;background:none;padding:0;text-decoration:underline;color:var(--mute)}
+.link{border:0;background:none;padding:0;text-decoration:underline;color:var(--mute);font-size:13px}
+.link:hover{color:var(--navy)}
 main{padding:24px 24px 60px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
 .top h2{margin:0;font-size:20px;color:var(--navy);font-weight:800}
@@ -96,23 +98,39 @@ dialog input,dialog select,dialog textarea{width:100%;padding:9px;border:1px sol
 dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--acc)}
 .row{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
 
-/* Уведомления: сверху по центру, крупнее, с цветами бренда */
+/* Уведомления: сверху, с очередью, кнопками и звуком */
 #toast{
   position:fixed;top:16px;left:50%;
   transform:translateX(-50%) translateY(-24px);
   background:var(--navy);color:#fff;
-  padding:14px 24px;border-radius:12px;
+  padding:13px 18px;border-radius:12px;
   font-size:15px;font-weight:600;
-  display:none;max-width:min(600px,92vw);z-index:100;
+  display:none;max-width:min(620px,92vw);z-index:100;
   box-shadow:0 12px 36px rgba(0,43,91,.32);
-  cursor:pointer;text-align:center;line-height:1.35;letter-spacing:.01em;
+  cursor:pointer;line-height:1.35;letter-spacing:.01em;
   transition:transform .28s cubic-bezier(.2,.9,.3,1.2),opacity .22s ease;
   opacity:0;
+  align-items:center;gap:10px;
 }
-#toast.show{display:block;transform:translateX(-50%) translateY(0);opacity:1}
+#toast.show{display:flex;transform:translateX(-50%) translateY(0);opacity:1}
 #toast.ok{background:var(--blue)}
 #toast.bad{background:var(--bad)}
+#toast.warn{background:var(--warn)}
 #toast.info{background:var(--navy)}
+#toast.loading{background:var(--navy)}
+#toast.loading::before{
+  content:"";width:14px;height:14px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.35);border-top-color:#fff;
+  animation:toastspin .8s linear infinite;flex:none;
+}
+@keyframes toastspin{to{transform:rotate(360deg)}}
+.toast-action{
+  background:rgba(255,255,255,.2);border:0;color:#fff;
+  font:inherit;font-weight:700;padding:6px 14px;border-radius:8px;
+  cursor:pointer;white-space:nowrap;margin-left:6px;
+  transition:background .15s;
+}
+.toast-action:hover{background:rgba(255,255,255,.32)}
 
 .topics{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}
 .tp-toggle{background:none;border:0;padding:4px 0;font:inherit;font-size:13px;color:var(--mute);cursor:pointer;display:flex;align-items:center;gap:6px;width:100%;text-align:left;font-weight:600}
@@ -137,6 +155,7 @@ h1{font-size:18px;margin:0 0 10px}
 .subj{width:auto;white-space:nowrap;background:var(--surf);padding:8px 12px;font-size:13px;flex:none}
 .subj b{font-size:12px;margin-left:6px}
 .foot{margin-top:10px;font-size:12px}
+.foot-btns{gap:8px 12px;margin-top:8px}
 .brand-slogan{margin-top:10px;padding-top:8px;font-size:12px}
 main{padding:12px 10px 60px;max-width:100%}
 .top{margin-bottom:6px}
@@ -186,12 +205,16 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
   <div class="foot">
     <span class="adm-only">Режим администратора. <button class="link" id="logout">Выйти</button></span>
     <button class="link" id="login">Вход для администратора</button>
+    <div class="foot-btns">
+      <button class="link" id="soundbtn">🔊 Звук вкл.</button>
+      <button class="link" id="pushbtn">🔔 Уведомления</button>
+    </div>
   </div>
   <div class="brand-slogan">Будь лучшим. <span>Во всём.</span></div>
 </aside>
 <main>
   <div class="top"><h2 id="ttl">Все дисциплины</h2>
-   <div class="topb adm-only"><button class="btn" id="sumbtn">Сводка броней</button><button class="btn" id="apibtn">Бронирование</button><button class="btn" id="rensubj" hidden>Переименовать</button><button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button><button class="btn pri" id="new">Добавить задание</button></div></div>
+   <div class="topb adm-only"><button class="btn" id="sumbtn">Сводка броней</button><button class="btn" id="pushadminbtn">Рассылка</button><button class="btn" id="apibtn">Бронирование</button><button class="btn" id="rensubj" hidden>Переименовать</button><button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button><button class="btn pri" id="new">Добавить задание</button></div></div>
   <div id="list"></div>
 </main>
 </div>
@@ -220,6 +243,20 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 </form>
 </dialog>
 
+<dialog id="pdialog">
+<form method="dialog" id="pf">
+  <h2>Рассылка уведомления</h2>
+  <p>Push придёт на все устройства, где включены уведомления.</p>
+  <label for="p-title">Заголовок</label>
+  <input id="p-title" required maxlength="80" value="Дедлайны ОБ26-2">
+  <label for="p-body">Текст (до 240 символов)</label>
+  <textarea id="p-body" rows="4" required maxlength="240"></textarea>
+  <label for="p-key">Ключ администратора</label>
+  <input id="p-key" type="password" autocomplete="off" placeholder="Тот же ключ, что и для снятия броней">
+  <div class="row"><button class="btn" type="button" id="p-cancel">Отмена</button><button class="btn pri" type="submit" id="p-send">Отправить</button></div>
+</form>
+</dialog>
+
 <dialog id="sdlg" style="width:min(860px,94vw)">
   <h2>Сводка броней</h2>
   <div style="overflow:auto;max-height:60vh"><table id="stbl"><thead><tr><th>Дисциплина</th><th>Задание</th><th>Тема</th><th>Занял(а)</th></tr></thead><tbody id="sbody"></tbody></table></div>
@@ -237,6 +274,10 @@ const MAXF=25*1024*1024;
 const SB_URL="https://xmbanshmxcmylvjsrgol.supabase.co";
 const SB_KEY="sb_publishable_AOPVaQq28i30ZBLNtw289g_mSVZWj5v";
 
+/* ====== PUSH-УВЕДОМЛЕНИЯ (VAPID) ====== */
+const VAPID_PUBLIC_KEY="BOWSoOZSRNMCwALWj5su_LHDBxq8i1XPQu_MCjE5fLVmsva2jNjNL4LTgetGZh28CWKrQEtZiUeHmk4dGTb9dAc";
+const PUSH_FN_URL = SB_URL + "/functions/v1/send-push";
+
 let S={subjects:[],tasks:[]},cur="all",cfg=null,attachTo=null,loaded=false;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -244,15 +285,92 @@ const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
 let DONE=new Set(ls.get("dl-done",[]));
 
-/* Обновлённый toast: сверху, цветной по типу, можно закрыть кликом */
-function toast(t,ms=3500,type="info"){
-  const e=$("#toast");
-  e.textContent=t;
-  e.className="show "+type;
-  clearTimeout(toast.t);
-  e.onclick=()=>{e.className="";clearTimeout(toast.t)};
-  if(ms)toast.t=setTimeout(()=>{e.className="";},ms);
+/* ===== Система уведомлений: очередь, кнопки, звук ===== */
+const NOTE_QUEUE=[];
+let noteShowing=false,currentNote=null;
+let NOTE_SOUND=ls.get("dl-sound",true);
+
+let audioCtx=null;
+function beep(type){
+  if(!NOTE_SOUND)return;
+  try{
+    if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==="suspended")audioCtx.resume();
+    const now=audioCtx.currentTime;
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.type="sine";o.connect(g);g.connect(audioCtx.destination);
+    let freq=550,vol=0.05,dur=0.16;
+    if(type==="ok")   {freq=740;vol=0.06;dur=0.16;}
+    if(type==="bad")  {freq=220;vol=0.08;dur=0.22;}
+    if(type==="warn") {freq=440;vol=0.06;dur=0.20;}
+    o.frequency.value=freq;
+    g.gain.setValueAtTime(vol,now);
+    g.gain.exponentialRampToValueAtTime(0.0001,now+dur);
+    o.start(now);o.stop(now+dur+0.02);
+  }catch(e){}
 }
+
+function toast(t,ms=3500,type="info",opts={}){
+  for(let i=NOTE_QUEUE.length-1;i>=0;i--){
+    if(NOTE_QUEUE[i].type==="loading")NOTE_QUEUE.splice(i,1);
+  }
+  if(currentNote&&currentNote.type==="loading")hideNote();
+  NOTE_QUEUE.push({text:t,ms,type,actionLabel:opts.action,onAction:opts.onAction});
+  if(!noteShowing)showNextNote();
+}
+
+function showNextNote(){
+  if(noteShowing||!NOTE_QUEUE.length)return;
+  const note=NOTE_QUEUE.shift();
+  currentNote=note;noteShowing=true;
+
+  const e=$("#toast");
+  e.innerHTML="";
+
+  const txt=document.createElement("span");
+  txt.textContent=note.text;
+  txt.style.flex="1";txt.style.minWidth="0";
+  e.appendChild(txt);
+
+  if(note.actionLabel&&note.onAction){
+    const btn=document.createElement("button");
+    btn.textContent=note.actionLabel;
+    btn.className="toast-action";
+    btn.onclick=ev=>{
+      ev.stopPropagation();
+      try{note.onAction();}catch(_){}
+      hideNote();
+    };
+    e.appendChild(btn);
+  }
+
+  e.className="show "+note.type;
+  beep(note.type);
+
+  clearTimeout(showNextNote.t);
+  if(note.ms>0)showNextNote.t=setTimeout(hideNote,note.ms);
+}
+
+function hideNote(){
+  const e=$("#toast");
+  e.className="";
+  clearTimeout(showNextNote.t);
+  currentNote=null;noteShowing=false;
+  setTimeout(showNextNote,220);
+}
+
+function updateSoundLabel(){
+  const b=$("#soundbtn");
+  if(!b)return;
+  b.textContent=NOTE_SOUND?"🔊 Звук вкл.":"🔇 Звук выкл.";
+}
+$("#soundbtn").onclick=()=>{
+  NOTE_SOUND=!NOTE_SOUND;
+  ls.set("dl-sound",NOTE_SOUND);
+  updateSoundLabel();
+  if(NOTE_SOUND)beep("ok");
+};
+updateSoundLabel();
 
 /* ---- запись через GitHub API ---- */
 const enc=new TextEncoder();
@@ -271,7 +389,7 @@ async function pull(){const r=await gh("GET","data.json");
 function errMsg(e){return e instanceof TypeError?"Нет связи с GitHub — проверьте интернет":
  /401/.test(e.message)?"Ошибка 401 — токен неверный или просрочен":
  /40[34]/.test(e.message)?"Ошибка "+e.message.slice(5)+" — нет прав на запись или репозиторий не найден":"Не удалось опубликовать ("+e.message+")"}
-async function run(fn){toast("Публикую…",0);try{await fn();await publish();render();toast("Опубликовано. У остальных появится примерно через минуту",5000,"ok")}catch(e){toast(errMsg(e),6000,"bad")}}
+async function run(fn){toast("Публикую…",0,"loading");try{await fn();await publish();render();toast("Опубликовано. У остальных появится примерно через минуту",5000,"ok")}catch(e){toast(errMsg(e),6000,"bad")}}
 
 /* ---- загрузка данных ---- */
 async function loadData(){
@@ -371,7 +489,10 @@ async function book(tid,pid){
   if(result==="ok"){
    mine[tid+"|"+pid]=owner;ls.set("dl-mine",mine);
    EXPANDED.add(tid);ls.set("dl-expanded",[...EXPANDED]);
-   toast("Тема за вами",3500,"ok")
+   toast("Тема за вами",6000,"ok",{
+     action:"Отменить",
+     onAction:()=>unbook(tid+"|"+pid)
+   })
   }
   else if(result==="taken")toast("Эту тему уже заняли",3500,"bad")
   else if(result==="has_other")toast("Вы уже заняли другую тему в этом задании",3500,"bad")
@@ -399,6 +520,55 @@ async function unbook(k){
 
 $("#apibtn").onclick=()=>{
  toast("Бронирование работает через Supabase. Настраивать ничего не нужно.",4000)};
+
+/* ---- Рассылка push-уведомлений (админ) ---- */
+$("#pushadminbtn").onclick = () => {
+  $("#pf").reset();
+  $("#p-title").value = "Дедлайны ОБ26-2";
+  $("#p-key").value = ls.get("dl-akey", "");
+  $("#pdialog").showModal();
+  $("#p-body").focus();
+};
+
+$("#p-cancel").onclick = () => $("#pdialog").close();
+
+$("#pf").onsubmit = async (e) => {
+  e.preventDefault();
+  const title = $("#p-title").value.trim();
+  const body  = $("#p-body").value.trim();
+  const key   = $("#p-key").value.trim();
+  if (!title || !body || !key) { toast("Заполните все поля", 3500, "warn"); return; }
+
+  const btn = $("#p-send");
+  btn.disabled = true;
+  btn.textContent = "Отправляю…";
+
+  try {
+    const r = await fetch(PUSH_FN_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-admin-key": key },
+      body: JSON.stringify({ title, body })
+    });
+    const j = await r.json().catch(() => ({}));
+
+    if (r.status === 403) {
+      toast("Неверный ключ администратора", 4000, "bad");
+    } else if (!r.ok) {
+      toast("Ошибка: " + (j.error || "HTTP " + r.status), 5000, "bad");
+    } else if (j.total === 0) {
+      toast("Нет подписчиков — никто ещё не включил уведомления", 4500, "warn");
+    } else {
+      ls.set("dl-akey", key);
+      toast(`Отправлено: ${j.sent} · не доставлено: ${j.failed} · удалено мёртвых: ${j.removed}`, 6000, "ok");
+      $("#pdialog").close();
+    }
+  } catch (err) {
+    toast("Сеть недоступна: " + err.message, 5000, "bad");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Отправить";
+  }
+};
 
 /* ---- сводка броней ---- */
 function sumRows(){const rows=[];S.tasks.forEach(t=>(t.topics||[]).forEach(p=>{
@@ -462,18 +632,163 @@ $("#login").onclick=()=>{if(!loaded){toast("Сначала нужно откры
 $("#acancel").onclick=()=>$("#adlg").close();
 $("#af").onsubmit=async()=>{
  cfg={o:$("#a-b").value.trim(),r:$("#a-k").value.trim(),t:$("#a-s").value.trim()};
- toast("Проверяю доступ…",0);
+ toast("Проверяю доступ…",0,"loading");
  try{await pull();await publish();ls.set("dl-admin",cfg);render();toast("Вы вошли как администратор",3500,"ok")}catch(e){cfg=null;render();toast(errMsg(e),6000,"bad")}};
 $("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");render()};
 
+/* ---- PUSH: подписка и логика ---- */
+function urlB64ToUint8Array(base64String){
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+  const rawData = atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+  return outputArray;
+}
+
+function pushSupported(){
+  return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+}
+
+function updatePushBtn(){
+  const b = $("#pushbtn");
+  if(!b) return;
+  if(!pushSupported()){ b.textContent = "🔕 Уведомления не поддерживаются"; b.disabled = true; return; }
+  if(Notification.permission === "denied"){
+    b.textContent = "🔕 Уведомления заблокированы"; return;
+  }
+  b.textContent = ls.get("dl-push-enabled", false) ? "🔔 Уведомления включены" : "🔔 Включить уведомления";
+}
+
+async function enablePush(){
+  if(!pushSupported()){
+    toast("Браузер не поддерживает push-уведомления", 4000, "bad");
+    return;
+  }
+  try{
+    const perm = await Notification.requestPermission();
+    if(perm !== "granted"){
+      toast("Разрешение не выдано — уведомления не придут", 4500, "warn");
+      return;
+    }
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if(!sub){
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY)
+      });
+    }
+    const j = sub.toJSON();
+    const r = await fetch(SB_URL + "/rest/v1/push_subs", {
+      method: "POST",
+      headers: {
+        "apikey": SB_KEY,
+        "Authorization": "Bearer " + SB_KEY,
+        "Content-Type": "application/json",
+        "Prefer": "resolution=merge-duplicates,return=minimal"
+      },
+      body: JSON.stringify({
+        endpoint: j.endpoint,
+        p256dh: j.keys.p256dh,
+        auth: j.keys.auth,
+        name: ls.get("dl-name", null),
+        user_agent: navigator.userAgent.slice(0, 200)
+      })
+    });
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    ls.set("dl-push-enabled", true);
+    updatePushBtn();
+    toast("Уведомления включены", 4000, "ok", {
+      action: "Тест",
+      onAction: () => testPush()
+    });
+  }catch(e){
+    console.error(e);
+    toast("Не удалось включить: " + e.message, 5000, "bad");
+  }
+}
+
+async function disablePush(){
+  try{
+    const reg = await navigator.serviceWorker.ready;
+    const sub = await reg.pushManager.getSubscription();
+    if(sub){
+      const j = sub.toJSON();
+      await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), {
+        method: "DELETE",
+        headers: {"apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY}
+      });
+      await sub.unsubscribe();
+    }
+    ls.set("dl-push-enabled", false);
+    updatePushBtn();
+    toast("Уведомления отключены", 3500, "info");
+  }catch(e){
+    toast("Ошибка отключения: " + e.message, 4500, "bad");
+  }
+}
+
+async function testPush(){
+  const reg = await navigator.serviceWorker.ready;
+  reg.showNotification("Дедлайны ОБ26-2", {
+    body: "Проверка уведомлений. Всё работает!",
+    icon: "icon-192.png",
+    badge: "icon-192.png",
+    tag: "test"
+  });
+}
+
+$("#pushbtn").onclick = () => {
+  if(!pushSupported()){ toast("Браузер не поддерживает push", 4000, "bad"); return; }
+  if(ls.get("dl-push-enabled", false)) {
+    if(confirm("Отключить уведомления?")) disablePush();
+  } else {
+    enablePush();
+  }
+};
+
+/* ---- Умные предупреждения при старте ---- */
+function startWarnings(){
+  if(!S.tasks.length)return;
+  const now=new Date();
+  const d0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  let over=0,todayCnt=0;
+  S.tasks.forEach(t=>{
+    if(DONE.has(t.id)||!t.due)return;
+    const d=new Date(t.due);
+    if(d<now){over++;return}
+    const dd=new Date(d.getFullYear(),d.getMonth(),d.getDate());
+    if(dd.getTime()===d0.getTime())todayCnt++;
+  });
+  if(over>0){
+    setTimeout(()=>toast(`Просрочено заданий: ${over}`,7000,"warn",{
+      action:"Показать",
+      onAction:()=>{
+        const el=document.querySelector(".grp.bad");
+        if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
+      }
+    }),700);
+  }
+  if(todayCnt>0){
+    setTimeout(()=>toast(`Сегодня сдавать: ${todayCnt}`,7000,"warn",{
+      action:"К началу",
+      onAction:()=>window.scrollTo({top:0,behavior:"smooth"})
+    }),over>0?2500:700);
+  }
+}
+
+/* ---- Старт ---- */
 cfg=ls.get("dl-admin",null);
-(cfg?pull().catch(loadData):loadData()).then(()=>{render();loadBookings()});
+(cfg?pull().catch(loadData):loadData()).then(()=>{render();loadBookings();startWarnings()});
 setInterval(()=>{if(SB_URL)loadBookings()},30000);
 
 /* ---- PWA ---- */
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+    navigator.serviceWorker.register('service-worker.js').then(()=>{
+      updatePushBtn();
+    }).catch(()=>{});
   });
 }
 </script>
