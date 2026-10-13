@@ -77,7 +77,6 @@ main{padding:24px 24px 60px}
 .topb-public .btn{padding:7px 11px;font-size:13px;font-weight:600}
 .filter-btn.active{background:var(--acc);border-color:var(--acc);color:#fff}
 
-/* ===== Поиск ===== */
 .top-search{display:flex;align-items:center;gap:6px;flex:1 1 220px;min-width:180px;position:relative}
 .top-search input{
   width:100%;padding:8px 32px 8px 34px;
@@ -95,7 +94,6 @@ main{padding:24px 24px 60px}
 .top-search.has-value .ico-clear{display:block}
 .top-search.has-value .ico-lupe{color:var(--acc)}
 
-/* ===== Архив в сайдбаре ===== */
 .arch-block{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
 .archive-item{
   display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;
@@ -117,7 +115,6 @@ main{padding:24px 24px 60px}
 .grp.collapsed .grp-body{display:none}
 .grp.bad h3{color:var(--bad)}
 
-/* ===== Карточка задания ===== */
 .task{
   display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;
   background:var(--surf);color:var(--ink);
@@ -163,7 +160,6 @@ body.dark .task:hover{box-shadow:0 2px 12px rgba(0,0,0,.4)}
 .ico:hover{background:var(--hover);color:var(--navy)}
 .empty{padding:40px 16px;text-align:center;color:var(--mute)}
 
-/* ===== Диалоги ===== */
 dialog{
   border:0;border-radius:14px;padding:22px;
   width:min(460px,92vw);
@@ -179,7 +175,6 @@ dialog input,dialog select,dialog textarea{width:100%;padding:9px;border:1px sol
 dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--acc);outline:none}
 .row{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
 
-/* ===== Подробности задачи ===== */
 #tdlg{padding:0;width:min(680px,94vw);max-height:88vh;overflow:hidden;display:none;flex-direction:column}
 #tdlg[open]{display:flex}
 .td-head{padding:20px 22px 12px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:10px}
@@ -229,7 +224,6 @@ dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--
 .td-btn-star.on{background:var(--star);border-color:var(--star);color:#1A1A1A}
 .td-empty{padding:20px;text-align:center;color:var(--mute);font-size:13px;font-style:italic}
 
-/* ===== Toast ===== */
 #toast{
   position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-24px);
   background:var(--navy);color:#fff;padding:13px 18px;border-radius:12px;
@@ -430,6 +424,10 @@ let COLLAPSED_GROUPS = loadCollapsed();
 
 /* ===== Архив ===== */
 function isArchived(t){
+  // Ручная метка — приоритетнее всего
+  if(t.archived === true) return true;
+  if(t.archived === false) return false;
+  // Автоматически — если дедлайн старше 30 дней
   if(!t.due) return false;
   const d = new Date(t.due);
   if(isNaN(d.getTime())) return false;
@@ -746,10 +744,11 @@ function openTaskDetail(id, silent=false){
   const s = S.subjects.find(x => x.id === t.subj) || {name:"—"};
   const dn = DONE.has(t.id), st = STARRED.has(t.id);
   const i = dueInfo(t);
+  const arch = isArchived(t);
 
   let html = `<div class="td-head"><h2>${esc(t.title)}</h2><button class="td-close" aria-label="Закрыть">✕</button></div>`;
   html += `<div class="td-body">`;
-  html += `<div class="td-meta"><span>${esc(s.name)}</span><span class="due ${dn?"":i.cls}">${i.txt}</span>${st?`<span style="color:var(--star);font-weight:700">★ Важное</span>`:""}</div>`;
+  html += `<div class="td-meta"><span>${esc(s.name)}</span><span class="due ${dn?"":i.cls}">${i.txt}</span>${st?`<span style="color:var(--star);font-weight:700">★ Важное</span>`:""}${arch?`<span style="color:var(--mute);font-weight:700">📦 В архиве</span>`:""}</div>`;
   if(t.note){ html += `<div class="td-note">${esc(t.note)}</div>`; }
   else { html += `<div class="td-empty">Заметки нет</div>`; }
 
@@ -784,6 +783,7 @@ function openTaskDetail(id, silent=false){
   html += `<div class="td-foot-left">`;
   html += `<button class="td-btn-star ${st?"on":""}" id="td-star">${st?"★ Убрать из важных":"☆ В важное"}</button>`;
   html += `<button class="btn" id="td-copy">🔗 Ссылка</button>`;
+  if(cfg){ html += `<button class="btn" id="td-archive">${arch?"↩️ Вернуть из архива":"📦 В архив"}</button>`; }
   html += `</div>`;
   html += `<div class="td-foot-right">`;
   if(cfg){ html += `<button class="btn" id="td-edit">✏️ Изменить</button>`; }
@@ -819,6 +819,15 @@ $("#tdetail").addEventListener("click", e => {
     if(navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(url).then(okMsg).catch(()=>{ prompt("Скопируйте ссылку:", url); });
     } else { prompt("Скопируйте ссылку:", url); }
+    return;
+  }
+  if(e.target.closest("#td-archive")){
+    const t = S.tasks.find(x => x.id === id);
+    if(!t) return;
+    const wasArchived = isArchived(t);
+    closeTaskDetail();
+    run(async () => { t.archived = !wasArchived; });
+    toast(wasArchived ? "Задание возвращено из архива" : "Задание перемещено в архив", 3500, "ok");
     return;
   }
   if(e.target.closest("#td-edit")){
