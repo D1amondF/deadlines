@@ -90,11 +90,22 @@ main{padding:24px 24px 60px}
 .top-search .ico-lupe{position:absolute;left:10px;font-size:14px;color:var(--mute);pointer-events:none;line-height:1}
 .top-search .ico-clear{
   position:absolute;right:6px;border:0;background:none;
-  padding:4px 8px;color:var(--mute);font-size:14px;line-height:1;
-  display:none;
+  padding:4px 8px;color:var(--mute);font-size:14px;line-height:1;display:none;
 }
 .top-search.has-value .ico-clear{display:block}
 .top-search.has-value .ico-lupe{color:var(--acc)}
+
+/* ===== Архив в сайдбаре ===== */
+.arch-block{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+.archive-item{
+  display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;
+  border:0;background:none;border-radius:8px;text-align:left;
+  font-weight:600;color:var(--ink);cursor:pointer;
+  transition:background .15s,color .15s;
+}
+.archive-item:hover{background:var(--hover)}
+.archive-item.on{background:var(--surf);color:var(--navy);box-shadow:inset 3px 0 0 var(--acc)}
+.archive-item b{margin-left:auto;font-weight:600;color:var(--mute);font-size:13px}
 
 .grp{margin-top:26px}
 .grp h3{margin:0 0 8px;font-size:13px;color:var(--mute);font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;padding:8px 4px;border-radius:8px;-webkit-tap-highlight-color:transparent;transition:color .15s,background .15s}
@@ -168,18 +179,12 @@ dialog input,dialog select,dialog textarea{width:100%;padding:9px;border:1px sol
 dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--acc);outline:none}
 .row{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
 
-/* ===== Диалог подробностей задачи ===== */
+/* ===== Подробности задачи ===== */
 #tdlg{padding:0;width:min(680px,94vw);max-height:88vh;overflow:hidden;display:none;flex-direction:column}
 #tdlg[open]{display:flex}
-.td-head{
-  padding:20px 22px 12px;border-bottom:1px solid var(--line);
-  display:flex;align-items:flex-start;gap:10px;
-}
+.td-head{padding:20px 22px 12px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:10px}
 .td-head h2{margin:0;font-size:20px;flex:1;min-width:0;line-height:1.3}
-.td-close{
-  border:0;background:none;font-size:22px;line-height:1;color:var(--mute);
-  padding:4px 8px;border-radius:6px;flex:none;
-}
+.td-close{border:0;background:none;font-size:22px;line-height:1;color:var(--mute);padding:4px 8px;border-radius:6px;flex:none}
 .td-close:hover{background:var(--hover);color:var(--ink)}
 .td-body{padding:16px 22px 8px;overflow-y:auto;flex:1}
 .td-meta{font-size:13px;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 14px;margin-bottom:12px}
@@ -269,6 +274,8 @@ h1{font-size:18px;margin:0 0 10px}
 #subjs::-webkit-scrollbar{display:none}
 .subj{width:auto;white-space:nowrap;background:var(--surf);padding:8px 12px;font-size:13px;flex:none}
 .subj b{font-size:12px;margin-left:6px}
+.arch-block{margin-top:8px;padding-top:8px}
+.archive-item{padding:8px 10px;font-size:13px}
 .foot{margin-top:10px;font-size:12px}
 .foot-btns{gap:8px 12px;margin-top:8px}
 .brand-slogan{margin-top:10px;padding-top:8px;font-size:12px}
@@ -328,6 +335,7 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 <aside>
   <h1>Дедлайны <span style="font-size:13px;color:var(--mute);font-weight:600;letter-spacing:.04em">ОБ26-2</span></h1>
   <div id="subjs"></div>
+  <div class="arch-block" id="archblock"></div>
   <div class="adm-only"><form class="addsubj" id="sf"><input id="sn" placeholder="Новая дисциплина" aria-label="Название дисциплины" maxlength="60"><button class="btn">Добавить</button></form></div>
   <div class="foot">
     <span class="adm-only">Режим администратора. <button class="link" id="logout">Выйти</button></span>
@@ -335,6 +343,7 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
     <div class="foot-btns">
       <button class="link" id="themebtn">🌓 Тема</button>
       <button class="link" id="soundbtn">🔊 Звук вкл.</button>
+      <button class="link" id="icsbtn">📅 Календарь</button>
       <button class="link" id="pushbtn" hidden>🔔 Уведомления</button>
     </div>
   </div>
@@ -351,7 +360,6 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
     <div class="topb-public">
       <button class="btn filter-btn" id="minebtn">👤 Только мои</button>
       <button class="btn filter-btn" id="starbtn">⭐ Важные</button>
-      <button class="btn" id="icsbtn">📅 В календарь</button>
     </div>
     <div class="topb adm-only"><button class="btn" id="sumbtn">Сводка броней</button><button class="btn" id="apibtn">Бронирование</button><button class="btn" id="rensubj" hidden>Переименовать</button><button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button><button class="btn pri" id="new">Добавить задание</button></div>
   </div>
@@ -401,6 +409,7 @@ const SB_URL="https://xmbanshmxcmylvjsrgol.supabase.co";
 const SB_KEY="sb_publishable_AOPVaQq28i30ZBLNtw289g_mSVZWj5v";
 const VAPID_PUBLIC_KEY="BOWSoOZSRNMCwALWj5su_LHDBxq8i1XPQu_MCjE5fLVmsva2jNjNL4LTgetGZh28CWKrQEtZiUeHmk4dGTb9dAc";
 const PUSH_FN_URL = SB_URL + "/functions/v1/send-push";
+const ARCHIVE_DAYS = 30;
 
 let S={subjects:[],tasks:[]},cur="all",cfg=null,attachTo=null,loaded=false;
 const $=s=>document.querySelector(s);
@@ -418,6 +427,15 @@ function collapsedKey(){ return "dl-collapsed-groups-" + cur; }
 function loadCollapsed(){ try{ return new Set(ls.get(collapsedKey(), [])); }catch(e){ return new Set(); } }
 function saveCollapsed(){ ls.set(collapsedKey(), [...COLLAPSED_GROUPS]); }
 let COLLAPSED_GROUPS = loadCollapsed();
+
+/* ===== Архив ===== */
+function isArchived(t){
+  if(!t.due) return false;
+  const d = new Date(t.due);
+  if(isNaN(d.getTime())) return false;
+  const cutoff = Date.now() - ARCHIVE_DAYS * 86400000;
+  return d.getTime() < cutoff;
+}
 
 /* ===== Тёмная тема ===== */
 let THEME_DARK = ls.get("dl-dark", null);
@@ -499,7 +517,6 @@ async function loadData(){
   loaded=true}catch(e){$("#list").innerHTML='<div class="empty">Не удалось загрузить задания. Откройте сайт по ссылке с хостинга, а не как файл с компьютера.</div>';return false}
  return true}
 
-/* ===== Даты ===== */
 const tm=d=>d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
 const fmt=d=>new Date(d).toLocaleString("ru-RU",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"});
 function dueInfo(t){
@@ -513,9 +530,7 @@ const GROUPS=[["over","Просрочено","bad"],["today","Сегодня",""
 const size=n=>n>1048576?(n/1048576).toFixed(1)+" МБ":Math.max(1,Math.round(n/1024))+" КБ";
 
 function hasMyBooking(t){
-  // Задания без тем — обязательные для всех, значит, «мои»
   if(!t.topics || !t.topics.length) return true;
-  // Если темы есть — проверяем, занял ли ты одну из них
   return t.topics.some(p => mine[t.id + "|" + p.id]);
 }
 
@@ -537,21 +552,36 @@ function render(){
  const sb=$("#starbtn"); if(sb) sb.classList.toggle("active", ONLY_STAR);
  const qw=$("#qwrap"); if(qw) qw.classList.toggle("has-value", !!Q);
 
- const cnt=id=>S.tasks.filter(t=>!DONE.has(t.id)&&(id==="all"||t.subj===id)).length;
- if(cur!=="all"&&!S.subjects.some(s=>s.id===cur))cur="all";
+ const cnt=id=>S.tasks.filter(t=>!DONE.has(t.id)&&!isArchived(t)&&(id==="all"||t.subj===id)).length;
+ const archCount=S.tasks.filter(t=>isArchived(t)&&!DONE.has(t.id)).length;
+ if(cur!=="all"&&cur!=="_archive"&&!S.subjects.some(s=>s.id===cur))cur="all";
+
  $("#subjs").innerHTML=`<button class="subj ${cur==="all"?"on":""}" data-s="all"><i></i>Все дисциплины<b>${cnt("all")}</b></button>`+
   S.subjects.map(s=>`<button class="subj ${cur===s.id?"on":""}" data-s="${s.id}" style="--c:${s.c}"><i></i>${esc(s.name)}<b>${cnt(s.id)}</b></button>`).join("");
+ $("#archblock").innerHTML=`<button class="archive-item ${cur==="_archive"?"on":""}" data-s="_archive"><span>📦</span><span>Архив</span>${archCount?`<b>${archCount}</b>`:""}</button>`;
+
  const sub=S.subjects.find(s=>s.id===cur);
- $("#ttl").textContent=sub?sub.name:"Все дисциплины";$("#delsubj").hidden=!sub;$("#rensubj").hidden=!sub;
+ const isArch=cur==="_archive";
+ $("#ttl").textContent=isArch?"Архив":(sub?sub.name:"Все дисциплины");
+ $("#delsubj").hidden=!sub;$("#rensubj").hidden=!sub;
+ $("#new").hidden=isArch;
 
  const by={};GROUPS.forEach(g=>by[g[0]]=[]);
  S.tasks
-   .filter(t=>cur==="all"||t.subj===cur)
+   .filter(t=>{
+     if(cur==="_archive") return isArchived(t);
+     if(cur==="all") return !isArchived(t);
+     return t.subj===cur && !isArchived(t);
+   })
    .filter(t=> !ONLY_MINE || hasMyBooking(t))
    .filter(t=> !ONLY_STAR || STARRED.has(t.id))
    .filter(matchQuery)
    .forEach(t=>{const i=dueInfo(t);by[DONE.has(t.id)?"done":i.g].push({t,i})});
- for(const k in by)by[k].sort((a,b)=>(a.t.due||"9")<(b.t.due||"9")?-1:1);
+ for(const k in by)by[k].sort((a,b)=>{
+   const da=a.t.due||"9", db=b.t.due||"9";
+   if(cur==="_archive") return da>db?-1:1;
+   return da<db?-1:1;
+ });
 
  let h="";
  for(const[k,name,cls]of GROUPS){if(!by[k].length)continue;
@@ -677,7 +707,7 @@ function icsDate(d){
 }
 function icsEsc(s){ return String(s||"").replace(/\\/g,"\\\\").replace(/,/g,"\\,").replace(/;/g,"\\;").replace(/\r?\n/g,"\\n"); }
 function downloadICS(){
-  const list = S.tasks.filter(t => t.due && !DONE.has(t.id) && (cur==="all" || t.subj===cur) && (!ONLY_MINE || hasMyBooking(t)));
+  const list = S.tasks.filter(t => t.due && !DONE.has(t.id) && !isArchived(t) && (cur==="all" || t.subj===cur) && (!ONLY_MINE || hasMyBooking(t)));
   if(!list.length){ toast("Нет заданий с дедлайном", 3500, "warn"); return; }
   const stamp = icsDate(new Date());
   const lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Дедлайны ОБ26-2//RU","CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:Дедлайны ОБ26-2"];
@@ -707,7 +737,7 @@ function downloadICS(){
 }
 $("#icsbtn").onclick = downloadICS;
 
-/* ===== Подробная карточка задания ===== */
+/* ===== Подробности ===== */
 let curDetailId = null;
 function openTaskDetail(id, silent=false){
   const t = S.tasks.find(x => x.id === id);
@@ -720,14 +750,9 @@ function openTaskDetail(id, silent=false){
   let html = `<div class="td-head"><h2>${esc(t.title)}</h2><button class="td-close" aria-label="Закрыть">✕</button></div>`;
   html += `<div class="td-body">`;
   html += `<div class="td-meta"><span>${esc(s.name)}</span><span class="due ${dn?"":i.cls}">${i.txt}</span>${st?`<span style="color:var(--star);font-weight:700">★ Важное</span>`:""}</div>`;
+  if(t.note){ html += `<div class="td-note">${esc(t.note)}</div>`; }
+  else { html += `<div class="td-empty">Заметки нет</div>`; }
 
-  if(t.note){
-    html += `<div class="td-note">${esc(t.note)}</div>`;
-  } else {
-    html += `<div class="td-empty">Заметки нет</div>`;
-  }
-
-  // Файлы
   if(t.files && t.files.length){
     html += `<div class="td-section-title">Файлы · ${t.files.length}</div><div class="td-files">`;
     t.files.forEach(f => {
@@ -740,7 +765,6 @@ function openTaskDetail(id, silent=false){
     html += `</div>`;
   }
 
-  // Темы
   if(t.topics && t.topics.length){
     html += `<div class="td-section-title">Темы · ${t.topics.length}</div><div class="td-topics">`;
     t.topics.forEach(p => {
@@ -754,8 +778,7 @@ function openTaskDetail(id, silent=false){
     });
     html += `</div>`;
   }
-
-  html += `</div>`; // end td-body
+  html += `</div>`;
 
   html += `<div class="td-foot">`;
   html += `<div class="td-foot-left">`;
@@ -763,19 +786,13 @@ function openTaskDetail(id, silent=false){
   html += `<button class="btn" id="td-copy">🔗 Ссылка</button>`;
   html += `</div>`;
   html += `<div class="td-foot-right">`;
-  if(cfg){
-    html += `<button class="btn" id="td-edit">✏️ Изменить</button>`;
-  }
+  if(cfg){ html += `<button class="btn" id="td-edit">✏️ Изменить</button>`; }
   html += `<button class="btn pri" id="td-close2">Закрыть</button>`;
-  html += `</div>`;
-  html += `</div>`;
+  html += `</div></div>`;
 
   $("#tdetail").innerHTML = html;
   if(!$("#tdlg").open) $("#tdlg").showModal();
-  if(!silent){
-    // Обновляем hash в адресе, чтобы ссылкой можно было поделиться
-    try{ history.replaceState(null,"", "#task-" + t.id); }catch(e){}
-  }
+  if(!silent){ try{ history.replaceState(null,"", "#task-" + t.id); }catch(e){} }
 }
 
 function closeTaskDetail(){
@@ -784,14 +801,9 @@ function closeTaskDetail(){
   try{ history.replaceState(null,"", location.pathname + location.search); }catch(e){}
 }
 
-$("#tdlg").addEventListener("click", (e) => {
-  if(e.target === $("#tdlg")) closeTaskDetail();
-});
-document.addEventListener("keydown", e => {
-  if(e.key === "Escape" && $("#tdlg").open) closeTaskDetail();
-});
+$("#tdlg").addEventListener("click", (e) => { if(e.target === $("#tdlg")) closeTaskDetail(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape" && $("#tdlg").open) closeTaskDetail(); });
 
-/* Кнопки внутри диалога */
 $("#tdetail").addEventListener("click", e => {
   const id = curDetailId;
   if(!id) return;
@@ -805,12 +817,8 @@ $("#tdetail").addEventListener("click", e => {
     const url = location.origin + location.pathname + "#task-" + id;
     const okMsg = () => toast("Ссылка скопирована",2500,"ok");
     if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(url).then(okMsg).catch(()=>{
-        prompt("Скопируйте ссылку:", url);
-      });
-    } else {
-      prompt("Скопируйте ссылку:", url);
-    }
+      navigator.clipboard.writeText(url).then(okMsg).catch(()=>{ prompt("Скопируйте ссылку:", url); });
+    } else { prompt("Скопируйте ссылку:", url); }
     return;
   }
   if(e.target.closest("#td-edit")){
@@ -839,7 +847,7 @@ $("#sclose").onclick=()=>$("#sdlg").close();
 $("#scsv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"',rows=[["Дисциплина","Задание","Тема","Занял(а)"],...sumRows()];
  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+rows.map(r=>r.map(q).join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"}));a.download="bronirovanie.csv";a.click()};
 
-/* ===== Файлы и загрузка ===== */
+/* ===== Файлы ===== */
 async function openFile(m){
   if(!m) return;
   try{
@@ -852,17 +860,12 @@ async function upload(t,files){for(const f of files){
  if(f.size>MAXF){toast("«"+f.name+"» больше 25 МБ — пропущен",3500,"bad");continue}
  const id=uid();await putFile("files/"+id,f);t.files.push({id,name:f.name,size:f.size})}}
 
-/* ===== Обработка кликов ===== */
+/* ===== Клики ===== */
 document.addEventListener("click",e=>{
-  // Проверяем клик по карточке (открытие подробностей)
   const taskEl = e.target.closest(".task");
   if(taskEl && !e.target.closest("button, input, .file, .tp-toggle, .tp, .acts, .topics")){
-    // Не открываем если выделен текст
     const sel = window.getSelection && window.getSelection().toString();
-    if(!sel){
-      openTaskDetail(taskEl.dataset.id);
-      return;
-    }
+    if(!sel){ openTaskDetail(taskEl.dataset.id); return; }
   }
 
   const b=e.target.closest("button, h3[data-toggle-grp], .tp-toggle");
@@ -916,7 +919,7 @@ $("#tf").onsubmit=()=>{
  const v={title:$("#f-t").value.trim(),subj:$("#f-s").value,due:$("#f-d").value,note:$("#f-n").value.trim(),topics:$("#f-p").value.split("\n").map(s=>s.trim()).filter(Boolean).map(x=>((editing&&editing.topics)||[]).find(o=>o.text===x)||{id:uid(),text:x})},fl=[...$("#f-f").files],t=editing||{id:uid(),files:[]};
  run(async()=>{Object.assign(t,v);await upload(t,fl);if(!editing)S.tasks.push(t)})};
 
-/* ===== Вход админа ===== */
+/* ===== Вход ===== */
 $("#login").onclick=()=>{if(!loaded){toast("Сначала откройте сайт по ссылке с хостинга",3500,"bad");return}$("#adlg").showModal()};
 $("#acancel").onclick=()=>$("#adlg").close();
 $("#af").onsubmit=async()=>{
@@ -925,7 +928,7 @@ $("#af").onsubmit=async()=>{
  try{await pull();await publish();ls.set("dl-admin",cfg);render();toast("Вы вошли как администратор",3500,"ok")}catch(e){cfg=null;render();toast(errMsg(e),6000,"bad")}};
 $("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");render()};
 
-/* ===== PUSH (код оставлен, кнопка скрыта) ===== */
+/* ===== PUSH ===== */
 function urlB64ToUint8Array(base64String){
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
@@ -973,7 +976,7 @@ function startWarnings(){
   const now=new Date(); const d0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
   let over=0,todayCnt=0;
   S.tasks.forEach(t=>{
-    if(DONE.has(t.id)||!t.due)return;
+    if(DONE.has(t.id)||!t.due||isArchived(t))return;
     const d=new Date(t.due);
     if(d<now){over++;return}
     const dd=new Date(d.getFullYear(),d.getMonth(),d.getDate());
@@ -981,13 +984,18 @@ function startWarnings(){
   });
   if(over>0){
     setTimeout(()=>toast(`Просрочено заданий: ${over}`,7000,"warn",{ action:"Показать", onAction:()=>{
+      if(cur==="_archive") cur="all";
       COLLAPSED_GROUPS.delete("over"); saveCollapsed(); render();
-      const el=document.querySelector(".grp.bad"); if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
+      setTimeout(()=>{
+        const el=document.querySelector(".grp.bad"); if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
+      },100);
     }}),700);
   }
   if(todayCnt>0){
     setTimeout(()=>toast(`Сегодня сдавать: ${todayCnt}`,7000,"warn",{ action:"Показать", onAction:()=>{
-      COLLAPSED_GROUPS.delete("today"); saveCollapsed(); render(); window.scrollTo({top:0,behavior:"smooth"});
+      if(cur==="_archive") cur="all";
+      COLLAPSED_GROUPS.delete("today"); saveCollapsed(); render();
+      setTimeout(()=>window.scrollTo({top:0,behavior:"smooth"}),100);
     }}),over>0?2500:700);
   }
 }
@@ -996,7 +1004,6 @@ function startWarnings(){
 cfg=ls.get("dl-admin",null);
 (cfg?pull().catch(loadData):loadData()).then(()=>{
   render(); loadBookings(); startWarnings();
-  // Открываем задание из ссылки, если есть хэш
   if(location.hash.startsWith("#task-")){
     const id = location.hash.slice(6);
     setTimeout(()=>openTaskDetail(id), 600);
