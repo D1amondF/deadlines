@@ -5,16 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Дедлайны ОБ26-2</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#2C3E50">
+<meta name="theme-color" content="#002b5b">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="ОБ26-2">
 <meta name="application-name" content="Дедлайны ОБ26-2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1c2333;--mute:#667085;--bg:#eef1f6;--surf:#fff;--line:#d9dfea;--acc:#2f4bff;--bad:#d93a3a;--ok:#1f8f5f;--warn:#b86b00;
-font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink)}
+:root{
+  --ink:#171F29;
+  --mute:#8B8A8F;
+  --bg:#E9E8F1;
+  --surf:#FFFFFF;
+  --line:#D3E0E4;
+  --acc:#C81240;      /* академический красный */
+  --navy:#002b5b;     /* глубокий синий */
+  --blue:#004c79;     /* насыщенный синий */
+  --bad:#A00F33;      /* бордовый */
+  --ok:#1f8f5f;       /* зелёный для «выполнено» */
+  --warn:#EF5803;     /* оранжевый для «скоро» */
+  font-family:'Manrope',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  color:var(--ink);
+}
 *{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
 .app>*{min-width:0}
@@ -27,84 +43,108 @@ body.adm .adm-only{display:revert!important}
 body.adm .topb.adm-only,body.adm .acts.adm-only{display:flex!important}
 .app{display:grid;grid-template-columns:260px 1fr;min-height:100vh;max-width:1100px;margin:0 auto}
 aside{padding:24px 16px;border-right:1px solid var(--line)}
-h1{font-size:22px;margin:0 0 20px;letter-spacing:-.01em}
-.subj{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:0;background:none;border-radius:8px;text-align:left}
-.subj:hover{background:#e2e7f1}
-.subj.on{background:var(--surf);font-weight:600;box-shadow:inset 3px 0 0 var(--c,var(--acc))}
+h1{font-size:21px;margin:0 0 20px;letter-spacing:-.01em;color:var(--navy);font-weight:800}
+.subj{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:0;background:none;border-radius:8px;text-align:left;font-weight:500}
+.subj:hover{background:#dde2f0}
+.subj.on{background:var(--surf);font-weight:700;box-shadow:inset 3px 0 0 var(--c,var(--acc));color:var(--navy)}
 .subj i{width:10px;height:10px;border-radius:50%;background:var(--c,var(--mute));flex:none}
-.subj b{margin-left:auto;font-weight:500;color:var(--mute);font-size:13px}
+.subj b{margin-left:auto;font-weight:600;color:var(--mute);font-size:13px}
 .addsubj{display:flex;gap:6px;margin-top:14px}
 .addsubj input{flex:1;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--surf)}
-.btn{border:1px solid var(--line);background:var(--surf);padding:8px 12px;border-radius:8px}
+.btn{border:1px solid var(--line);background:var(--surf);padding:8px 12px;border-radius:8px;font-weight:500;transition:border-color .15s,background .15s,color .15s}
 .btn:hover{border-color:var(--acc)}
-.btn.pri{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
+.btn.pri:hover{background:#a80f34;border-color:#a80f34}
 .btn.bad{color:var(--bad)}
 .foot{margin-top:24px;font-size:13px;color:var(--mute)}
+.brand-slogan{margin-top:18px;padding:12px 0 0;border-top:1px solid var(--line);font-size:13px;color:var(--navy);letter-spacing:.02em;line-height:1.4}
+.brand-slogan span{color:var(--acc);font-weight:700}
 .link{border:0;background:none;padding:0;text-decoration:underline;color:var(--mute)}
 main{padding:24px 24px 60px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
-.top h2{margin:0;font-size:20px}
+.top h2{margin:0;font-size:20px;color:var(--navy);font-weight:800}
 .topb{display:flex;gap:8px}
 .grp{margin-top:26px}
-.grp h3{margin:0 0 8px;font-size:14px;color:var(--mute);font-weight:600}
+.grp h3{margin:0 0 8px;font-size:13px;color:var(--mute);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .grp.bad h3{color:var(--bad)}
-.task{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;background:var(--surf);padding:12px 14px 12px 12px;border-left:4px solid var(--c);border-radius:4px 10px 10px 4px;margin-bottom:8px}
+.task{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;background:var(--surf);padding:12px 14px 12px 12px;border-left:4px solid var(--c);border-radius:4px 10px 10px 4px;margin-bottom:8px;transition:box-shadow .15s}
+.task:hover{box-shadow:0 2px 10px rgba(0,43,91,.06)}
 .task.done{opacity:.55}
 .task.done .tt{text-decoration:line-through}
 .chk{width:20px;height:20px;margin-top:2px;accent-color:var(--ok)}
-.tt{font-weight:600}
+.tt{font-weight:700;color:var(--navy)}
 .meta{font-size:13px;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:2px}
-.due.bad{color:var(--bad);font-weight:600}.due.soon{color:var(--warn);font-weight:600}
+.due.bad{color:var(--bad);font-weight:700}.due.soon{color:var(--warn);font-weight:700}
 .note{font-size:14px;margin-top:6px;white-space:pre-wrap}
 .note,.tt,.meta,.tp-t,.tp-toggle span{overflow-wrap:anywhere;word-break:break-word}
 .files,.file{max-width:100%}
 .file button{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .files{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.file{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;font-size:13px;background:#f7f9fc}
-.file button{border:0;background:none;padding:3px 9px}
+.file{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;font-size:13px;background:#f5f6fa}
+.file button{border:0;background:none;padding:3px 9px;color:var(--blue)}
 .file .x{color:var(--mute);padding-left:2px}
 .acts{display:flex;gap:4px}
-.ico{border:0;background:none;padding:4px 8px;border-radius:6px;color:var(--mute);font-size:13px}
-.ico:hover{background:var(--bg);color:var(--ink)}
+.ico{border:0;background:none;padding:4px 8px;border-radius:6px;color:var(--mute);font-size:13px;font-weight:500}
+.ico:hover{background:var(--bg);color:var(--navy)}
 .empty{padding:40px 16px;text-align:center;color:var(--mute)}
-dialog{border:0;border-radius:14px;padding:22px;width:min(460px,92vw);box-shadow:0 20px 60px rgba(20,30,60,.3)}
-dialog::backdrop{background:rgba(20,30,60,.4)}
-dialog h2{margin:0 0 14px;font-size:18px}
+dialog{border:0;border-radius:14px;padding:22px;width:min(460px,92vw);box-shadow:0 20px 60px rgba(0,43,91,.3);font-family:inherit}
+dialog::backdrop{background:rgba(0,43,91,.45)}
+dialog h2{margin:0 0 14px;font-size:18px;color:var(--navy)}
 dialog p{font-size:13px;color:var(--mute);margin:0 0 4px}
-label{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px}
+label{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px;font-weight:500}
 dialog input,dialog select,dialog textarea{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:#fff}
+dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--acc)}
 .row{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
-#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:8px;font-size:14px;display:none;max-width:92vw;z-index:10}
+
+/* Уведомления: сверху по центру, крупнее, с цветами бренда */
+#toast{
+  position:fixed;top:16px;left:50%;
+  transform:translateX(-50%) translateY(-24px);
+  background:var(--navy);color:#fff;
+  padding:14px 24px;border-radius:12px;
+  font-size:15px;font-weight:600;
+  display:none;max-width:min(600px,92vw);z-index:100;
+  box-shadow:0 12px 36px rgba(0,43,91,.32);
+  cursor:pointer;text-align:center;line-height:1.35;letter-spacing:.01em;
+  transition:transform .28s cubic-bezier(.2,.9,.3,1.2),opacity .22s ease;
+  opacity:0;
+}
+#toast.show{display:block;transform:translateX(-50%) translateY(0);opacity:1}
+#toast.ok{background:var(--blue)}
+#toast.bad{background:var(--bad)}
+#toast.info{background:var(--navy)}
+
 .topics{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}
-.tp-toggle{background:none;border:0;padding:4px 0;font:inherit;font-size:13px;color:var(--mute);cursor:pointer;display:flex;align-items:center;gap:6px;width:100%;text-align:left;font-weight:500}
-.tp-toggle:hover{color:var(--ink)}
+.tp-toggle{background:none;border:0;padding:4px 0;font:inherit;font-size:13px;color:var(--mute);cursor:pointer;display:flex;align-items:center;gap:6px;width:100%;text-align:left;font-weight:600}
+.tp-toggle:hover{color:var(--navy)}
 .tp-toggle .chev{margin-left:auto;font-size:14px;color:var(--mute);line-height:1}
 .tp-list{margin-top:2px}
 .tp{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:14px}
 .tp-t{flex:1}
 .tp.taken .tp-t{color:var(--mute)}
-.tp-n{font-size:13px;color:var(--ok);font-weight:600}
+.tp-n{font-size:13px;color:var(--blue);font-weight:700}
 .tp .btn{padding:4px 10px;font-size:13px}
 #stbl{width:100%;border-collapse:collapse;font-size:14px}
 #stbl th,#stbl td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
-#stbl th{color:var(--mute);font-weight:600;font-size:13px}
-#stbl td.free{color:var(--mute)}#stbl td.ok{font-weight:600;color:var(--ok)}
+#stbl th{color:var(--mute);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+#stbl td.free{color:var(--mute)}#stbl td.ok{font-weight:700;color:var(--blue)}
 @media(max-width:760px){
 .app{grid-template-columns:1fr;max-width:100%}
 aside{border-right:0;border-bottom:1px solid var(--line);padding:12px 10px}
-h1{font-size:19px;margin:0 0 10px}
+h1{font-size:18px;margin:0 0 10px}
 #subjs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 #subjs::-webkit-scrollbar{display:none}
 .subj{width:auto;white-space:nowrap;background:var(--surf);padding:8px 12px;font-size:13px;flex:none}
 .subj b{font-size:12px;margin-left:6px}
 .foot{margin-top:10px;font-size:12px}
+.brand-slogan{margin-top:10px;padding-top:8px;font-size:12px}
 main{padding:12px 10px 60px;max-width:100%}
 .top{margin-bottom:6px}
 .top h2{font-size:17px}
 .topb{width:100%;flex-wrap:wrap;gap:6px}
 .topb .btn{flex:1 1 auto;padding:9px 10px;font-size:14px;text-align:center}
 .grp{margin-top:18px}
-.grp h3{font-size:13px}
+.grp h3{font-size:12px}
 .task{grid-template-columns:auto 1fr;padding:10px;gap:8px;margin-bottom:8px;max-width:100%}
 .task>div{min-width:0}
 .chk{width:22px;height:22px}
@@ -125,7 +165,8 @@ dialog{padding:16px;width:min(460px,94vw)}
 dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 .row{gap:6px;margin-top:14px}
 .row .btn{padding:10px 14px;flex:1 1 auto}
-#toast{font-size:13px;padding:8px 14px;bottom:12px;left:10px;right:10px;transform:none;max-width:none}
+#toast{top:10px;left:10px;right:10px;transform:translateY(-20px);max-width:none;font-size:14px;padding:12px 16px}
+#toast.show{transform:translateY(0)}
 #stbl{font-size:13px}
 #stbl th,#stbl td{padding:5px 6px}
 }
@@ -139,13 +180,14 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 <body>
 <div class="app">
 <aside>
-  <h1>Дедлайны <span style="font-size:13px;color:var(--mute);font-weight:500;letter-spacing:.04em">ОБ26-2</span></h1>
+  <h1>Дедлайны <span style="font-size:13px;color:var(--mute);font-weight:600;letter-spacing:.04em">ОБ26-2</span></h1>
   <div id="subjs"></div>
   <div class="adm-only"><form class="addsubj" id="sf"><input id="sn" placeholder="Новая дисциплина" aria-label="Название дисциплины" maxlength="60"><button class="btn">Добавить</button></form></div>
   <div class="foot">
     <span class="adm-only">Режим администратора. <button class="link" id="logout">Выйти</button></span>
     <button class="link" id="login">Вход для администратора</button>
   </div>
+  <div class="brand-slogan">Будь лучшим. <span>Во всём.</span></div>
 </aside>
 <main>
   <div class="top"><h2 id="ttl">Все дисциплины</h2>
@@ -188,7 +230,7 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 <input type="file" id="addf" multiple hidden>
 
 <script>
-const COLORS=["#2f4bff","#d9534f","#1f8f5f","#b86b00","#8a3ffc","#0b8aa6","#c2185b","#5d6b82"];
+const COLORS=["#C81240","#002b5b","#004c79","#A00F33","#4D56BC","#5ba7d5","#E63542","#EF5803"];
 const MAXF=25*1024*1024;
 
 /* ====== НАСТРОЙКИ SUPABASE ====== */
@@ -201,7 +243,16 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
 let DONE=new Set(ls.get("dl-done",[]));
-function toast(t,ms=3500){const e=$("#toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);if(ms)toast.t=setTimeout(()=>e.style.display="none",ms)}
+
+/* Обновлённый toast: сверху, цветной по типу, можно закрыть кликом */
+function toast(t,ms=3500,type="info"){
+  const e=$("#toast");
+  e.textContent=t;
+  e.className="show "+type;
+  clearTimeout(toast.t);
+  e.onclick=()=>{e.className="";clearTimeout(toast.t)};
+  if(ms)toast.t=setTimeout(()=>{e.className="";},ms);
+}
 
 /* ---- запись через GitHub API ---- */
 const enc=new TextEncoder();
@@ -220,7 +271,7 @@ async function pull(){const r=await gh("GET","data.json");
 function errMsg(e){return e instanceof TypeError?"Нет связи с GitHub — проверьте интернет":
  /401/.test(e.message)?"Ошибка 401 — токен неверный или просрочен":
  /40[34]/.test(e.message)?"Ошибка "+e.message.slice(5)+" — нет прав на запись или репозиторий не найден":"Не удалось опубликовать ("+e.message+")"}
-async function run(fn){toast("Публикую…",0);try{await fn();await publish();render();toast("Опубликовано. У остальных появится примерно через минуту",5000)}catch(e){toast(errMsg(e),6000)}}
+async function run(fn){toast("Публикую…",0);try{await fn();await publish();render();toast("Опубликовано. У остальных появится примерно через минуту",5000,"ok")}catch(e){toast(errMsg(e),6000,"bad")}}
 
 /* ---- загрузка данных ---- */
 async function loadData(){
@@ -320,13 +371,13 @@ async function book(tid,pid){
   if(result==="ok"){
    mine[tid+"|"+pid]=owner;ls.set("dl-mine",mine);
    EXPANDED.add(tid);ls.set("dl-expanded",[...EXPANDED]);
-   toast("Тема за вами")
+   toast("Тема за вами",3500,"ok")
   }
-  else if(result==="taken")toast("Эту тему уже заняли")
-  else if(result==="has_other")toast("Вы уже заняли другую тему в этом задании")
-  else if(result==="bad_request")toast("Проверьте введённые данные")
-  else toast("Не удалось занять тему")
- }catch(e){toast("Сервис бронирования недоступен")}
+  else if(result==="taken")toast("Эту тему уже заняли",3500,"bad")
+  else if(result==="has_other")toast("Вы уже заняли другую тему в этом задании",3500,"bad")
+  else if(result==="bad_request")toast("Проверьте введённые данные",3500,"bad")
+  else toast("Не удалось занять тему",3500,"bad")
+ }catch(e){toast("Сервис бронирования недоступен",3500,"bad")}
  loadBookings()}
 
 async function unbook(k){
@@ -340,10 +391,10 @@ async function unbook(k){
    body:JSON.stringify(body)
   });
   const result=await r.json().catch(()=>"");
-  if(result==="ok"){delete mine[k];ls.set("dl-mine",mine);if(body.p_admin)ls.set("dl-akey",body.p_admin);toast("Бронь снята")}
-  else if(result==="forbidden"){if(body.p_admin)ls.del("dl-akey");toast("Нет прав снять эту бронь")}
-  else toast("Не удалось снять бронь")
- }catch(e){toast("Сервис бронирования недоступен")}
+  if(result==="ok"){delete mine[k];ls.set("dl-mine",mine);if(body.p_admin)ls.set("dl-akey",body.p_admin);toast("Бронь снята",3500,"ok")}
+  else if(result==="forbidden"){if(body.p_admin)ls.del("dl-akey");toast("Нет прав снять эту бронь",3500,"bad")}
+  else toast("Не удалось снять бронь",3500,"bad")
+ }catch(e){toast("Сервис бронирования недоступен",3500,"bad")}
  loadBookings()}
 
 $("#apibtn").onclick=()=>{
@@ -361,9 +412,9 @@ $("#scsv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"',rows=[["
  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+rows.map(r=>r.map(q).join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"}));a.download="bronirovanie.csv";a.click()};
 
 /* ---- действия ---- */
-async function openFile(m){try{const r=await fetch("files/"+m.id);if(!r.ok)throw 0;const a=document.createElement("a");a.href=URL.createObjectURL(await r.blob());a.download=m.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}catch(e){toast("Не удалось скачать файл")}}
+async function openFile(m){try{const r=await fetch("files/"+m.id);if(!r.ok)throw 0;const a=document.createElement("a");a.href=URL.createObjectURL(await r.blob());a.download=m.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}catch(e){toast("Не удалось скачать файл",3500,"bad")}}
 async function upload(t,files){for(const f of files){
- if(f.size>MAXF){toast("«"+f.name+"» больше 25 МБ — пропущен");continue}
+ if(f.size>MAXF){toast("«"+f.name+"» больше 25 МБ — пропущен",3500,"bad");continue}
  const id=uid();await putFile("files/"+id,f);t.files.push({id,name:f.name,size:f.size})}}
 
 document.addEventListener("click",e=>{
@@ -394,7 +445,7 @@ $("#delsubj").onclick=()=>{const s=S.subjects.find(x=>x.id===cur);if(!s||!confir
   S.tasks=S.tasks.filter(t=>t.subj!==s.id);S.subjects=S.subjects.filter(x=>x!==s);cur="all"})};
 let editing=null;
 function openForm(t){
- if(!S.subjects.length){toast("Сначала добавьте дисциплину слева");return}
+ if(!S.subjects.length){toast("Сначала добавьте дисциплину слева",3500,"bad");return}
  editing=t;$("#tf").reset();
  $("#f-s").innerHTML=S.subjects.map(s=>`<option value="${s.id}" ${s.id===(t?t.subj:cur)?"selected":""}>${esc(s.name)}</option>`).join("");
  $("#dh").textContent=t?"Изменить задание":"Новое задание";$("#dsub").textContent=t?"Сохранить":"Опубликовать";
@@ -407,12 +458,12 @@ $("#tf").onsubmit=()=>{
  run(async()=>{Object.assign(t,v);await upload(t,fl);if(!editing)S.tasks.push(t)})};
 
 /* ---- вход админа ---- */
-$("#login").onclick=()=>{if(!loaded){toast("Сначала нужно открыть сайт по ссылке с хостинга");return}$("#adlg").showModal()};
+$("#login").onclick=()=>{if(!loaded){toast("Сначала нужно открыть сайт по ссылке с хостинга",3500,"bad");return}$("#adlg").showModal()};
 $("#acancel").onclick=()=>$("#adlg").close();
 $("#af").onsubmit=async()=>{
  cfg={o:$("#a-b").value.trim(),r:$("#a-k").value.trim(),t:$("#a-s").value.trim()};
  toast("Проверяю доступ…",0);
- try{await pull();await publish();ls.set("dl-admin",cfg);render();toast("Вы вошли как администратор")}catch(e){cfg=null;render();toast(errMsg(e),6000)}};
+ try{await pull();await publish();ls.set("dl-admin",cfg);render();toast("Вы вошли как администратор",3500,"ok")}catch(e){cfg=null;render();toast(errMsg(e),6000,"bad")}};
 $("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");render()};
 
 cfg=ls.get("dl-admin",null);
