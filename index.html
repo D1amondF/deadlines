@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#C81240">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="ОБ26-2">
@@ -98,7 +99,6 @@ dialog input,dialog select,dialog textarea{width:100%;padding:9px;border:1px sol
 dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--acc)}
 .row{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
 
-/* Уведомления: сверху, с очередью, кнопками и звуком */
 #toast{
   position:fixed;top:16px;left:50%;
   transform:translateX(-50%) translateY(-24px);
@@ -109,8 +109,7 @@ dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--
   box-shadow:0 12px 36px rgba(0,43,91,.32);
   cursor:pointer;line-height:1.35;letter-spacing:.01em;
   transition:transform .28s cubic-bezier(.2,.9,.3,1.2),opacity .22s ease;
-  opacity:0;
-  align-items:center;gap:10px;
+  opacity:0;align-items:center;gap:10px;
 }
 #toast.show{display:flex;transform:translateX(-50%) translateY(0);opacity:1}
 #toast.ok{background:var(--blue)}
@@ -680,13 +679,21 @@ async function enablePush(){
       });
     }
     const j = sub.toJSON();
+
+    // Сначала удаляем старую запись с таким endpoint — политика anon_delete это разрешает
+    await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), {
+      method: "DELETE",
+      headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY }
+    });
+
+    // Теперь вставляем свежую подписку обычным INSERT (без upsert, чтобы не нужен был SELECT)
     const r = await fetch(SB_URL + "/rest/v1/push_subs", {
       method: "POST",
       headers: {
         "apikey": SB_KEY,
         "Authorization": "Bearer " + SB_KEY,
         "Content-Type": "application/json",
-        "Prefer": "resolution=merge-duplicates,return=minimal"
+        "Prefer": "return=minimal"
       },
       body: JSON.stringify({
         endpoint: j.endpoint,
@@ -696,7 +703,11 @@ async function enablePush(){
         user_agent: navigator.userAgent.slice(0, 200)
       })
     });
-    if(!r.ok) throw new Error("HTTP " + r.status);
+    if(!r.ok){
+      const t = await r.text().catch(()=>"");
+      throw new Error("HTTP " + r.status + (t ? " — " + t : ""));
+    }
+
     ls.set("dl-push-enabled", true);
     updatePushBtn();
     toast("Уведомления включены", 4000, "ok", {
