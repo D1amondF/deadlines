@@ -62,7 +62,8 @@ h1{font-size:21px;margin:0 0 20px;letter-spacing:-.01em;color:var(--navy);font-w
 .btn.pri{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
 .btn.pri:hover{background:var(--acc-hover);border-color:var(--acc-hover)}
 .btn.bad{color:var(--bad)}
-.btn.bad:hover{border-color:var(--bad)}
+.btn.bad:hover{border-color:var(--bad);background:rgba(200,18,64,.08)}
+.btn.active{background:var(--acc);border-color:var(--acc);color:#fff}
 .foot{margin-top:24px;font-size:13px;color:var(--mute)}
 .foot-btns{margin-top:10px;display:flex;flex-wrap:wrap;gap:10px 14px}
 .brand-slogan{margin-top:18px;padding:12px 0 0;border-top:1px solid var(--line);font-size:13px;color:var(--navy);letter-spacing:.02em;line-height:1.4}
@@ -93,6 +94,17 @@ main{padding:24px 24px 60px}
 }
 .top-search.has-value .ico-clear{display:block}
 .top-search.has-value .ico-lupe{color:var(--acc)}
+
+/* ===== Панель массовых действий ===== */
+.selbar{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 12px;background:var(--surf);border:1px solid var(--line);
+  border-radius:10px;margin:0 0 12px;box-shadow:0 2px 10px rgba(0,0,0,.05);
+}
+.selbar[hidden]{display:none!important}
+.selbar .selcount{font-weight:700;color:var(--navy);margin-right:auto;font-size:14px}
+.selbar .selcount b{color:var(--acc)}
+.selbar .btn{padding:6px 12px;font-size:13px}
 
 .arch-block{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
 .archive-item{
@@ -130,7 +142,12 @@ body.dark .task:hover{box-shadow:0 2px 12px rgba(0,0,0,.4)}
 .task.starred{box-shadow:inset 0 0 0 1px var(--star)}
 .task.done{opacity:.55}
 .task.done .tt{text-decoration:line-through}
+.task.selected{background:rgba(200,18,64,.08);box-shadow:inset 0 0 0 2px var(--acc)}
+body.dark .task.selected{background:rgba(232,92,127,.12)}
 .chk{width:20px;height:20px;margin-top:2px;accent-color:var(--ok);cursor:pointer}
+.chkwrap{display:flex;flex-direction:column;gap:6px;align-items:center;margin-top:2px}
+.chkwrap .chk{margin-top:0}
+.selchk{width:20px;height:20px;accent-color:var(--acc);cursor:pointer;margin:0}
 .tt{font-weight:700;color:var(--navy);flex:1;min-width:0}
 .tt-row{display:flex;align-items:flex-start;gap:6px}
 .star-btn{
@@ -280,13 +297,17 @@ main{padding:12px 10px 60px;max-width:100%}
 .topb-public{width:100%}
 .topb-public .btn{flex:1 1 auto;padding:9px 10px;font-size:13px;text-align:center}
 .topb{width:100%;flex-wrap:wrap;gap:6px}
-.topb .btn{flex:1 1 auto;padding:9px 10px;font-size:14px;text-align:center}
+.topb .btn{flex:1 1 auto;padding:9px 10px;font-size:13px;text-align:center}
+.selbar{padding:8px 10px;gap:6px}
+.selbar .selcount{width:100%;font-size:13px;margin-bottom:2px}
+.selbar .btn{padding:6px 10px;font-size:12px;flex:1 1 auto;text-align:center}
 .grp{margin-top:18px}
 .grp h3{font-size:12px;padding:6px 2px;gap:8px}
 .grp h3 .chev{width:26px;height:26px;font-size:18px}
 .task{grid-template-columns:auto 1fr;padding:10px;gap:8px;margin-bottom:8px;max-width:100%}
 .task>div{min-width:0}
 .chk{width:22px;height:22px}
+.selchk{width:22px;height:22px}
 .acts{grid-column:1/-1;justify-content:flex-end;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:6px;margin-top:2px}
 .acts .ico{padding:6px 10px;font-size:13px}
 .tt{font-size:15px}
@@ -318,7 +339,7 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 .td-foot .btn,.td-btn-star{flex:1 1 auto;justify-content:center;text-align:center}
 }
 @media(max-width:400px){
-.topb .btn{font-size:13px;padding:8px}
+.topb .btn{font-size:12px;padding:8px}
 .subj{font-size:13px}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -355,8 +376,25 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
       <button class="btn filter-btn" id="minebtn">👤 Только мои</button>
       <button class="btn filter-btn" id="starbtn">⭐ Важные</button>
     </div>
-    <div class="topb adm-only"><button class="btn" id="sumbtn">Сводка броней</button><button class="btn" id="apibtn">Бронирование</button><button class="btn" id="rensubj" hidden>Переименовать</button><button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button><button class="btn pri" id="new">Добавить задание</button></div>
+    <div class="topb adm-only">
+      <button class="btn" id="sumbtn">Сводка броней</button>
+      <button class="btn" id="selbtn">☑️ Выбрать</button>
+      <button class="btn" id="rensubj" hidden>Переименовать</button>
+      <button class="btn bad" id="delsubj" hidden>Удалить дисциплину</button>
+      <button class="btn pri" id="new">Добавить задание</button>
+    </div>
   </div>
+
+  <div class="selbar adm-only" id="selbar" hidden>
+    <span class="selcount">Выбрано: <b id="selcount">0</b></span>
+    <button class="btn" id="sel-archive">📦 В архив</button>
+    <button class="btn" id="sel-unarchive">↩️ Из архива</button>
+    <button class="btn" id="sel-star">⭐ В важное</button>
+    <button class="btn" id="sel-unstar">☆ Убрать метку</button>
+    <button class="btn bad" id="sel-delete">🗑 Удалить</button>
+    <button class="btn" id="sel-cancel">Отмена</button>
+  </div>
+
   <div id="list"></div>
 </main>
 </div>
@@ -416,6 +454,8 @@ let STARRED=new Set(ls.get("dl-starred",[]));
 let ONLY_MINE=ls.get("dl-only-mine",false);
 let ONLY_STAR=ls.get("dl-only-star",false);
 let Q="";
+let SELECT_MODE=false;
+let SELECTED=new Set();
 
 function collapsedKey(){ return "dl-collapsed-groups-" + cur; }
 function loadCollapsed(){ try{ return new Set(ls.get(collapsedKey(), [])); }catch(e){ return new Set(); } }
@@ -424,10 +464,8 @@ let COLLAPSED_GROUPS = loadCollapsed();
 
 /* ===== Архив ===== */
 function isArchived(t){
-  // Ручная метка — приоритетнее всего
   if(t.archived === true) return true;
   if(t.archived === false) return false;
-  // Автоматически — если дедлайн старше 30 дней
   if(!t.due) return false;
   const d = new Date(t.due);
   if(isNaN(d.getTime())) return false;
@@ -550,6 +588,9 @@ function render(){
  const sb=$("#starbtn"); if(sb) sb.classList.toggle("active", ONLY_STAR);
  const qw=$("#qwrap"); if(qw) qw.classList.toggle("has-value", !!Q);
 
+ // Кнопка "Выбрать" активна в режиме выделения
+ const selb=$("#selbtn"); if(selb) selb.classList.toggle("active", SELECT_MODE);
+
  const cnt=id=>S.tasks.filter(t=>!DONE.has(t.id)&&!isArchived(t)&&(id==="all"||t.subj===id)).length;
  const archCount=S.tasks.filter(t=>isArchived(t)&&!DONE.has(t.id)).length;
  if(cur!=="all"&&cur!=="_archive"&&!S.subjects.some(s=>s.id===cur))cur="all";
@@ -563,6 +604,11 @@ function render(){
  $("#ttl").textContent=isArch?"Архив":(sub?sub.name:"Все дисциплины");
  $("#delsubj").hidden=!sub;$("#rensubj").hidden=!sub;
  $("#new").hidden=isArch;
+
+ // Панель массовых действий — только когда мы в админ-режиме и включён SELECT_MODE
+ const bar=$("#selbar");
+ if(bar) bar.hidden = !(SELECT_MODE && cfg);
+ const sc=$("#selcount"); if(sc) sc.textContent = SELECTED.size;
 
  const by={};GROUPS.forEach(g=>by[g[0]]=[]);
  S.tasks
@@ -587,8 +633,12 @@ function render(){
   h+=`<section class="grp ${cls}${collapsed}"><h3 class="grp-toggle" data-toggle-grp="${k}"><span class="chev">▾</span><span>${name} · ${by[k].length}</span></h3><div class="grp-body">`+
    by[k].map(({t,i})=>{
    const s=S.subjects.find(x=>x.id===t.subj)||{name:"—",c:"#999"},dn=DONE.has(t.id),st=STARRED.has(t.id);
-   return `<article class="task ${dn?"done":""}${st?" starred":""}" data-id="${t.id}" style="--c:${s.c}">
-   <input type="checkbox" class="chk" data-done="${t.id}" ${dn?"checked":""} aria-label="Отметить выполненным">
+   const selected = SELECTED.has(t.id);
+   const checkboxBlock = (SELECT_MODE && cfg)
+     ? `<div class="chkwrap"><input type="checkbox" class="selchk" data-sel="${t.id}" ${selected?"checked":""} aria-label="Выделить"><input type="checkbox" class="chk" data-done="${t.id}" ${dn?"checked":""} aria-label="Отметить выполненным"></div>`
+     : `<input type="checkbox" class="chk" data-done="${t.id}" ${dn?"checked":""} aria-label="Отметить выполненным">`;
+   return `<article class="task ${dn?"done":""}${st?" starred":""}${selected?" selected":""}" data-id="${t.id}" style="--c:${s.c}">
+   ${checkboxBlock}
    <div><div class="tt-row"><div class="tt">${esc(t.title)}</div><button class="star-btn ${st?"on":""}" data-star="${t.id}" aria-label="Важное">${st?"★":"☆"}</button></div>
     <div class="meta"><span>${esc(s.name)}</span><span class="due ${dn?"":i.cls}">${i.txt}</span></div>
     ${t.note?`<div class="note">${esc(t.note)}</div>`:""}
@@ -687,8 +737,6 @@ async function unbook(k){
  loadBookings();
 }
 
-$("#apibtn").onclick=()=>{ toast("Бронирование работает через Supabase.",3500) };
-
 /* ===== Фильтры ===== */
 $("#minebtn").onclick=()=>{ ONLY_MINE=!ONLY_MINE; ls.set("dl-only-mine",ONLY_MINE); render(); };
 $("#starbtn").onclick=()=>{ ONLY_STAR=!ONLY_STAR; ls.set("dl-only-star",ONLY_STAR); render(); if(ONLY_STAR) toast("Показаны только важные",2500,"info"); };
@@ -696,6 +744,52 @@ $("#starbtn").onclick=()=>{ ONLY_STAR=!ONLY_STAR; ls.set("dl-only-star",ONLY_STA
 /* ===== Поиск ===== */
 $("#q").addEventListener("input", e => { Q = e.target.value.trim(); render(); });
 $("#qclear").onclick = () => { Q=""; $("#q").value=""; render(); };
+
+/* ===== Массовые действия ===== */
+$("#selbtn").onclick = () => {
+  SELECT_MODE = !SELECT_MODE;
+  if(!SELECT_MODE) SELECTED.clear();
+  render();
+};
+
+function massAction(action){
+  if(!SELECTED.size){ toast("Ничего не выбрано", 3000, "warn"); return; }
+  const ids = [...SELECTED];
+  SELECT_MODE = false;
+  SELECTED.clear();
+  run(async () => {
+    if(action === "delete"){
+      for(const id of ids){
+        const t = S.tasks.find(x => x.id === id);
+        if(!t) continue;
+        for(const f of (t.files||[])){
+          try { await delFile("files/" + f.id); } catch(x){}
+        }
+      }
+      S.tasks = S.tasks.filter(t => !ids.includes(t.id));
+      return;
+    }
+    for(const id of ids){
+      const t = S.tasks.find(x => x.id === id);
+      if(!t) continue;
+      if(action === "archive") t.archived = true;
+      else if(action === "unarchive") t.archived = false;
+      else if(action === "star") STARRED.add(id);
+      else if(action === "unstar") STARRED.delete(id);
+    }
+    if(action === "star" || action === "unstar") ls.set("dl-starred", [...STARRED]);
+  });
+}
+
+$("#sel-archive").onclick = () => massAction("archive");
+$("#sel-unarchive").onclick = () => massAction("unarchive");
+$("#sel-star").onclick = () => massAction("star");
+$("#sel-unstar").onclick = () => massAction("unstar");
+$("#sel-delete").onclick = () => {
+  if(!SELECTED.size){ toast("Ничего не выбрано", 3000, "warn"); return; }
+  if(confirm(`Удалить ${SELECTED.size} заданий? Файлы тоже будут удалены.`)) massAction("delete");
+};
+$("#sel-cancel").onclick = () => { SELECTED.clear(); SELECT_MODE = false; render(); };
 
 /* ===== Календарь ===== */
 function icsPad(n){ return String(n).padStart(2,"0"); }
@@ -871,16 +965,27 @@ async function upload(t,files){for(const f of files){
 
 /* ===== Клики ===== */
 document.addEventListener("click",e=>{
+  // Клик по карточке задания
   const taskEl = e.target.closest(".task");
   if(taskEl && !e.target.closest("button, input, .file, .tp-toggle, .tp, .acts, .topics")){
     const sel = window.getSelection && window.getSelection().toString();
-    if(!sel){ openTaskDetail(taskEl.dataset.id); return; }
+    if(!sel){
+      if(SELECT_MODE && cfg){
+        // В режиме выделения клик по карточке переключает её выбор
+        const id = taskEl.dataset.id;
+        if(SELECTED.has(id)) SELECTED.delete(id); else SELECTED.add(id);
+        render();
+        return;
+      }
+      openTaskDetail(taskEl.dataset.id);
+      return;
+    }
   }
 
   const b=e.target.closest("button, h3[data-toggle-grp], .tp-toggle");
   if(!b)return;
   const d=b.dataset,T=id=>S.tasks.find(t=>t.id===id);
-  if(d.s){ cur=d.s; COLLAPSED_GROUPS=loadCollapsed(); render(); return; }
+  if(d.s){ cur=d.s; COLLAPSED_GROUPS=loadCollapsed(); SELECTED.clear(); render(); return; }
   if(d.toggleGrp){
     const g=d.toggleGrp;
     if(COLLAPSED_GROUPS.has(g))COLLAPSED_GROUPS.delete(g);else COLLAPSED_GROUPS.add(g);
@@ -905,7 +1010,24 @@ document.addEventListener("click",e=>{
   if(d.rm){const[t,f]=d.rm.split("|"),tk=T(t);if(confirm("Удалить файл?"))run(async()=>{try{await delFile("files/"+f)}catch(x){}tk.files=tk.files.filter(x=>x.id!==f)})}
   if(d.del){const tk=T(d.del);if(confirm("Удалить «"+tk.title+"» вместе с файлами?"))run(async()=>{for(const f of tk.files){try{await delFile("files/"+f.id)}catch(x){}}S.tasks=S.tasks.filter(x=>x!==tk)})}
 });
-document.addEventListener("change",e=>{const id=e.target.dataset.done;if(!id)return;e.target.checked?DONE.add(id):DONE.delete(id);ls.set("dl-done",[...DONE]);render()});
+document.addEventListener("change",e=>{
+  const id=e.target.dataset.done;
+  if(id){
+    e.target.checked?DONE.add(id):DONE.delete(id);
+    ls.set("dl-done",[...DONE]);
+    render();
+    return;
+  }
+  const sid=e.target.dataset.sel;
+  if(sid){
+    if(e.target.checked)SELECTED.add(sid);else SELECTED.delete(sid);
+    // Обновляем только счётчик и подсветку — не перерисовываем весь список
+    const sc=$("#selcount"); if(sc) sc.textContent = SELECTED.size;
+    const card = e.target.closest(".task");
+    if(card) card.classList.toggle("selected", SELECTED.has(sid));
+    return;
+  }
+});
 $("#addf").onchange=e=>{const fl=[...e.target.files],t=attachTo;e.target.value="";if(t&&fl.length)run(()=>upload(t,fl))};
 $("#sf").onsubmit=e=>{e.preventDefault();const n=$("#sn").value.trim();if(!n)return;
  S.subjects.push({id:uid(),name:n,c:COLORS[S.subjects.length%COLORS.length]});$("#sn").value="";run(async()=>{})};
@@ -935,7 +1057,7 @@ $("#af").onsubmit=async()=>{
  cfg={o:$("#a-b").value.trim(),r:$("#a-k").value.trim(),t:$("#a-s").value.trim()};
  toast("Проверяю доступ…",0,"loading");
  try{await pull();await publish();ls.set("dl-admin",cfg);render();toast("Вы вошли как администратор",3500,"ok")}catch(e){cfg=null;render();toast(errMsg(e),6000,"bad")}};
-$("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");render()};
+$("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");SELECT_MODE=false;SELECTED.clear();render()};
 
 /* ===== PUSH ===== */
 function urlB64ToUint8Array(base64String){
