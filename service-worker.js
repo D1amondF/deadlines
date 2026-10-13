@@ -39,15 +39,14 @@ self.addEventListener('fetch', e => {
       caches.open(CACHE).then(c => c.put(e.request, copy));
       return r;
     }))
+  );
+});
 
-
-
-
-
-    /* ---- Push-уведомления ---- */
+/* ---- Push-уведомления ---- */
 self.addEventListener('push', event => {
   let data = {};
   try { data = event.data ? event.data.json() : {}; } catch(_) {}
+
   const title = data.title || 'Дедлайны ОБ26-2';
   const options = {
     body: data.body || 'Новое уведомление',
@@ -70,7 +69,5 @@ self.addEventListener('notificationclick', event => {
       }
       return clients.openWindow(url);
     })
-  );
-});
   );
 });
