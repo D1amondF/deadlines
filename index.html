@@ -8,6 +8,8 @@
 :root{--ink:#1c2333;--mute:#667085;--bg:#eef1f6;--surf:#fff;--line:#d9dfea;--acc:#2f4bff;--bad:#d93a3a;--ok:#1f8f5f;--warn:#b86b00;
 font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink)}
 *{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+.app>*{min-width:0}
 body{margin:0;background:var(--bg);line-height:1.45}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
@@ -46,6 +48,9 @@ main{padding:24px 24px 60px}
 .meta{font-size:13px;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:2px}
 .due.bad{color:var(--bad);font-weight:600}.due.soon{color:var(--warn);font-weight:600}
 .note{font-size:14px;margin-top:6px;white-space:pre-wrap}
+.note,.tt,.meta,.tp-t,.tp-toggle span{overflow-wrap:anywhere;word-break:break-word}
+.files,.file{max-width:100%}
+.file button{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .files{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .file{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;font-size:13px;background:#f7f9fc}
 .file button{border:0;background:none;padding:3px 9px}
@@ -77,37 +82,42 @@ dialog input,dialog select,dialog textarea{width:100%;padding:9px;border:1px sol
 #stbl th{color:var(--mute);font-weight:600;font-size:13px}
 #stbl td.free{color:var(--mute)}#stbl td.ok{font-weight:600;color:var(--ok)}
 @media(max-width:760px){
-.app{grid-template-columns:1fr}
-aside{border-right:0;border-bottom:1px solid var(--line);padding:14px 12px}
-h1{font-size:19px;margin:0 0 12px}
-#subjs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}
-.subj{width:auto;white-space:nowrap;background:var(--surf);padding:8px 12px;font-size:14px}
+.app{grid-template-columns:1fr;max-width:100%}
+aside{border-right:0;border-bottom:1px solid var(--line);padding:12px 10px}
+h1{font-size:19px;margin:0 0 10px}
+#subjs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#subjs::-webkit-scrollbar{display:none}
+.subj{width:auto;white-space:nowrap;background:var(--surf);padding:8px 12px;font-size:13px;flex:none}
 .subj b{font-size:12px;margin-left:6px}
-main{padding:14px 12px 60px}
+.foot{margin-top:10px;font-size:12px}
+main{padding:12px 10px 60px;max-width:100%}
 .top{margin-bottom:6px}
 .top h2{font-size:17px}
 .topb{width:100%;flex-wrap:wrap;gap:6px}
 .topb .btn{flex:1 1 auto;padding:9px 10px;font-size:14px;text-align:center}
-.grp{margin-top:20px}
+.grp{margin-top:18px}
 .grp h3{font-size:13px}
-.task{grid-template-columns:auto 1fr;padding:10px 12px;gap:10px;margin-bottom:8px}
+.task{grid-template-columns:auto 1fr;padding:10px;gap:8px;margin-bottom:8px;max-width:100%}
+.task>div{min-width:0}
 .chk{width:22px;height:22px}
 .acts{grid-column:1/-1;justify-content:flex-end;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:6px;margin-top:2px}
 .acts .ico{padding:6px 10px;font-size:13px}
 .tt{font-size:15px}
 .meta{font-size:12px;gap:2px 10px}
 .note{font-size:13px}
+.files{gap:5px}
 .file{font-size:12px}
 .file button{padding:4px 10px}
 .tp-toggle{font-size:13px;padding:6px 0}
-.tp{font-size:13px;padding:6px 0}
+.tp{font-size:13px;padding:6px 0;gap:6px}
+.tp-t{min-width:0;overflow:hidden;text-overflow:ellipsis}
 .tp .btn{padding:6px 12px;font-size:13px}
 .tp-n{font-size:12px}
-dialog{padding:18px;width:min(460px,94vw)}
+dialog{padding:16px;width:min(460px,94vw)}
 dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 .row{gap:6px;margin-top:14px}
 .row .btn{padding:10px 14px;flex:1 1 auto}
-#toast{font-size:13px;padding:8px 14px;bottom:12px}
+#toast{font-size:13px;padding:8px 14px;bottom:12px;left:10px;right:10px;transform:none;max-width:none}
 #stbl{font-size:13px}
 #stbl th,#stbl td{padding:5px 6px}
 }
