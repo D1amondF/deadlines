@@ -14,6 +14,7 @@ button{cursor:pointer}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .adm-only{display:none!important}
 body.adm .adm-only{display:revert!important}
+body.adm .topb.adm-only,body.adm .acts.adm-only{display:flex!important}
 .app{display:grid;grid-template-columns:260px 1fr;min-height:100vh;max-width:1100px;margin:0 auto}
 aside{padding:24px 16px;border-right:1px solid var(--line)}
 h1{font-size:22px;margin:0 0 20px;letter-spacing:-.01em}
@@ -137,6 +138,11 @@ main{padding:16px 16px 60px}
 <script>
 const COLORS=["#2f4bff","#d9534f","#1f8f5f","#b86b00","#8a3ffc","#0b8aa6","#c2185b","#5d6b82"];
 const MAXF=25*1024*1024;
+
+/* ====== НАСТРОЙКИ SUPABASE ====== */
+const SB_URL="https://xmbanshmxcmylvjsrgol.supabase.co";
+const SB_KEY="sb_publishable_AOPVaQq28i30ZBLNtw289g_mSVZWj5v";
+
 let S={subjects:[],tasks:[]},cur="all",cfg=null,attachTo=null,loaded=false;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -213,46 +219,70 @@ function render(){
  $("#list").innerHTML=h||`<div class="empty">${cfg?"Добавьте дисциплину слева, затем первое задание.":"Заданий пока нет."}</div>`;
 }
 
-/* ---- бронирование тем ---- */
+/* ---- бронирование тем (Supabase) ---- */
 let BK=[],bkErr=false,mine=ls.get("dl-mine",{});
 const rnd=()=>[...crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,"0")).join("");
 function topicsHtml(t){
  if(!t.topics||!t.topics.length)return"";
- const on=!!S.api&&!bkErr,free=t.topics.filter(p=>!BK.some(b=>b.task===t.id&&b.topic===p.id)).length;
- const note=!S.api?" · бронирование пока не настроено":bkErr?" · бронирование сейчас недоступно":" · свободно "+free+" из "+t.topics.length;
+ const on=!!SB_URL&&!bkErr,free=t.topics.filter(p=>!BK.some(b=>b.task===t.id&&b.topic===p.id)).length;
+ const note=!SB_URL?" · бронирование пока не настроено":bkErr?" · бронирование сейчас недоступно":" · свободно "+free+" из "+t.topics.length;
  return `<div class="topics"><div class="tp-h">Темы${note}</div>`+t.topics.map(p=>{
   const k=t.id+"|"+p.id,b=BK.find(x=>x.task===t.id&&x.topic===p.id);let r="";
   if(b)r=`<span class="tp-n">${esc(b.name)}</span>`+(mine[k]?`<button class="ico" data-unbook="${k}">Отменить</button>`:`<button class="ico adm-only" data-unbook="${k}">Освободить</button>`);
   else if(on)r=`<button class="btn" data-book="${k}">Занять</button>`;
   return `<div class="tp ${b?"taken":""}"><span class="tp-t">${esc(p.text)}</span>${r}</div>`}).join("")+`</div>`}
+
 async function loadBookings(){
- if(!S.api)return;
- try{const r=await fetch(S.api+"/api/bookings",{cache:"no-store"});if(!r.ok)throw 0;BK=(await r.json()).bookings;bkErr=false}catch(e){bkErr=true}
+ if(!SB_URL||!SB_KEY)return;
+ try{
+  const r=await fetch(SB_URL+"/rest/v1/rpc/list_bookings",{
+   method:"POST",
+   headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
+   body:"{}"
+  });
+  if(!r.ok)throw 0;
+  BK=await r.json();
+  bkErr=false
+ }catch(e){bkErr=true}
  render()}
+
 async function book(tid,pid){
  let name=prompt("Ваши фамилия и имя (так их увидит группа)",ls.get("dl-name",""));name=(name||"").trim().replace(/\s+/g," ");
  if(name.length<2)return;ls.set("dl-name",name);const owner=rnd();
- try{const r=await fetch(S.api+"/api/book",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({task:tid,topic:pid,name,owner})});
-  const j=await r.json().catch(()=>({}));
-  if(r.ok){mine[tid+"|"+pid]=owner;ls.set("dl-mine",mine);toast("Тема за вами")}
-  else if(j.error==="taken")toast("Эту тему уже заняли")
-  else if(j.error==="has_other")toast("Вы уже заняли другую тему в этом задании")
-  else toast("Не удалось занять тему")}catch(e){toast("Сервис бронирования недоступен")}
+ try{
+  const r=await fetch(SB_URL+"/rest/v1/rpc/book_topic",{
+   method:"POST",
+   headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
+   body:JSON.stringify({p_task:tid,p_topic:pid,p_name:name,p_owner:owner})
+  });
+  const result=await r.json().catch(()=>"");
+  if(result==="ok"){mine[tid+"|"+pid]=owner;ls.set("dl-mine",mine);toast("Тема за вами")}
+  else if(result==="taken")toast("Эту тему уже заняли")
+  else if(result==="has_other")toast("Вы уже заняли другую тему в этом задании")
+  else if(result==="bad_request")toast("Проверьте введённые данные")
+  else toast("Не удалось занять тему")
+ }catch(e){toast("Сервис бронирования недоступен")}
  loadBookings()}
+
 async function unbook(k){
- const[tid,pid]=k.split("|"),hdr={"content-type":"application/json"},body={task:tid,topic:pid};
- if(mine[k])body.owner=mine[k];
- else{let ak=ls.get("dl-akey","");if(!ak){ak=(prompt("Ключ администратора бронирования (ADMIN_KEY)")||"").trim();if(!ak)return}hdr["x-admin-key"]=ak}
- try{const r=await fetch(S.api+"/api/book",{method:"DELETE",headers:hdr,body:JSON.stringify(body)});
-  if(r.ok){delete mine[k];ls.set("dl-mine",mine);if(hdr["x-admin-key"])ls.set("dl-akey",hdr["x-admin-key"]);toast("Бронь снята")}
-  else if(r.status===403){if(hdr["x-admin-key"])ls.del("dl-akey");toast("Нет прав снять эту бронь")}
-  else toast("Не удалось снять бронь")}catch(e){toast("Сервис бронирования недоступен")}
+ const[tid,pid]=k.split("|"),body={p_task:tid,p_topic:pid};
+ if(mine[k])body.p_owner=mine[k];
+ else{let ak=ls.get("dl-akey","");if(!ak){ak=(prompt("Ключ администратора бронирования")||"").trim();if(!ak)return}body.p_admin=ak}
+ try{
+  const r=await fetch(SB_URL+"/rest/v1/rpc/unbook_topic",{
+   method:"POST",
+   headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
+   body:JSON.stringify(body)
+  });
+  const result=await r.json().catch(()=>"");
+  if(result==="ok"){delete mine[k];ls.set("dl-mine",mine);if(body.p_admin)ls.set("dl-akey",body.p_admin);toast("Бронь снята")}
+  else if(result==="forbidden"){if(body.p_admin)ls.del("dl-akey");toast("Нет прав снять эту бронь")}
+  else toast("Не удалось снять бронь")
+ }catch(e){toast("Сервис бронирования недоступен")}
  loadBookings()}
+
 $("#apibtn").onclick=()=>{
- const v=prompt("Адрес сервиса бронирования из Cloudflare, например https://deadlines-book.имя.workers.dev",S.api||"");
- if(v===null)return;const u=v.trim().replace(/\/+$/,"");
- if(u&&!/^https:\/\//.test(u)){toast("Адрес должен начинаться с https://");return}
- S.api=u;run(async()=>{}).then(loadBookings)};
+ toast("Бронирование работает через Supabase. Настраивать ничего не нужно.",4000)};
 
 /* ---- сводка броней ---- */
 function sumRows(){const rows=[];S.tasks.forEach(t=>(t.topics||[]).forEach(p=>{
@@ -315,7 +345,8 @@ $("#af").onsubmit=async()=>{
 $("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");render()};
 
 cfg=ls.get("dl-admin",null);
-(cfg?pull().catch(loadData):loadData()).then(()=>{render();loadBookings()});setInterval(()=>{if(S.api)loadBookings()},30000);
+(cfg?pull().catch(loadData):loadData()).then(()=>{render();loadBookings()});
+setInterval(()=>{if(SB_URL)loadBookings()},30000);
 </script>
 </body>
 </html>
