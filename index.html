@@ -231,7 +231,7 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
     <button class="link" id="login">Вход для администратора</button>
     <div class="foot-btns">
       <button class="link" id="soundbtn">🔊 Звук вкл.</button>
-      <!-- Уведомления временно отключены. Чтобы вернуть — уберите атрибут hidden ниже -->
+      <!-- Уведомления отключены. Чтобы вернуть — уберите hidden -->
       <button class="link" id="pushbtn" hidden>🔔 Уведомления</button>
     </div>
   </div>
@@ -268,20 +268,6 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 </form>
 </dialog>
 
-<dialog id="pdialog">
-<form method="dialog" id="pf">
-  <h2>Рассылка уведомления</h2>
-  <p>Push придёт на все устройства, где включены уведомления.</p>
-  <label for="p-title">Заголовок</label>
-  <input id="p-title" required maxlength="80" value="Дедлайны ОБ26-2">
-  <label for="p-body">Текст (до 240 символов)</label>
-  <textarea id="p-body" rows="4" required maxlength="240"></textarea>
-  <label for="p-key">Ключ администратора</label>
-  <input id="p-key" type="password" autocomplete="off" placeholder="Тот же ключ, что и для снятия броней">
-  <div class="row"><button class="btn" type="button" id="p-cancel">Отмена</button><button class="btn pri" type="submit" id="p-send">Отправить</button></div>
-</form>
-</dialog>
-
 <dialog id="sdlg" style="width:min(860px,94vw)">
   <h2>Сводка броней</h2>
   <div style="overflow:auto;max-height:60vh"><table id="stbl"><thead><tr><th>Дисциплина</th><th>Задание</th><th>Тема</th><th>Занял(а)</th></tr></thead><tbody id="sbody"></tbody></table></div>
@@ -299,7 +285,7 @@ const MAXF=25*1024*1024;
 const SB_URL="https://xmbanshmxcmylvjsrgol.supabase.co";
 const SB_KEY="sb_publishable_AOPVaQq28i30ZBLNtw289g_mSVZWj5v";
 
-/* ====== PUSH-УВЕДОМЛЕНИЯ (VAPID) ====== */
+/* ====== PUSH (VAPID) — код оставлен на случай возврата ====== */
 const VAPID_PUBLIC_KEY="BOWSoOZSRNMCwALWj5su_LHDBxq8i1XPQu_MCjE5fLVmsva2jNjNL4LTgetGZh28CWKrQEtZiUeHmk4dGTb9dAc";
 const PUSH_FN_URL = SB_URL + "/functions/v1/send-push";
 
@@ -501,8 +487,7 @@ async function loadBookings(){
   if(!r.ok)throw 0;
   BK=await r.json();
 
-  // Синхронизируем локальный «след» брони с сервером:
-  // если в базе моего ключа больше нет — удаляем его из localStorage.
+  // Синхронизируем локальный «след» брони с сервером
   const takenNow = new Set(BK.map(b => b.task + "|" + b.topic));
   Object.keys(mine).forEach(k => { if (!takenNow.has(k)) delete mine[k]; });
   ls.set("dl-mine", mine);
@@ -522,8 +507,6 @@ async function book(tid,pid){
   });
   const result=await r.json().catch(()=>"");
   if(result==="ok"){
-   // Один студент = одна тема на задание.
-   // Перед записью новой темы стираем все старые записи по этому заданию.
    Object.keys(mine).forEach(k => { if (k.startsWith(tid + "|")) delete mine[k]; });
    mine[tid+"|"+pid]=owner;ls.set("dl-mine",mine);
    EXPANDED.add(tid);ls.set("dl-expanded",[...EXPANDED]);
@@ -558,55 +541,6 @@ async function unbook(k){
 
 $("#apibtn").onclick=()=>{
  toast("Бронирование работает через Supabase. Настраивать ничего не нужно.",4000)};
-
-/* ---- Рассылка push-уведомлений (админ) ---- */
-$("#pushadminbtn").onclick = () => {
-  $("#pf").reset();
-  $("#p-title").value = "Дедлайны ОБ26-2";
-  $("#p-key").value = ls.get("dl-akey", "");
-  $("#pdialog").showModal();
-  $("#p-body").focus();
-};
-
-$("#p-cancel").onclick = () => $("#pdialog").close();
-
-$("#pf").onsubmit = async (e) => {
-  e.preventDefault();
-  const title = $("#p-title").value.trim();
-  const body  = $("#p-body").value.trim();
-  const key   = $("#p-key").value.trim();
-  if (!title || !body || !key) { toast("Заполните все поля", 3500, "warn"); return; }
-
-  const btn = $("#p-send");
-  btn.disabled = true;
-  btn.textContent = "Отправляю…";
-
-  try {
-    const r = await fetch(PUSH_FN_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-admin-key": key },
-      body: JSON.stringify({ title, body })
-    });
-    const j = await r.json().catch(() => ({}));
-
-    if (r.status === 403) {
-      toast("Неверный ключ администратора", 4000, "bad");
-    } else if (!r.ok) {
-      toast("Ошибка: " + (j.error || "HTTP " + r.status), 5000, "bad");
-    } else if (j.total === 0) {
-      toast("Нет подписчиков — никто ещё не включил уведомления", 4500, "warn");
-    } else {
-      ls.set("dl-akey", key);
-      toast(`Отправлено: ${j.sent} · не доставлено: ${j.failed} · удалено мёртвых: ${j.removed}`, 6000, "ok");
-      $("#pdialog").close();
-    }
-  } catch (err) {
-    toast("Сеть недоступна: " + err.message, 5000, "bad");
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "Отправить";
-  }
-};
 
 /* ---- сводка броней ---- */
 function sumRows(){const rows=[];S.tasks.forEach(t=>(t.topics||[]).forEach(p=>{
@@ -682,7 +616,7 @@ $("#af").onsubmit=async()=>{
  try{await pull();await publish();ls.set("dl-admin",cfg);render();toast("Вы вошли как администратор",3500,"ok")}catch(e){cfg=null;render();toast(errMsg(e),6000,"bad")}};
 $("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");render()};
 
-/* ---- PUSH: подписка и логика (кнопка скрыта) ---- */
+/* ---- PUSH: код оставлен на случай возврата (кнопки скрыты) ---- */
 function urlB64ToUint8Array(base64String){
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
@@ -691,80 +625,40 @@ function urlB64ToUint8Array(base64String){
   for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
   return outputArray;
 }
-
 function pushSupported(){
   return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
 }
-
 function updatePushBtn(){
   const b = $("#pushbtn");
   if(!b) return;
   if(!pushSupported()){ b.textContent = "🔕 Уведомления не поддерживаются"; b.disabled = true; return; }
-  if(Notification.permission === "denied"){
-    b.textContent = "🔕 Уведомления заблокированы"; return;
-  }
+  if(Notification.permission === "denied"){ b.textContent = "🔕 Уведомления заблокированы"; return; }
   b.textContent = ls.get("dl-push-enabled", false) ? "🔔 Уведомления включены" : "🔔 Включить уведомления";
 }
-
 async function enablePush(){
-  if(!pushSupported()){
-    toast("Браузер не поддерживает push-уведомления", 4000, "bad");
-    return;
-  }
+  if(!pushSupported()){ toast("Браузер не поддерживает push-уведомления", 4000, "bad"); return; }
   try{
     const perm = await Notification.requestPermission();
-    if(perm !== "granted"){
-      toast("Разрешение не выдано — уведомления не придут", 4500, "warn");
-      return;
-    }
+    if(perm !== "granted"){ toast("Разрешение не выдано — уведомления не придут", 4500, "warn"); return; }
     const reg = await navigator.serviceWorker.ready;
     let sub = await reg.pushManager.getSubscription();
-    if(!sub){
-      sub = await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY)
-      });
-    }
+    if(!sub){ sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY) }); }
     const j = sub.toJSON();
-
     await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), {
       method: "DELETE",
       headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY }
     });
-
     const r = await fetch(SB_URL + "/rest/v1/push_subs", {
       method: "POST",
-      headers: {
-        "apikey": SB_KEY,
-        "Authorization": "Bearer " + SB_KEY,
-        "Content-Type": "application/json",
-        "Prefer": "return=minimal"
-      },
-      body: JSON.stringify({
-        endpoint: j.endpoint,
-        p256dh: j.keys.p256dh,
-        auth: j.keys.auth,
-        name: ls.get("dl-name", null),
-        user_agent: navigator.userAgent.slice(0, 200)
-      })
+      headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" },
+      body: JSON.stringify({ endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth, name: ls.get("dl-name", null), user_agent: navigator.userAgent.slice(0, 200) })
     });
-    if(!r.ok){
-      const t = await r.text().catch(()=>"");
-      throw new Error("HTTP " + r.status + (t ? " — " + t : ""));
-    }
-
+    if(!r.ok){ const t = await r.text().catch(()=>""); throw new Error("HTTP " + r.status + (t ? " — " + t : "")); }
     ls.set("dl-push-enabled", true);
     updatePushBtn();
-    toast("Уведомления включены", 4000, "ok", {
-      action: "Тест",
-      onAction: () => testPush()
-    });
-  }catch(e){
-    console.error(e);
-    toast("Не удалось включить: " + e.message, 5000, "bad");
-  }
+    toast("Уведомления включены", 4000, "ok", { action: "Тест", onAction: () => testPush() });
+  }catch(e){ console.error(e); toast("Не удалось включить: " + e.message, 5000, "bad"); }
 }
-
 async function disablePush(){
   try{
     const reg = await navigator.serviceWorker.ready;
@@ -780,28 +674,16 @@ async function disablePush(){
     ls.set("dl-push-enabled", false);
     updatePushBtn();
     toast("Уведомления отключены", 3500, "info");
-  }catch(e){
-    toast("Ошибка отключения: " + e.message, 4500, "bad");
-  }
+  }catch(e){ toast("Ошибка отключения: " + e.message, 4500, "bad"); }
 }
-
 async function testPush(){
   const reg = await navigator.serviceWorker.ready;
-  reg.showNotification("Дедлайны ОБ26-2", {
-    body: "Проверка уведомлений. Всё работает!",
-    icon: "icon-192.png",
-    badge: "icon-192.png",
-    tag: "test"
-  });
+  reg.showNotification("Дедлайны ОБ26-2", { body: "Проверка уведомлений. Всё работает!", icon: "icon-192.png", badge: "icon-192.png", tag: "test" });
 }
-
 $("#pushbtn").onclick = () => {
   if(!pushSupported()){ toast("Браузер не поддерживает push", 4000, "bad"); return; }
-  if(ls.get("dl-push-enabled", false)) {
-    if(confirm("Отключить уведомления?")) disablePush();
-  } else {
-    enablePush();
-  }
+  if(ls.get("dl-push-enabled", false)) { if(confirm("Отключить уведомления?")) disablePush(); }
+  else { enablePush(); }
 };
 
 /* ---- Умные предупреждения при старте (раз за сессию) ---- */
@@ -809,7 +691,6 @@ function startWarnings(){
   if(!S.tasks.length)return;
   if(sessionStorage.getItem("dl-warned"))return;
   sessionStorage.setItem("dl-warned","1");
-
   const now=new Date();
   const d0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
   let over=0,todayCnt=0;
