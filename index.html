@@ -78,49 +78,24 @@ main{padding:24px 24px 60px}
 .topb-public{display:flex;gap:6px;flex-wrap:wrap}
 .topb-public .btn{padding:7px 11px;font-size:13px;font-weight:600}
 .filter-btn.active{background:var(--acc);border-color:var(--acc);color:#fff}
-
 .top-search{display:flex;align-items:center;gap:6px;flex:1 1 220px;min-width:180px;position:relative}
-.top-search input{
-  width:100%;padding:8px 32px 8px 34px;
-  border:1px solid var(--line);border-radius:8px;
-  background:var(--surf);color:var(--ink);
-  font-size:14px;transition:border-color .15s,background .15s;
-}
+.top-search input{width:100%;padding:8px 32px 8px 34px;border:1px solid var(--line);border-radius:8px;background:var(--surf);color:var(--ink);font-size:14px;transition:border-color .15s,background .15s}
 .top-search input:focus{border-color:var(--acc);outline:none}
 .top-search input::placeholder{color:var(--mute)}
 .top-search .ico-lupe{position:absolute;left:10px;font-size:14px;color:var(--mute);pointer-events:none;line-height:1}
-.top-search .ico-clear{
-  position:absolute;right:6px;border:0;background:none;
-  padding:4px 8px;color:var(--mute);font-size:14px;line-height:1;display:none;
-}
+.top-search .ico-clear{position:absolute;right:6px;border:0;background:none;padding:4px 8px;color:var(--mute);font-size:14px;line-height:1;display:none}
 .top-search.has-value .ico-clear{display:block}
 .top-search.has-value .ico-lupe{color:var(--acc)}
-
-/* ===== Панель массовых действий ===== */
-.selbar{
-  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
-  padding:10px 12px;background:var(--surf);border:1px solid var(--line);
-  border-radius:10px;margin:0 0 12px;box-shadow:0 2px 10px rgba(0,0,0,.05);
-}
+.selbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 12px;background:var(--surf);border:1px solid var(--line);border-radius:10px;margin:0 0 12px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
 .selbar .selcount{font-weight:700;color:var(--navy);margin-right:auto;font-size:14px}
 .selbar .selcount b{color:var(--acc)}
 .selbar .btn{padding:6px 12px;font-size:13px}
-.selbar .hint{
-  font-size:12px;color:var(--mute);flex:1 1 100%;
-  padding-top:2px;line-height:1.35;
-}
-
+.selbar .hint{font-size:12px;color:var(--mute);flex:1 1 100%;padding-top:2px;line-height:1.35}
 .arch-block{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
-.archive-item{
-  display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;
-  border:0;background:none;border-radius:8px;text-align:left;
-  font-weight:600;color:var(--ink);cursor:pointer;
-  transition:background .15s,color .15s;
-}
+.archive-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:0;background:none;border-radius:8px;text-align:left;font-weight:600;color:var(--ink);cursor:pointer;transition:background .15s,color .15s}
 .archive-item:hover{background:var(--hover)}
 .archive-item.on{background:var(--surf);color:var(--navy);box-shadow:inset 3px 0 0 var(--acc)}
 .archive-item b{margin-left:auto;font-weight:600;color:var(--mute);font-size:13px}
-
 .grp{margin-top:26px}
 .grp h3{margin:0 0 8px;font-size:13px;color:var(--mute);font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;padding:8px 4px;border-radius:8px;-webkit-tap-highlight-color:transparent;transition:color .15s,background .15s}
 .grp h3:hover{color:var(--navy);background:var(--hover)}
@@ -130,16 +105,7 @@ main{padding:24px 24px 60px}
 .grp.collapsed h3{opacity:.75}
 .grp.collapsed .grp-body{display:none}
 .grp.bad h3{color:var(--bad)}
-
-.task{
-  display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;
-  background:var(--surf);color:var(--ink);
-  padding:12px 14px 12px 12px;
-  border-left:4px solid var(--c);
-  border-radius:4px 10px 10px 4px;
-  margin-bottom:8px;transition:box-shadow .15s,transform .1s,background .15s,outline-color .15s;
-  cursor:pointer;position:relative;outline:2px solid transparent;outline-offset:-2px;
-}
+.task{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;background:var(--surf);color:var(--ink);padding:12px 14px 12px 12px;border-left:4px solid var(--c);border-radius:4px 10px 10px 4px;margin-bottom:8px;transition:box-shadow .15s,transform .1s,background .15s,outline-color .15s;cursor:pointer;position:relative;outline:2px solid transparent;outline-offset:-2px}
 .task:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
 body.dark .task:hover{box-shadow:0 2px 12px rgba(0,0,0,.4)}
 .task:active{transform:scale(.998)}
@@ -148,38 +114,22 @@ body.dark .task:hover{box-shadow:0 2px 12px rgba(0,0,0,.4)}
 .task.done .tt{text-decoration:line-through}
 .task.selected{background:rgba(200,18,64,.10);outline-color:var(--acc)}
 body.dark .task.selected{background:rgba(232,92,127,.14)}
-.task.selected::after{
-  content:"✓";
-  position:absolute;top:6px;right:8px;
-  width:22px;height:22px;border-radius:50%;
-  background:var(--acc);color:#fff;font-weight:700;font-size:13px;
-  display:flex;align-items:center;justify-content:center;
-  pointer-events:none;
-}
+.task.selected::after{content:"✓";position:absolute;top:6px;right:8px;width:22px;height:22px;border-radius:50%;background:var(--acc);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;pointer-events:none}
 body.selmode .task{cursor:copy}
 body.selmode .task:hover{box-shadow:0 2px 12px rgba(200,18,64,.15)}
 body.selmode .task .acts{display:none}
 body.selmode .task .star-btn{display:none}
-
 .chk{width:20px;height:20px;margin-top:2px;accent-color:var(--ok);cursor:pointer}
 .selchk{width:20px;height:20px;margin-top:2px;accent-color:var(--acc);cursor:pointer}
 .tt{font-weight:700;color:var(--navy);flex:1;min-width:0}
 .tt-row{display:flex;align-items:flex-start;gap:6px}
-.star-btn{
-  background:none;border:0;padding:2px 4px;font-size:16px;line-height:1;
-  color:var(--mute);opacity:.35;cursor:pointer;flex:none;
-  transition:opacity .15s,color .15s,transform .15s;
-}
+.star-btn{background:none;border:0;padding:2px 4px;font-size:16px;line-height:1;color:var(--mute);opacity:.35;cursor:pointer;flex:none;transition:opacity .15s,color .15s,transform .15s}
 .star-btn:hover{opacity:1;transform:scale(1.1)}
 .star-btn.on{opacity:1;color:var(--star)}
 .meta{font-size:13px;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:2px}
 .due.bad{color:var(--bad);font-weight:700}
 .due.soon{color:var(--warn);font-weight:700}
-.note{
-  font-size:14px;margin-top:6px;white-space:pre-wrap;color:var(--ink);
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
-  overflow:hidden;text-overflow:ellipsis;
-}
+.note{font-size:14px;margin-top:6px;white-space:pre-wrap;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis}
 .note,.tt,.meta,.tp-t,.tp-toggle span{overflow-wrap:anywhere;word-break:break-word}
 .files,.file{max-width:100%}
 .file button{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -191,14 +141,7 @@ body.selmode .task .star-btn{display:none}
 .ico{border:0;background:none;padding:4px 8px;border-radius:6px;color:var(--mute);font-size:13px;font-weight:500}
 .ico:hover{background:var(--hover);color:var(--navy)}
 .empty{padding:40px 16px;text-align:center;color:var(--mute)}
-
-dialog{
-  border:0;border-radius:14px;padding:22px;
-  width:min(460px,92vw);
-  background:var(--surf);color:var(--ink);
-  box-shadow:0 20px 60px rgba(0,0,0,.35);
-  font-family:inherit;
-}
+dialog{border:0;border-radius:14px;padding:22px;width:min(460px,92vw);background:var(--surf);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35);font-family:inherit}
 dialog::backdrop{background:rgba(0,20,40,.55)}
 dialog h2{margin:0 0 14px;font-size:18px;color:var(--navy)}
 dialog p{font-size:13px;color:var(--mute);margin:0 0 4px}
@@ -206,11 +149,9 @@ label{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px;font-weig
 dialog input,dialog select,dialog textarea{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--surf2);color:var(--ink)}
 dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--acc);outline:none}
 .row{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
-
 .tpl-row{display:flex;gap:8px;align-items:flex-end;margin-top:0}
 .tpl-row .tpl-field{flex:1;min-width:0}
 .tpl-row .btn{flex:none;padding:9px 12px}
-
 #tpllg{padding:0;width:min(560px,94vw);max-height:88vh;display:none;flex-direction:column;overflow:hidden}
 #tpllg[open]{display:flex}
 .tpl-head{padding:20px 22px 12px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:10px}
@@ -218,10 +159,7 @@ dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--
 .tpl-close{border:0;background:none;font-size:22px;line-height:1;color:var(--mute);padding:4px 8px;border-radius:6px;flex:none}
 .tpl-close:hover{background:var(--hover);color:var(--ink)}
 .tpl-body{padding:14px 22px;overflow-y:auto;flex:1}
-.tpl-item{
-  padding:10px 12px;background:var(--surf2);border:1px solid var(--line);
-  border-radius:8px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;
-}
+.tpl-item{padding:10px 12px;background:var(--surf2);border:1px solid var(--line);border-radius:8px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start}
 .tpl-item-main{flex:1;min-width:0}
 .tpl-item-name{font-weight:700;color:var(--navy);font-size:14px}
 .tpl-item-preview{font-size:12px;color:var(--mute);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -229,9 +167,6 @@ dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--
 .tpl-empty{padding:20px;text-align:center;color:var(--mute);font-size:13px;font-style:italic}
 .tpl-form{padding:14px 22px;border-top:1px solid var(--line);background:var(--surf2)}
 .tpl-form h3{margin:0 0 8px;font-size:13px;color:var(--navy);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
-.tpl-form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-@media(max-width:520px){.tpl-form-row{grid-template-columns:1fr}}
-
 #tdlg{padding:0;width:min(680px,94vw);max-height:88vh;overflow:hidden;display:none;flex-direction:column}
 #tdlg[open]{display:flex}
 .td-head{padding:20px 22px 12px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:10px}
@@ -240,55 +175,40 @@ dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--
 .td-close:hover{background:var(--hover);color:var(--ink)}
 .td-body{padding:16px 22px 8px;overflow-y:auto;flex:1}
 .td-meta{font-size:13px;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px 14px;margin-bottom:12px}
-.td-note{
-  white-space:pre-wrap;font-size:15px;line-height:1.55;
-  padding:12px 14px;background:var(--surf2);border-radius:10px;
-  margin-bottom:14px;border-left:3px solid var(--acc);
-}
-.td-section-title{
-  font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
-  color:var(--mute);margin:14px 0 6px;
-}
+.td-note{white-space:pre-wrap;font-size:15px;line-height:1.55;padding:12px 14px;background:var(--surf2);border-radius:10px;margin-bottom:14px;border-left:3px solid var(--acc)}
+.td-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--mute);margin:14px 0 6px}
 .td-files{display:flex;flex-direction:column;gap:6px}
-.td-file{
-  display:flex;align-items:center;gap:8px;padding:8px 12px;
-  background:var(--surf2);border:1px solid var(--line);border-radius:8px;
-  cursor:pointer;text-align:left;font-size:14px;width:100%;
-  color:var(--ink);transition:border-color .15s,background .15s;
-}
+.td-file{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surf2);border:1px solid var(--line);border-radius:8px;cursor:pointer;text-align:left;font-size:14px;width:100%;color:var(--ink);transition:border-color .15s,background .15s}
 .td-file:hover{border-color:var(--acc);background:var(--hover)}
 .td-file .td-fname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .td-file .td-fsize{color:var(--mute);font-size:12px;flex:none}
 .td-topics{display:flex;flex-direction:column;gap:4px}
-.td-topic{
-  display:flex;align-items:center;gap:10px;padding:8px 12px;
-  background:var(--surf2);border-radius:8px;font-size:14px;
-}
+.td-topic{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surf2);border-radius:8px;font-size:14px}
 .td-topic.taken .td-tt{color:var(--mute)}
 .td-topic .td-tt{flex:1}
 .td-topic .td-tn{font-size:13px;font-weight:700;color:var(--blue)}
-.td-foot{
-  padding:12px 22px;border-top:1px solid var(--line);
-  display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;
-}
+.td-foot{padding:12px 22px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between}
 .td-foot-left,.td-foot-right{display:flex;gap:8px;flex-wrap:wrap}
-.td-btn-star{
-  border:1px solid var(--line);background:var(--surf);color:var(--ink);
-  padding:8px 14px;border-radius:8px;font-weight:600;font-size:14px;
-  display:inline-flex;align-items:center;gap:6px;
-}
+.td-btn-star{border:1px solid var(--line);background:var(--surf);color:var(--ink);padding:8px 14px;border-radius:8px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px}
 .td-btn-star:hover{border-color:var(--star)}
 .td-btn-star.on{background:var(--star);border-color:var(--star);color:#1A1A1A}
 .td-empty{padding:20px;text-align:center;color:var(--mute);font-size:13px;font-style:italic}
 
-#toast{
-  position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-24px);
-  background:var(--navy);color:#fff;padding:13px 18px;border-radius:12px;
-  font-size:15px;font-weight:600;display:none;max-width:min(620px,92vw);z-index:100;
-  box-shadow:0 12px 36px rgba(0,0,0,.35);cursor:pointer;line-height:1.35;letter-spacing:.01em;
-  transition:transform .28s cubic-bezier(.2,.9,.3,1.2),opacity .22s ease;
-  opacity:0;align-items:center;gap:10px;
-}
+/* Сетка слотов очереди */
+.slots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:8px}
+.slot-item{padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surf2);font-size:13px;display:flex;align-items:center;gap:8px;min-height:44px}
+.slot-item.free{color:var(--mute)}
+.slot-item.taken{background:var(--surf);color:var(--ink)}
+.slot-item.mine{background:rgba(200,18,64,.08);border-color:var(--acc)}
+body.dark .slot-item.mine{background:rgba(232,92,127,.12)}
+.slot-num{font-weight:700;color:var(--navy);min-width:26px;flex:none}
+.slot-item.mine .slot-num{color:var(--acc)}
+.slot-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.slot-item .btn{padding:3px 9px;font-size:12px;flex:none}
+.slots-legend{font-size:12px;color:var(--mute);margin-top:6px;line-height:1.4}
+.slots-legend b{color:var(--acc)}
+
+#toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-24px);background:var(--navy);color:#fff;padding:13px 18px;border-radius:12px;font-size:15px;font-weight:600;display:none;max-width:min(620px,92vw);z-index:100;box-shadow:0 12px 36px rgba(0,0,0,.35);cursor:pointer;line-height:1.35;letter-spacing:.01em;transition:transform .28s cubic-bezier(.2,.9,.3,1.2),opacity .22s ease;opacity:0;align-items:center;gap:10px}
 #toast.show{display:flex;transform:translateX(-50%) translateY(0);opacity:1}
 #toast.ok{background:var(--blue);color:#fff}
 #toast.bad{background:var(--bad);color:#fff}
@@ -300,7 +220,6 @@ body.dark #toast.info{color:#0F1826}
 @keyframes toastspin{to{transform:rotate(360deg)}}
 .toast-action{background:rgba(255,255,255,.2);border:0;color:#fff;font:inherit;font-weight:700;padding:6px 14px;border-radius:8px;cursor:pointer;white-space:nowrap;margin-left:6px;transition:background .15s}
 .toast-action:hover{background:rgba(255,255,255,.32)}
-
 .topics{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}
 .tp-toggle{background:none;border:0;padding:4px 0;font:inherit;font-size:13px;color:var(--mute);cursor:pointer;display:flex;align-items:center;gap:6px;width:100%;text-align:left;font-weight:600}
 .tp-toggle:hover{color:var(--navy)}
@@ -316,7 +235,6 @@ body.dark #toast.info{color:#0F1826}
 #stbl th{color:var(--mute);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
 #stbl td.free{color:var(--mute)}
 #stbl td.ok{font-weight:700;color:var(--blue)}
-
 @media(max-width:760px){
 .app{grid-template-columns:1fr;max-width:100%}
 aside{border-right:0;border-bottom:1px solid var(--line);padding:12px 10px}
@@ -382,6 +300,8 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 .tpl-body{padding:12px 16px}
 .tpl-form{padding:12px 16px}
 .tpl-row{flex-direction:column;align-items:stretch}
+.slots-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:5px}
+.slot-item{font-size:12px;padding:7px 9px}
 }
 @media(max-width:400px){
 .topb .btn{font-size:12px;padding:8px}
@@ -430,7 +350,6 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
       <button class="btn pri" id="new">Добавить задание</button>
     </div>
   </div>
-
   <div class="selbar adm-only" id="selbar" style="display:none!important">
     <span class="selcount">Выбрано: <b id="selcount">0</b></span>
     <button class="btn" id="sel-all">✅ Все</button>
@@ -442,7 +361,6 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
     <button class="btn bad" id="sel-delete">🗑 Удалить</button>
     <div class="hint">Клик по карточке — выделить или снять выделение. Чтобы закрыть панель, нажмите «☑️ Выбрать» ещё раз.</div>
   </div>
-
   <div id="list"></div>
 </main>
 </div>
@@ -459,6 +377,7 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
   <label for="f-t">Что нужно сделать</label><input id="f-t" required maxlength="140">
   <label for="f-s">Дисциплина</label><select id="f-s" required></select>
   <label for="f-d">Срок сдачи</label><input id="f-d" type="datetime-local">
+  <label for="f-slots">Мест в очереди выступлений (0 — выключить)</label><input id="f-slots" type="number" min="0" max="200" value="30">
   <label for="f-n">Заметка</label><textarea id="f-n" rows="3"></textarea>
   <label for="f-p">Темы для бронирования (по одной в строке, необязательно)</label><textarea id="f-p" rows="4"></textarea>
   <label for="f-f">Файлы к заданию</label><input id="f-f" type="file" multiple>
@@ -534,13 +453,14 @@ let Q="";
 let SELECT_MODE=false;
 let SELECTED=new Set();
 let editingTpl=null;
+let SLOTS=[];
+let mineSlots=ls.get("dl-mine-slots",{});
 
 function collapsedKey(){ return "dl-collapsed-groups-" + cur; }
 function loadCollapsed(){ try{ return new Set(ls.get(collapsedKey(), [])); }catch(e){ return new Set(); } }
 function saveCollapsed(){ ls.set(collapsedKey(), [...COLLAPSED_GROUPS]); }
 let COLLAPSED_GROUPS = loadCollapsed();
 
-/* ===== Архив ===== */
 function isArchived(t){
   if(t.archived === true) return true;
   if(t.archived === false) return false;
@@ -551,7 +471,6 @@ function isArchived(t){
   return d.getTime() < cutoff;
 }
 
-/* ===== Тёмная тема ===== */
 let THEME_DARK = ls.get("dl-dark", null);
 if(THEME_DARK === null) THEME_DARK = !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
 function applyTheme(){ document.body.classList.toggle("dark", !!THEME_DARK); }
@@ -559,7 +478,6 @@ function updateThemeLabel(){ const b=$("#themebtn"); if(b) b.textContent = THEME
 $("#themebtn").onclick=()=>{ THEME_DARK=!THEME_DARK; ls.set("dl-dark",THEME_DARK); applyTheme(); updateThemeLabel(); };
 applyTheme(); updateThemeLabel();
 
-/* ===== Toast ===== */
 const NOTE_QUEUE=[]; let noteShowing=false,currentNote=null;
 let NOTE_SOUND=ls.get("dl-sound",true);
 let audioCtx=null;
@@ -606,7 +524,6 @@ function updateSoundLabel(){ const b=$("#soundbtn"); if(b) b.textContent = NOTE_
 $("#soundbtn").onclick=()=>{ NOTE_SOUND=!NOTE_SOUND; ls.set("dl-sound",NOTE_SOUND); updateSoundLabel(); if(NOTE_SOUND)beep("ok"); };
 updateSoundLabel();
 
-/* ===== GitHub ===== */
 const enc=new TextEncoder();
 const gh=(m,p,b)=>fetch(`https://api.github.com/repos/${cfg.o}/${cfg.r}/contents/${p}`,{method:m,headers:{Authorization:"Bearer "+cfg.t,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"},body:b?JSON.stringify(b):undefined});
 const b64s=b=>{let s="";for(let i=0;i<b.length;i+=8192)s+=String.fromCharCode.apply(null,b.subarray(i,i+8192));return btoa(s)};
@@ -697,9 +614,9 @@ function render(){
  $("#delsubj").hidden=!sub;$("#rensubj").hidden=!sub;
  $("#new").hidden=isArch;
 
- // Панель массовых действий: показываем только в режиме выделения
-  const bar=$("#selbar");
+ const bar=$("#selbar");
  if(bar) bar.style.setProperty("display", (SELECT_MODE && cfg) ? "flex" : "none", "important");
+ const sc=$("#selcount"); if(sc) sc.textContent = SELECTED.size;
 
  const by={};GROUPS.forEach(g=>by[g[0]]=[]);
  getVisibleTasks().forEach(t=>{const i=dueInfo(t);by[DONE.has(t.id)?"done":i.g].push({t,i})});
@@ -736,7 +653,6 @@ function render(){
  $("#list").innerHTML=h||`<div class="empty">${cfg?"Добавьте дисциплину слева, затем первое задание.":"Заданий пока нет."}</div>`;
 }
 
-/* ===== Брони ===== */
 let BK=[],bkErr=false,mine=ls.get("dl-mine",{}),EXPANDED=new Set(ls.get("dl-expanded",[]));
 const rnd=()=>[...crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,"0")).join("");
 
@@ -761,16 +677,30 @@ function topicsHtml(t){
 async function loadBookings(){
  if(!SB_URL||!SB_KEY)return;
  try{
-  const r=await fetch(SB_URL+"/rest/v1/rpc/list_bookings",{
-   method:"POST",
-   headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
-   body:"{}"
-  });
-  if(!r.ok)throw 0;
-  BK=await r.json();
+  const [r1, r2] = await Promise.all([
+   fetch(SB_URL+"/rest/v1/rpc/list_bookings",{
+    method:"POST",
+    headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
+    body:"{}"
+   }),
+   fetch(SB_URL+"/rest/v1/rpc/list_speaking_slots",{
+    method:"POST",
+    headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
+    body:"{}"
+   })
+  ]);
+  if(!r1.ok || !r2.ok) throw 0;
+  BK = await r1.json();
+  SLOTS = await r2.json();
+
   const takenNow = new Set(BK.map(b => b.task + "|" + b.topic));
   Object.keys(mine).forEach(k => { if (!takenNow.has(k)) delete mine[k]; });
   ls.set("dl-mine", mine);
+
+  const slotsNow = new Set(SLOTS.map(s => s.task + "|" + s.slot));
+  Object.keys(mineSlots).forEach(k => { if (!slotsNow.has(k)) delete mineSlots[k]; });
+  ls.set("dl-mine-slots", mineSlots);
+
   bkErr=false;
  }catch(e){bkErr=true}
  render();
@@ -819,32 +749,68 @@ async function unbook(k){
  loadBookings();
 }
 
-/* ===== Фильтры и поиск ===== */
+/* ===== Очередь выступлений ===== */
+async function takeSlot(tid, slot){
+ let name=prompt("Ваше имя (так его увидят все)",ls.get("dl-name",""));name=(name||"").trim().replace(/\s+/g," ");
+ if(name.length<2)return;ls.set("dl-name",name);const owner=rnd();
+ try{
+  const r=await fetch(SB_URL+"/rest/v1/rpc/take_speaking_slot",{
+   method:"POST",
+   headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
+   body:JSON.stringify({p_task:tid,p_slot:slot,p_name:name,p_owner:owner})
+  });
+  const result=await r.json().catch(()=>"");
+  if(result==="ok"){
+   Object.keys(mineSlots).forEach(k => { if (k.startsWith(tid + "|")) delete mineSlots[k]; });
+   mineSlots[tid+"|"+slot]=owner;ls.set("dl-mine-slots",mineSlots);
+   toast("Место №"+slot+" за вами",3500,"ok");
+  }
+  else if(result==="taken")toast("Это место уже занято",3500,"bad");
+  else if(result==="has_other")toast("Вы уже заняли место в этой очереди",3500,"bad");
+  else if(result==="bad_request")toast("Проверьте данные",3500,"bad");
+  else toast("Не удалось занять место",3500,"bad");
+ }catch(e){toast("Сервис недоступен",3500,"bad")}
+ loadBookings();
+}
+
+async function freeSlot(tid, slot){
+ const k = tid+"|"+slot;
+ const body={p_task:tid,p_slot:slot};
+ if(mineSlots[k])body.p_owner=mineSlots[k];
+ else{let ak=ls.get("dl-akey","");if(!ak){ak=(prompt("Ключ администратора")||"").trim();if(!ak)return}body.p_admin=ak}
+ try{
+  const r=await fetch(SB_URL+"/rest/v1/rpc/free_speaking_slot",{
+   method:"POST",
+   headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
+   body:JSON.stringify(body)
+  });
+  const result=await r.json().catch(()=>"");
+  if(result==="ok"){delete mineSlots[k];ls.set("dl-mine-slots",mineSlots);toast("Место освобождено",3000,"ok")}
+  else if(result==="forbidden"){toast("Нет прав снять это место",3500,"bad")}
+  else toast("Не удалось освободить место",3500,"bad");
+ }catch(e){toast("Сервис недоступен",3500,"bad")}
+ loadBookings();
+}
+
 $("#minebtn").onclick=()=>{ ONLY_MINE=!ONLY_MINE; ls.set("dl-only-mine",ONLY_MINE); render(); };
 $("#starbtn").onclick=()=>{ ONLY_STAR=!ONLY_STAR; ls.set("dl-only-star",ONLY_STAR); render(); if(ONLY_STAR) toast("Показаны только важные",2500,"info"); };
 $("#q").addEventListener("input", e => { Q = e.target.value.trim(); render(); });
 $("#qclear").onclick = () => { Q=""; $("#q").value=""; render(); };
 
-/* ===== Режим выделения (переключается кнопкой «Выбрать») ===== */
 $("#selbtn").onclick = () => {
   SELECT_MODE = !SELECT_MODE;
   if(!SELECT_MODE) SELECTED.clear();
   document.body.classList.toggle("selmode", SELECT_MODE && !!cfg);
   render();
 };
-
 function exitSelectMode(){
   SELECTED.clear();
   SELECT_MODE = false;
   document.body.classList.remove("selmode");
   render();
 }
-
 $("#sel-none").onclick = () => { SELECTED.clear(); render(); };
-$("#sel-all").onclick = () => {
-  getVisibleTasks().forEach(t => SELECTED.add(t.id));
-  render();
-};
+$("#sel-all").onclick = () => { getVisibleTasks().forEach(t => SELECTED.add(t.id)); render(); };
 
 function massAction(action){
   if(!SELECTED.size){ toast("Ничего не выбрано", 3000, "warn"); return; }
@@ -858,9 +824,7 @@ function massAction(action){
       for(const id of ids){
         const t = S.tasks.find(x => x.id === id);
         if(!t) continue;
-        for(const f of (t.files||[])){
-          try { await delFile("files/" + f.id); } catch(x){}
-        }
+        for(const f of (t.files||[])){ try { await delFile("files/" + f.id); } catch(x){} }
       }
       S.tasks = S.tasks.filter(t => !ids.includes(t.id));
       return;
@@ -876,7 +840,6 @@ function massAction(action){
     if(action === "star" || action === "unstar") ls.set("dl-starred", [...STARRED]);
   });
 }
-
 $("#sel-archive").onclick = () => massAction("archive");
 $("#sel-unarchive").onclick = () => massAction("unarchive");
 $("#sel-star").onclick = () => massAction("star");
@@ -886,12 +849,8 @@ $("#sel-delete").onclick = () => {
   if(confirm(`Удалить ${SELECTED.size} заданий? Файлы тоже будут удалены.`)) massAction("delete");
 };
 
-/* ===== Календарь ===== */
 function icsPad(n){ return String(n).padStart(2,"0"); }
-function icsDate(d){
-  return d.getUTCFullYear() + icsPad(d.getUTCMonth()+1) + icsPad(d.getUTCDate())
-       + "T" + icsPad(d.getUTCHours()) + icsPad(d.getUTCMinutes()) + "00Z";
-}
+function icsDate(d){ return d.getUTCFullYear() + icsPad(d.getUTCMonth()+1) + icsPad(d.getUTCDate()) + "T" + icsPad(d.getUTCHours()) + icsPad(d.getUTCMinutes()) + "00Z"; }
 function icsEsc(s){ return String(s||"").replace(/\\/g,"\\\\").replace(/,/g,"\\,").replace(/;/g,"\\;").replace(/\r?\n/g,"\\n"); }
 function downloadICS(){
   const list = S.tasks.filter(t => t.due && !DONE.has(t.id) && !isArchived(t) && (cur==="all" || t.subj===cur) && (!ONLY_MINE || hasMyBooking(t)));
@@ -916,21 +875,18 @@ function downloadICS(){
   });
   lines.push("END:VCALENDAR");
   const blob = new Blob([lines.join("\r\n")], {type:"text/calendar;charset=utf-8"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob); a.download = "deadlines.ics";
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "deadlines.ics";
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
   toast("Календарь скачан · " + list.length + " заданий", 5000, "ok");
 }
 $("#icsbtn").onclick = downloadICS;
 
-/* ===== Шаблоны заданий ===== */
 function renderTemplates(){
   const list = S.templates || [];
   const box = $("#tpl-list");
-  if(!list.length){
-    box.innerHTML = `<div class="tpl-empty">Шаблонов пока нет. Добавьте первый в форме ниже.</div>`;
-  } else {
+  if(!list.length){ box.innerHTML = `<div class="tpl-empty">Шаблонов пока нет. Добавьте первый в форме ниже.</div>`; }
+  else {
     box.innerHTML = list.map(tp => `
       <div class="tpl-item">
         <div class="tpl-item-main">
@@ -944,24 +900,10 @@ function renderTemplates(){
       </div>`).join("");
   }
 }
-
-function resetTplForm(){
-  editingTpl = null;
-  $("#tpl-form-title").textContent = "Новый шаблон";
-  $("#tpl-name").value = "";
-  $("#tpl-title").value = "";
-  $("#tpl-note").value = "";
-  $("#tpl-topics").value = "";
-}
-
-$("#tplbtn").onclick = () => {
-  resetTplForm();
-  renderTemplates();
-  $("#tpllg").showModal();
-};
+function resetTplForm(){ editingTpl = null; $("#tpl-form-title").textContent = "Новый шаблон"; $("#tpl-name").value = ""; $("#tpl-title").value = ""; $("#tpl-note").value = ""; $("#tpl-topics").value = ""; }
+$("#tplbtn").onclick = () => { resetTplForm(); renderTemplates(); $("#tpllg").showModal(); };
 $("#tpl-close").onclick = () => $("#tpllg").close();
 $("#tpl-reset").onclick = () => resetTplForm();
-
 $("#tpl-save").onclick = () => {
   const name = $("#tpl-name").value.trim();
   const title = $("#tpl-title").value.trim();
@@ -969,22 +911,16 @@ $("#tpl-save").onclick = () => {
   const topics = $("#tpl-topics").value.trim();
   if(!name){ toast("Укажите название шаблона", 3000, "warn"); return; }
   if(!title && !note && !topics){ toast("Заполните хотя бы одно поле", 3000, "warn"); return; }
-
   run(async () => {
     if(!Array.isArray(S.templates)) S.templates = [];
-    if(editingTpl){
-      const tp = S.templates.find(x => x.id === editingTpl);
-      if(tp){ tp.name = name; tp.title = title; tp.note = note; tp.topics = topics; }
-    } else {
-      S.templates.push({ id: uid(), name, title, note, topics });
-    }
+    if(editingTpl){ const tp = S.templates.find(x => x.id === editingTpl); if(tp){ tp.name = name; tp.title = title; tp.note = note; tp.topics = topics; } }
+    else { S.templates.push({ id: uid(), name, title, note, topics }); }
   });
   resetTplForm();
   setTimeout(renderTemplates, 500);
   toast("Шаблон сохранён", 3000, "ok");
 };
 
-/* ===== Подробности задачи ===== */
 let curDetailId = null;
 function openTaskDetail(id, silent=false){
   const t = S.tasks.find(x => x.id === id);
@@ -1004,28 +940,58 @@ function openTaskDetail(id, silent=false){
   if(t.files && t.files.length){
     html += `<div class="td-section-title">Файлы · ${t.files.length}</div><div class="td-files">`;
     t.files.forEach(f => {
-      html += `<button class="td-file" data-open="${t.id}|${f.id}">
-        <span>📎</span>
-        <span class="td-fname">${esc(f.name)}</span>
-        <span class="td-fsize">${size(f.size)}</span>
-      </button>`;
+      html += `<button class="td-file" data-open="${t.id}|${f.id}"><span>📎</span><span class="td-fname">${esc(f.name)}</span><span class="td-fsize">${size(f.size)}</span></button>`;
     });
     html += `</div>`;
   }
 
+  // Очередь выступлений
+  const slotCount = Math.max(0, Math.min(200, parseInt(t.slots, 10) || 0));
+  if(slotCount > 0){
+    const takenMap = {};
+    SLOTS.forEach(sl => { if(sl.task === t.id) takenMap[sl.slot] = sl.name; });
+    const takenCount = Object.keys(takenMap).length;
+
+    html += `<div class="td-section-title">🎤 Очередь выступлений · ${takenCount} из ${slotCount}</div>`;
+    html += `<div class="slots-grid">`;
+    for(let n = 1; n <= slotCount; n++){
+      const k = t.id + "|" + n;
+      const nm = takenMap[n];
+      const isMine = !!mineSlots[k];
+      if(nm){
+        html += `<div class="slot-item taken${isMine?" mine":""}">
+          <span class="slot-num">№${n}</span>
+          <span class="slot-name">${esc(nm)}${isMine?" (вы)":""}</span>
+          ${isMine || cfg ? `<button class="btn sm" data-freeslot="${t.id}|${n}">Снять</button>` : ""}
+        </div>`;
+      } else {
+        html += `<div class="slot-item free">
+          <span class="slot-num">№${n}</span>
+          <span class="slot-name">свободно</span>
+          <button class="btn sm" data-takeslot="${t.id}|${n}">Занять</button>
+        </div>`;
+      }
+    }
+    html += `</div>`;
+    html += `<div class="slots-legend">Порядок выступления = номер места. Можно взять любое свободное. У одного человека — одно место на задание.</div>`;
+  }
+
+  // Темы для бронирования
   if(t.topics && t.topics.length){
-    html += `<div class="td-section-title">Темы · ${t.topics.length}</div><div class="td-topics">`;
+    html += `<div class="td-section-title">📚 Темы для бронирования · ${t.topics.length}</div><div class="td-topics">`;
     t.topics.forEach(p => {
       const k = t.id + "|" + p.id;
       const b = BK.find(x => x.task === t.id && x.topic === p.id);
       const isMine = !!mine[k];
-      html += `<div class="td-topic ${b?"taken":""}">
-        <span class="td-tt">${esc(p.text)}</span>
-        ${b ? `<span class="td-tn">${esc(b.name)}${isMine?" (вы)":""}</span>` : `<span class="td-tn" style="color:var(--mute)">свободно</span>`}
-      </div>`;
+      if(b){
+        html += `<div class="td-topic taken"><span class="td-tt">${esc(p.text)}</span><span class="td-tn">${esc(b.name)}${isMine?" (вы)":""}</span></div>`;
+      } else {
+        html += `<div class="td-topic"><span class="td-tt">${esc(p.text)}</span><span class="td-tn" style="color:var(--mute)">свободно</span></div>`;
+      }
     });
     html += `</div>`;
   }
+
   html += `</div>`;
 
   html += `<div class="td-foot">`;
@@ -1070,9 +1036,8 @@ $("#tdetail").addEventListener("click", e => {
   if(e.target.closest("#td-copy")){
     const url = location.origin + location.pathname + "#task-" + id;
     const okMsg = () => toast("Ссылка скопирована",2500,"ok");
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(url).then(okMsg).catch(()=>{ prompt("Скопируйте ссылку:", url); });
-    } else { prompt("Скопируйте ссылку:", url); }
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(okMsg).catch(()=>{ prompt("Скопируйте ссылку:", url); }); }
+    else { prompt("Скопируйте ссылку:", url); }
     return;
   }
   if(e.target.closest("#td-archive")){
@@ -1090,6 +1055,18 @@ $("#tdetail").addEventListener("click", e => {
     if(t) openForm(t);
     return;
   }
+  const takeslot = e.target.closest("[data-takeslot]");
+  if(takeslot){
+    const [tid, slot] = takeslot.dataset.takeslot.split("|");
+    takeSlot(tid, parseInt(slot, 10));
+    return;
+  }
+  const freeslot = e.target.closest("[data-freeslot]");
+  if(freeslot){
+    const [tid, slot] = freeslot.dataset.freeslot.split("|");
+    freeSlot(tid, parseInt(slot, 10));
+    return;
+  }
   if(e.target.closest("[data-open]")){
     const b = e.target.closest("[data-open]");
     const [tid, fid] = b.dataset.open.split("|");
@@ -1099,7 +1076,6 @@ $("#tdetail").addEventListener("click", e => {
   }
 });
 
-/* ===== Сводка ===== */
 function sumRows(){const rows=[];S.tasks.forEach(t=>(t.topics||[]).forEach(p=>{
  const b=BK.find(x=>x.task===t.id&&x.topic===p.id),s=S.subjects.find(x=>x.id===t.subj);
  rows.push([s?s.name:"—",t.title,p.text,b?b.name:""])}));return rows}
@@ -1110,7 +1086,6 @@ $("#sclose").onclick=()=>$("#sdlg").close();
 $("#scsv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"',rows=[["Дисциплина","Задание","Тема","Занял(а)"],...sumRows()];
  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+rows.map(r=>r.map(q).join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"}));a.download="bronirovanie.csv";a.click()};
 
-/* ===== Файлы ===== */
 async function openFile(m){
   if(!m) return;
   try{
@@ -1123,7 +1098,6 @@ async function upload(t,files){for(const f of files){
  if(f.size>MAXF){toast("«"+f.name+"» больше 25 МБ — пропущен",3500,"bad");continue}
  const id=uid();await putFile("files/"+id,f);t.files.push({id,name:f.name,size:f.size})}}
 
-/* ===== Клики ===== */
 document.addEventListener("click",e=>{
   const tplEditBtn = e.target.closest("[data-tpl-edit]");
   if(tplEditBtn){
@@ -1196,12 +1170,7 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("change",e=>{
   const id=e.target.dataset.done;
-  if(id){
-    e.target.checked?DONE.add(id):DONE.delete(id);
-    ls.set("dl-done",[...DONE]);
-    render();
-    return;
-  }
+  if(id){ e.target.checked?DONE.add(id):DONE.delete(id); ls.set("dl-done",[...DONE]); render(); return; }
   const sid=e.target.dataset.sel;
   if(sid){
     if(e.target.checked)SELECTED.add(sid);else SELECTED.delete(sid);
@@ -1228,7 +1197,6 @@ function fillTemplateSelect(currentValue){
   sel.innerHTML = `<option value="">— Без шаблона —</option>` +
     list.map(tp => `<option value="${tp.id}" ${currentValue===tp.id?"selected":""}>${esc(tp.name)}</option>`).join("");
 }
-
 $("#f-tpl").addEventListener("change", e => {
   const id = e.target.value;
   if(!id) return;
@@ -1246,15 +1214,32 @@ function openForm(t){
  fillTemplateSelect("");
  $("#f-s").innerHTML=S.subjects.map(s=>`<option value="${s.id}" ${s.id===(t?t.subj:cur)?"selected":""}>${esc(s.name)}</option>`).join("");
  $("#dh").textContent=t?"Изменить задание":"Новое задание";$("#dsub").textContent=t?"Сохранить":"Опубликовать";
- if(t){$("#f-t").value=t.title;$("#f-d").value=t.due||"";$("#f-n").value=t.note||"";$("#f-p").value=(t.topics||[]).map(x=>x.text).join("\n")}
+ if(t){
+   $("#f-t").value=t.title;
+   $("#f-d").value=t.due||"";
+   $("#f-n").value=t.note||"";
+   $("#f-p").value=(t.topics||[]).map(x=>x.text).join("\n");
+   $("#f-slots").value = (t.slots != null ? t.slots : 30);
+ } else {
+   $("#f-slots").value = 30;
+ }
  $("#dlg").showModal();$("#f-t").focus()}
 $("#new").onclick=()=>openForm(null);
 $("#cancel").onclick=()=>$("#dlg").close();
 $("#tf").onsubmit=()=>{
- const v={title:$("#f-t").value.trim(),subj:$("#f-s").value,due:$("#f-d").value,note:$("#f-n").value.trim(),topics:$("#f-p").value.split("\n").map(s=>s.trim()).filter(Boolean).map(x=>((editing&&editing.topics)||[]).find(o=>o.text===x)||{id:uid(),text:x})},fl=[...$("#f-f").files],t=editing||{id:uid(),files:[]};
+ const slotsVal = Math.max(0, Math.min(200, parseInt($("#f-slots").value,10) || 0));
+ const v={
+   title:$("#f-t").value.trim(),
+   subj:$("#f-s").value,
+   due:$("#f-d").value,
+   note:$("#f-n").value.trim(),
+   slots: slotsVal,
+   topics:$("#f-p").value.split("\n").map(s=>s.trim()).filter(Boolean).map(x=>((editing&&editing.topics)||[]).find(o=>o.text===x)||{id:uid(),text:x})
+ };
+ const fl=[...$("#f-f").files];
+ const t=editing||{id:uid(),files:[]};
  run(async()=>{Object.assign(t,v);await upload(t,fl);if(!editing)S.tasks.push(t)})};
 
-/* ===== Вход ===== */
 $("#login").onclick=()=>{if(!loaded){toast("Сначала откройте сайт по ссылке с хостинга",3500,"bad");return}$("#adlg").showModal()};
 $("#acancel").onclick=()=>$("#adlg").close();
 $("#af").onsubmit=async()=>{
@@ -1263,7 +1248,6 @@ $("#af").onsubmit=async()=>{
  try{await pull();await publish();ls.set("dl-admin",cfg);render();toast("Вы вошли как администратор",3500,"ok")}catch(e){cfg=null;render();toast(errMsg(e),6000,"bad")}};
 $("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");exitSelectMode();render()};
 
-/* ===== PUSH ===== */
 function urlB64ToUint8Array(base64String){
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
@@ -1303,7 +1287,6 @@ async function disablePush(){
 }
 $("#pushbtn").onclick = () => { if(ls.get("dl-push-enabled", false)) { if(confirm("Отключить?")) disablePush(); } else { enablePush(); } };
 
-/* ===== Предупреждения ===== */
 function startWarnings(){
   if(!S.tasks.length)return;
   if(sessionStorage.getItem("dl-warned"))return;
@@ -1321,9 +1304,7 @@ function startWarnings(){
     setTimeout(()=>toast(`Просрочено заданий: ${over}`,7000,"warn",{ action:"Показать", onAction:()=>{
       if(cur==="_archive") cur="all";
       COLLAPSED_GROUPS.delete("over"); saveCollapsed(); render();
-      setTimeout(()=>{
-        const el=document.querySelector(".grp.bad"); if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
-      },100);
+      setTimeout(()=>{ const el=document.querySelector(".grp.bad"); if(el)el.scrollIntoView({behavior:"smooth",block:"start"}); },100);
     }}),700);
   }
   if(todayCnt>0){
@@ -1335,7 +1316,6 @@ function startWarnings(){
   }
 }
 
-/* ===== Старт ===== */
 cfg=ls.get("dl-admin",null);
 (cfg?pull().catch(loadData):loadData()).then(()=>{
   render(); loadBookings(); startWarnings();
