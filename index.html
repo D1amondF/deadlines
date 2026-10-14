@@ -377,7 +377,14 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
   <label for="f-t">Что нужно сделать</label><input id="f-t" required maxlength="140">
   <label for="f-s">Дисциплина</label><select id="f-s" required></select>
   <label for="f-d">Срок сдачи</label><input id="f-d" type="datetime-local">
-  <label for="f-slots">Мест в очереди выступлений (0 — выключить)</label><input id="f-slots" type="number" min="0" max="200" value="30">
+  <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-top:16px">
+    <input type="checkbox" id="f-slots-on" style="width:auto;margin:0">
+    <span>Очередь выступлений</span>
+  </label>
+  <div id="f-slots-wrap" style="display:none">
+    <label for="f-slots">Количество мест</label>
+    <input id="f-slots" type="number" min="1" max="200" value="30">
+  </div>
   <label for="f-n">Заметка</label><textarea id="f-n" rows="3"></textarea>
   <label for="f-p">Темы для бронирования (по одной в строке, необязательно)</label><textarea id="f-p" rows="4"></textarea>
   <label for="f-f">Файлы к заданию</label><input id="f-f" type="file" multiple>
@@ -1219,15 +1226,25 @@ function openForm(t){
    $("#f-d").value=t.due||"";
    $("#f-n").value=t.note||"";
    $("#f-p").value=(t.topics||[]).map(x=>x.text).join("\n");
-   $("#f-slots").value = (t.slots != null ? t.slots : 30);
+   const hasSlots = t.slots != null && t.slots > 0;
+   $("#f-slots-on").checked = hasSlots;
+   $("#f-slots").value = hasSlots ? t.slots : 30;
+   $("#f-slots-wrap").style.display = hasSlots ? "block" : "none";
  } else {
+   $("#f-slots-on").checked = false;
    $("#f-slots").value = 30;
+   $("#f-slots-wrap").style.display = "none";
  }
  $("#dlg").showModal();$("#f-t").focus()}
+$("#f-slots-on").addEventListener("change", e => {
+  const wrap = $("#f-slots-wrap");
+  if(wrap) wrap.style.display = e.target.checked ? "block" : "none";
+});
 $("#new").onclick=()=>openForm(null);
 $("#cancel").onclick=()=>$("#dlg").close();
 $("#tf").onsubmit=()=>{
- const slotsVal = Math.max(0, Math.min(200, parseInt($("#f-slots").value,10) || 0));
+ const slotsOn = $("#f-slots-on").checked;
+ const slotsVal = slotsOn ? Math.max(1, Math.min(200, parseInt($("#f-slots").value,10) || 30)) : 0;
  const v={
    title:$("#f-t").value.trim(),
    subj:$("#f-s").value,
