@@ -193,8 +193,6 @@ dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--
 .td-btn-star:hover{border-color:var(--star)}
 .td-btn-star.on{background:var(--star);border-color:var(--star);color:#1A1A1A}
 .td-empty{padding:20px;text-align:center;color:var(--mute);font-size:13px;font-style:italic}
-
-/* Сетка слотов очереди */
 .slots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:8px}
 .slot-item{padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surf2);font-size:13px;display:flex;align-items:center;gap:8px;min-height:44px}
 .slot-item.free{color:var(--mute)}
@@ -207,7 +205,6 @@ body.dark .slot-item.mine{background:rgba(232,92,127,.12)}
 .slot-item .btn{padding:3px 9px;font-size:12px;flex:none}
 .slots-legend{font-size:12px;color:var(--mute);margin-top:6px;line-height:1.4}
 .slots-legend b{color:var(--acc)}
-
 #toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-24px);background:var(--navy);color:#fff;padding:13px 18px;border-radius:12px;font-size:15px;font-weight:600;display:none;max-width:min(620px,92vw);z-index:100;box-shadow:0 12px 36px rgba(0,0,0,.35);cursor:pointer;line-height:1.35;letter-spacing:.01em;transition:transform .28s cubic-bezier(.2,.9,.3,1.2),opacity .22s ease;opacity:0;align-items:center;gap:10px}
 #toast.show{display:flex;transform:translateX(-50%) translateY(0);opacity:1}
 #toast.ok{background:var(--blue);color:#fff}
@@ -235,6 +232,15 @@ body.dark #toast.info{color:#0F1826}
 #stbl th{color:var(--mute);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
 #stbl td.free{color:var(--mute)}
 #stbl td.ok{font-weight:700;color:var(--blue)}
+/* Пасхалка */
+#lobasovDlg{border:0;border-radius:16px;padding:0;overflow:hidden;width:min(520px,94vw);max-width:94vw;background:var(--surf);color:var(--ink);box-shadow:0 24px 80px rgba(0,0,0,.5)}
+#lobasovDlg::backdrop{background:rgba(0,20,40,.7)}
+#lobasovDlg img{display:block;width:100%;height:auto;max-height:70vh;object-fit:contain;background:#111}
+#lobasovDlg .lb-title{padding:14px 18px 6px;font-weight:800;font-size:17px;color:var(--navy);text-align:center;letter-spacing:.02em}
+#lobasovDlg .lb-sub{padding:0 18px 12px;font-size:13px;color:var(--mute);text-align:center}
+#lobasovDlg .lb-close-wrap{padding:12px 18px 16px;display:flex;justify-content:center}
+@keyframes lbShake{0%,100%{transform:rotate(0deg) scale(1)}20%{transform:rotate(-3deg) scale(1.02)}40%{transform:rotate(3deg) scale(1.03)}60%{transform:rotate(-2deg) scale(1.02)}80%{transform:rotate(2deg) scale(1.01)}}
+#lobasovDlg.shake img{animation:lbShake .7s ease-out}
 @media(max-width:760px){
 .app{grid-template-columns:1fr;max-width:100%}
 aside{border-right:0;border-bottom:1px solid var(--line);padding:12px 10px}
@@ -433,6 +439,19 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 </dialog>
 
 <dialog id="tdlg"><div id="tdetail"></div></dialog>
+
+<dialog id="lobasovDlg">
+  <div class="lb-title">🎉 ЛОБАСОВ ЗАМЕЧЕН!</div>
+  <div class="lb-sub">Легенда вернулась в игру</div>
+  <img id="lobasovImg" src="lobasov.jpg" alt="Лобасов"
+       onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+  <div id="lobasovFallback" style="display:none;padding:40px 20px;text-align:center;color:var(--mute)">
+    Не удалось загрузить фото.<br>Проверьте, что файл <b>lobasov.jpg</b> лежит рядом с index.html
+  </div>
+  <div class="lb-close-wrap">
+    <button class="btn pri" id="lobasovClose">Закрыть</button>
+  </div>
+</dialog>
 
 <div id="toast" role="status"></div>
 <input type="file" id="addf" multiple hidden>
@@ -685,16 +704,8 @@ async function loadBookings(){
  if(!SB_URL||!SB_KEY)return;
  try{
   const [r1, r2] = await Promise.all([
-   fetch(SB_URL+"/rest/v1/rpc/list_bookings",{
-    method:"POST",
-    headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
-    body:"{}"
-   }),
-   fetch(SB_URL+"/rest/v1/rpc/list_speaking_slots",{
-    method:"POST",
-    headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
-    body:"{}"
-   })
+   fetch(SB_URL+"/rest/v1/rpc/list_bookings",{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},body:"{}"}),
+   fetch(SB_URL+"/rest/v1/rpc/list_speaking_slots",{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},body:"{}"})
   ]);
   if(!r1.ok || !r2.ok) throw 0;
   BK = await r1.json();
@@ -719,8 +730,7 @@ async function book(tid,pid){
  if(name.length<2)return;ls.set("dl-name",name);const owner=rnd();
  try{
   const r=await fetch(SB_URL+"/rest/v1/rpc/book_topic",{
-   method:"POST",
-   headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
+   method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
    body:JSON.stringify({p_task:tid,p_topic:pid,p_name:name,p_owner:owner})
   });
   const result=await r.json().catch(()=>"");
@@ -729,6 +739,7 @@ async function book(tid,pid){
    mine[tid+"|"+pid]=owner;ls.set("dl-mine",mine);
    EXPANDED.add(tid);ls.set("dl-expanded",[...EXPANDED]);
    toast("Тема за вами",6000,"ok",{ action:"Отменить", onAction:()=>unbook(tid+"|"+pid) });
+   if(isLobasov(name)) setTimeout(showLobasov, 400);
   }
   else if(result==="taken")toast("Эту тему уже заняли",3500,"bad");
   else if(result==="has_other")toast("Вы уже заняли другую тему",3500,"bad");
@@ -744,8 +755,7 @@ async function unbook(k){
  else{let ak=ls.get("dl-akey","");if(!ak){ak=(prompt("Ключ администратора бронирования")||"").trim();if(!ak)return}body.p_admin=ak}
  try{
   const r=await fetch(SB_URL+"/rest/v1/rpc/unbook_topic",{
-   method:"POST",
-   headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
+   method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
    body:JSON.stringify(body)
   });
   const result=await r.json().catch(()=>"");
@@ -756,14 +766,12 @@ async function unbook(k){
  loadBookings();
 }
 
-/* ===== Очередь выступлений ===== */
 async function takeSlot(tid, slot){
  let name=prompt("Ваше имя (так его увидят все)",ls.get("dl-name",""));name=(name||"").trim().replace(/\s+/g," ");
  if(name.length<2)return;ls.set("dl-name",name);const owner=rnd();
  try{
   const r=await fetch(SB_URL+"/rest/v1/rpc/take_speaking_slot",{
-   method:"POST",
-   headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
+   method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
    body:JSON.stringify({p_task:tid,p_slot:slot,p_name:name,p_owner:owner})
   });
   const result=await r.json().catch(()=>"");
@@ -771,6 +779,7 @@ async function takeSlot(tid, slot){
    Object.keys(mineSlots).forEach(k => { if (k.startsWith(tid + "|")) delete mineSlots[k]; });
    mineSlots[tid+"|"+slot]=owner;ls.set("dl-mine-slots",mineSlots);
    toast("Место №"+slot+" за вами",3500,"ok");
+   if(isLobasov(name)) setTimeout(showLobasov, 400);
   }
   else if(result==="taken")toast("Это место уже занято",3500,"bad");
   else if(result==="has_other")toast("Вы уже заняли место в этой очереди",3500,"bad");
@@ -787,8 +796,7 @@ async function freeSlot(tid, slot){
  else{let ak=ls.get("dl-akey","");if(!ak){ak=(prompt("Ключ администратора")||"").trim();if(!ak)return}body.p_admin=ak}
  try{
   const r=await fetch(SB_URL+"/rest/v1/rpc/free_speaking_slot",{
-   method:"POST",
-   headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
+   method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
    body:JSON.stringify(body)
   });
   const result=await r.json().catch(()=>"");
@@ -810,12 +818,7 @@ $("#selbtn").onclick = () => {
   document.body.classList.toggle("selmode", SELECT_MODE && !!cfg);
   render();
 };
-function exitSelectMode(){
-  SELECTED.clear();
-  SELECT_MODE = false;
-  document.body.classList.remove("selmode");
-  render();
-}
+function exitSelectMode(){ SELECTED.clear(); SELECT_MODE = false; document.body.classList.remove("selmode"); render(); }
 $("#sel-none").onclick = () => { SELECTED.clear(); render(); };
 $("#sel-all").onclick = () => { getVisibleTasks().forEach(t => SELECTED.add(t.id)); render(); };
 
@@ -952,7 +955,6 @@ function openTaskDetail(id, silent=false){
     html += `</div>`;
   }
 
-  // Очередь выступлений
   const slotCount = Math.max(0, Math.min(200, parseInt(t.slots, 10) || 0));
   if(slotCount > 0){
     const takenMap = {};
@@ -983,7 +985,6 @@ function openTaskDetail(id, silent=false){
     html += `<div class="slots-legend">Порядок выступления = номер места. Можно взять любое свободное. У одного человека — одно место на задание.</div>`;
   }
 
-  // Темы для бронирования
   if(t.topics && t.topics.length){
     html += `<div class="td-section-title">📚 Темы для бронирования · ${t.topics.length}</div><div class="td-topics">`;
     t.topics.forEach(p => {
@@ -1028,6 +1029,7 @@ document.addEventListener("keydown", e => {
   if(e.key === "Escape"){
     if($("#tdlg").open) closeTaskDetail();
     if($("#tpllg").open) $("#tpllg").close();
+    if($("#lobasovDlg").open) $("#lobasovDlg").close();
   }
 });
 
@@ -1063,17 +1065,9 @@ $("#tdetail").addEventListener("click", e => {
     return;
   }
   const takeslot = e.target.closest("[data-takeslot]");
-  if(takeslot){
-    const [tid, slot] = takeslot.dataset.takeslot.split("|");
-    takeSlot(tid, parseInt(slot, 10));
-    return;
-  }
+  if(takeslot){ const [tid, slot] = takeslot.dataset.takeslot.split("|"); takeSlot(tid, parseInt(slot, 10)); return; }
   const freeslot = e.target.closest("[data-freeslot]");
-  if(freeslot){
-    const [tid, slot] = freeslot.dataset.freeslot.split("|");
-    freeSlot(tid, parseInt(slot, 10));
-    return;
-  }
+  if(freeslot){ const [tid, slot] = freeslot.dataset.freeslot.split("|"); freeSlot(tid, parseInt(slot, 10)); return; }
   if(e.target.closest("[data-open]")){
     const b = e.target.closest("[data-open]");
     const [tid, fid] = b.dataset.open.split("|");
@@ -1215,6 +1209,11 @@ $("#f-tpl").addEventListener("change", e => {
   toast("Шаблон применён", 2000, "info");
 });
 
+$("#f-slots-on").addEventListener("change", e => {
+  const wrap = $("#f-slots-wrap");
+  if(wrap) wrap.style.display = e.target.checked ? "block" : "none";
+});
+
 function openForm(t){
  if(!S.subjects.length){toast("Сначала добавьте дисциплину слева",3500,"bad");return}
  editing=t;$("#tf").reset();
@@ -1236,10 +1235,6 @@ function openForm(t){
    $("#f-slots-wrap").style.display = "none";
  }
  $("#dlg").showModal();$("#f-t").focus()}
-$("#f-slots-on").addEventListener("change", e => {
-  const wrap = $("#f-slots-wrap");
-  if(wrap) wrap.style.display = e.target.checked ? "block" : "none";
-});
 $("#new").onclick=()=>openForm(null);
 $("#cancel").onclick=()=>$("#dlg").close();
 $("#tf").onsubmit=()=>{
@@ -1303,6 +1298,23 @@ async function disablePush(){
   }catch(e){ toast("Ошибка отключения", 4500, "bad"); }
 }
 $("#pushbtn").onclick = () => { if(ls.get("dl-push-enabled", false)) { if(confirm("Отключить?")) disablePush(); } else { enablePush(); } };
+
+/* ===== Пасхалка: Лобасов ===== */
+function isLobasov(name){
+  return /лоб[ао]с/i.test(String(name || ""));
+}
+function showLobasov(){
+  const dlg = $("#lobasovDlg");
+  if(!dlg) return;
+  dlg.classList.remove("shake");
+  void dlg.offsetWidth;
+  dlg.classList.add("shake");
+  if(!dlg.open) dlg.showModal();
+  clearTimeout(showLobasov.t);
+  showLobasov.t = setTimeout(() => { if(dlg.open) dlg.close(); }, 8000);
+}
+$("#lobasovClose").onclick = () => $("#lobasovDlg").close();
+$("#lobasovDlg").addEventListener("click", (e) => { if(e.target === $("#lobasovDlg")) $("#lobasovDlg").close(); });
 
 function startWarnings(){
   if(!S.tasks.length)return;
