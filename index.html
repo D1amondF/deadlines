@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Дедлайны ОБ26-2</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="yandex" content="noindex, nofollow">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#C81240">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
@@ -15,7 +18,8 @@
 <meta name="application-name" content="Дедлайны ОБ26-2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"></noscript>
 <style>
 :root{
   --ink:#171F29; --mute:#8B8A8F; --bg:#E9E8F1; --surf:#FFFFFF;
@@ -91,6 +95,12 @@ main{padding:24px 24px 60px}
 .selbar .selcount b{color:var(--acc)}
 .selbar .btn{padding:6px 12px;font-size:13px}
 .selbar .hint{font-size:12px;color:var(--mute);flex:1 1 100%;padding-top:2px;line-height:1.35}
+.stale-banner{
+  padding:10px 14px;background:var(--warn);color:#fff;
+  border-radius:10px;margin-bottom:12px;font-size:14px;font-weight:600;
+  display:flex;align-items:center;gap:8px;line-height:1.35;
+}
+.stale-banner[hidden]{display:none!important}
 .arch-block{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
 .archive-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:0;background:none;border-radius:8px;text-align:left;font-weight:600;color:var(--ink);cursor:pointer;transition:background .15s,color .15s}
 .archive-item:hover{background:var(--hover)}
@@ -227,12 +237,13 @@ body.dark #toast.info{color:#0F1826}
 .tp.taken .tp-t{color:var(--mute)}
 .tp-n{font-size:13px;color:var(--blue);font-weight:700}
 .tp .btn{padding:4px 10px;font-size:13px}
-#stbl{width:100%;border-collapse:collapse;font-size:14px;color:var(--ink)}
+#stbl{width:100%;border-collapse:collapse;font-size:13px;color:var(--ink)}
 #stbl th,#stbl td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
-#stbl th{color:var(--mute);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+#stbl th{color:var(--mute);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
 #stbl td.free{color:var(--mute)}
 #stbl td.ok{font-weight:700;color:var(--blue)}
-/* Пасхалка */
+#stbl td.type-topic{color:var(--blue);font-weight:700}
+#stbl td.type-slot{color:var(--acc);font-weight:700}
 #lobasovDlg{border:0;border-radius:16px;padding:0;overflow:hidden;width:min(520px,94vw);max-width:94vw;background:var(--surf);color:var(--ink);box-shadow:0 24px 80px rgba(0,0,0,.5)}
 #lobasovDlg::backdrop{background:rgba(0,20,40,.7)}
 #lobasovDlg img{display:block;width:100%;height:auto;max-height:70vh;object-fit:contain;background:#111}
@@ -265,6 +276,7 @@ main{padding:12px 10px 60px;max-width:100%}
 .selbar{padding:8px 10px;gap:6px}
 .selbar .selcount{width:100%;font-size:13px;margin-bottom:2px}
 .selbar .btn{padding:6px 10px;font-size:12px;flex:1 1 auto;text-align:center}
+.stale-banner{font-size:12px;padding:8px 12px}
 .grp{margin-top:18px}
 .grp h3{font-size:12px;padding:6px 2px;gap:8px}
 .grp h3 .chev{width:26px;height:26px;font-size:18px}
@@ -291,7 +303,7 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 .row .btn{padding:10px 14px;flex:1 1 auto}
 #toast{top:10px;left:10px;right:10px;transform:translateY(-20px);max-width:none;font-size:14px;padding:12px 16px}
 #toast.show{transform:translateY(0)}
-#stbl{font-size:13px}
+#stbl{font-size:12px}
 #stbl th,#stbl td{padding:5px 6px}
 #tdlg{width:96vw;max-height:92vh}
 .td-head{padding:16px 16px 10px}
@@ -367,6 +379,7 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
     <button class="btn bad" id="sel-delete">🗑 Удалить</button>
     <div class="hint">Клик по карточке — выделить или снять выделение. Чтобы закрыть панель, нажмите «☑️ Выбрать» ещё раз.</div>
   </div>
+  <div id="staleBanner" class="stale-banner" hidden>⚠️ Данные о бронированиях могут быть устаревшими — сервис временно недоступен. Показаны последние успешно загруженные данные.</div>
   <div id="list"></div>
 </main>
 </div>
@@ -409,9 +422,9 @@ dialog input,dialog select,dialog textarea{padding:10px;font-size:16px}
 </form>
 </dialog>
 
-<dialog id="sdlg" style="width:min(860px,94vw)">
-  <h2>Сводка броней</h2>
-  <div style="overflow:auto;max-height:60vh"><table id="stbl"><thead><tr><th>Дисциплина</th><th>Задание</th><th>Тема</th><th>Занял(а)</th></tr></thead><tbody id="sbody"></tbody></table></div>
+<dialog id="sdlg" style="width:min(960px,94vw)">
+  <h2>Сводка броней и очереди выступлений</h2>
+  <div style="overflow:auto;max-height:60vh"><table id="stbl"><thead><tr><th>Тип</th><th>Дисциплина</th><th>Задание</th><th>Тема / Место</th><th>Кто</th></tr></thead><tbody id="sbody"></tbody></table></div>
   <div class="row"><button class="btn" type="button" id="scsv">Скачать для Excel</button><button class="btn pri" type="button" id="sclose">Закрыть</button></div>
 </dialog>
 
@@ -464,8 +477,11 @@ const SB_KEY="sb_publishable_AOPVaQq28i30ZBLNtw289g_mSVZWj5v";
 const VAPID_PUBLIC_KEY="BOWSoOZSRNMCwALWj5su_LHDBxq8i1XPQu_MCjE5fLVmsva2jNjNL4LTgetGZh28CWKrQEtZiUeHmk4dGTb9dAc";
 const PUSH_FN_URL = SB_URL + "/functions/v1/send-push";
 const ARCHIVE_DAYS = 30;
+const FETCH_TIMEOUT = 10000;
 
 let S={subjects:[],tasks:[],templates:[]},cur="all",cfg=null,attachTo=null,loaded=false;
+let dataSha = null;
+let bkErr=false, bkStale=false;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
@@ -481,6 +497,14 @@ let SELECTED=new Set();
 let editingTpl=null;
 let SLOTS=[];
 let mineSlots=ls.get("dl-mine-slots",{});
+
+/* ===== fetch с таймаутом ===== */
+async function fetchT(url, opts={}, ms=FETCH_TIMEOUT){
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms);
+  try { return await fetch(url, {...opts, signal: ctrl.signal}); }
+  finally { clearTimeout(t); }
+}
 
 function collapsedKey(){ return "dl-collapsed-groups-" + cur; }
 function loadCollapsed(){ try{ return new Set(ls.get(collapsedKey(), [])); }catch(e){ return new Set(); } }
@@ -551,31 +575,74 @@ $("#soundbtn").onclick=()=>{ NOTE_SOUND=!NOTE_SOUND; ls.set("dl-sound",NOTE_SOUN
 updateSoundLabel();
 
 const enc=new TextEncoder();
-const gh=(m,p,b)=>fetch(`https://api.github.com/repos/${cfg.o}/${cfg.r}/contents/${p}`,{method:m,headers:{Authorization:"Bearer "+cfg.t,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"},body:b?JSON.stringify(b):undefined});
+const gh=(m,p,b)=>fetchT(`https://api.github.com/repos/${cfg.o}/${cfg.r}/contents/${p}`,{method:m,headers:{Authorization:"Bearer "+cfg.t,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"},body:b?JSON.stringify(b):undefined}, 15000);
 const b64s=b=>{let s="";for(let i=0;i<b.length;i+=8192)s+=String.fromCharCode.apply(null,b.subarray(i,i+8192));return btoa(s)};
 const fileB64=f=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(f)});
 async function shaOf(p){const r=await gh("GET",p);if(r.status===404)return undefined;if(!r.ok)throw new Error("HTTP "+r.status);return(await r.json()).sha}
-async function put(p,b64){const body={message:"update "+p,content:b64},s=await shaOf(p);if(s)body.sha=s;const r=await gh("PUT",p,body);if(!r.ok)throw new Error("HTTP "+r.status)}
+
+/* Простая запись файлов (файлы к заданиям) — как раньше с shaOf */
+async function put(p,b64){
+  const body={message:"update "+p,content:b64};
+  const s=await shaOf(p);
+  if(s)body.sha=s;
+  const r=await gh("PUT",p,body);
+  if(!r.ok)throw new Error("HTTP "+r.status);
+}
 async function delFile(p){const s=await shaOf(p);if(!s)return;const r=await gh("DELETE",p,{message:"delete "+p,sha:s});if(!r.ok)throw new Error("HTTP "+r.status)}
 const putFile=async(p,f)=>put(p,await fileB64(f));
-const publish=()=>put("data.json",b64s(enc.encode(JSON.stringify(S))));
-async function pull(){const r=await gh("GET","data.json");
- if(r.status===404){S={subjects:[],tasks:[],templates:[]};loaded=true;return}
- if(!r.ok)throw new Error("HTTP "+r.status);const j=await r.json();
- S=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.content.replace(/\n/g,"")),c=>c.charCodeAt(0))));
- if(!Array.isArray(S.templates)) S.templates=[];
- loaded=true}
-function errMsg(e){return e instanceof TypeError?"Нет связи с GitHub — проверьте интернет":
- /401/.test(e.message)?"Ошибка 401 — токен неверный или просрочен":
- /40[34]/.test(e.message)?"Ошибка "+e.message.slice(5)+" — нет прав на запись или репозиторий не найден":"Не удалось опубликовать ("+e.message+")"}
-async function run(fn){toast("Публикую…",0,"loading");try{await fn();await publish();render();toast("Опубликовано",4000,"ok")}catch(e){toast(errMsg(e),6000,"bad")}}
+
+/* ===== data.json — с защитой от затирания ===== */
+async function pull(){
+  const r = await gh("GET","data.json");
+  if(r.status===404){
+    S={subjects:[],tasks:[],templates:[]};
+    dataSha = null;
+    loaded = true;
+    return;
+  }
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  const j = await r.json();
+  dataSha = j.sha;
+  S = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.content.replace(/\n/g,"")),c=>c.charCodeAt(0))));
+  if(!Array.isArray(S.templates)) S.templates=[];
+  loaded = true;
+}
+
+async function publish(){
+  const body = { message: "update data.json", content: b64s(enc.encode(JSON.stringify(S))) };
+  if(dataSha) body.sha = dataSha;
+  const r = await gh("PUT","data.json", body);
+  if(r.status === 409) throw new Error("CONFLICT");
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  const j = await r.json();
+  dataSha = j.content.sha;
+}
+
+function errMsg(e){
+  if(e instanceof TypeError) return "Нет связи с GitHub — проверьте интернет";
+  if(/CONFLICT/.test(e.message)) return "Другой администратор изменил данные. Обновите страницу (Ctrl+F5) и повторите — иначе ваша правка затрёт его изменения.";
+  if(/401/.test(e.message)) return "Ошибка 401 — токен неверный или просрочен";
+  if(/40[34]/.test(e.message)) return "Ошибка "+e.message.slice(5)+" — нет прав на запись или репозиторий не найден";
+  return "Не удалось опубликовать ("+e.message+")";
+}
+async function run(fn){
+  toast("Публикую…",0,"loading");
+  try{ await fn(); await publish(); render(); toast("Опубликовано",4000,"ok"); }
+  catch(e){ toast(errMsg(e),7000,"bad"); }
+}
 
 async function loadData(){
- try{const r=await fetch("data.json?"+Date.now(),{cache:"no-store"});
-  if(r.ok){S=await r.json(); if(!Array.isArray(S.templates)) S.templates=[];}
-  else if(r.status!==404)throw 0;
-  loaded=true}catch(e){$("#list").innerHTML='<div class="empty">Не удалось загрузить задания. Откройте сайт по ссылке с хостинга, а не как файл с компьютера.</div>';return false}
- return true}
+  try{
+    const r = await fetchT("data.json?"+Date.now(), {cache:"no-store"}, FETCH_TIMEOUT);
+    if(r.ok){ S = await r.json(); if(!Array.isArray(S.templates)) S.templates=[]; }
+    else if(r.status !== 404) throw 0;
+    loaded = true;
+  } catch(e){
+    $("#list").innerHTML='<div class="empty">Не удалось загрузить задания. Откройте сайт по ссылке с хостинга, а не как файл с компьютера.</div>';
+    return false;
+  }
+  return true;
+}
 
 const tm=d=>d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
 const fmt=d=>new Date(d).toLocaleString("ru-RU",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"});
@@ -625,6 +692,8 @@ function render(){
  const sb=$("#starbtn"); if(sb) sb.classList.toggle("active", ONLY_STAR);
  const qw=$("#qwrap"); if(qw) qw.classList.toggle("has-value", !!Q);
  const selb=$("#selbtn"); if(selb) selb.classList.toggle("active", SELECT_MODE);
+
+ const sb2=$("#staleBanner"); if(sb2) sb2.hidden = !(bkErr && bkStale);
 
  const cnt=id=>S.tasks.filter(t=>!DONE.has(t.id)&&!isArchived(t)&&(id==="all"||t.subj===id)).length;
  const archCount=S.tasks.filter(t=>isArchived(t)&&!DONE.has(t.id)).length;
@@ -679,7 +748,7 @@ function render(){
  $("#list").innerHTML=h||`<div class="empty">${cfg?"Добавьте дисциплину слева, затем первое задание.":"Заданий пока нет."}</div>`;
 }
 
-let BK=[],bkErr=false,mine=ls.get("dl-mine",{}),EXPANDED=new Set(ls.get("dl-expanded",[]));
+let BK=[],mine=ls.get("dl-mine",{}),EXPANDED=new Set(ls.get("dl-expanded",[]));
 const rnd=()=>[...crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,"0")).join("");
 
 function topicsHtml(t){
@@ -690,7 +759,7 @@ function topicsHtml(t){
  let note;
  if(myTopic)note=" · вы заняли: "+esc(myTopic.text);
  else if(!SB_URL)note=" · бронирование пока не настроено";
- else if(bkErr)note=" · бронирование сейчас недоступно";
+ else if(bkErr)note = bkStale ? " · данные могут быть устаревшими" : " · бронирование сейчас недоступно";
  else note=" · свободно "+free+" из "+t.topics.length;
  const open=EXPANDED.has(t.id);
  const list=open?`<div class="tp-list">`+t.topics.map(p=>{
@@ -704,23 +773,32 @@ async function loadBookings(){
  if(!SB_URL||!SB_KEY)return;
  try{
   const [r1, r2] = await Promise.all([
-   fetch(SB_URL+"/rest/v1/rpc/list_bookings",{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},body:"{}"}),
-   fetch(SB_URL+"/rest/v1/rpc/list_speaking_slots",{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},body:"{}"})
+   fetchT(SB_URL+"/rest/v1/rpc/list_bookings",{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},body:"{}"}, FETCH_TIMEOUT),
+   fetchT(SB_URL+"/rest/v1/rpc/list_speaking_slots",{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},body:"{}"}, FETCH_TIMEOUT)
   ]);
   if(!r1.ok || !r2.ok) throw 0;
-  BK = await r1.json();
-  SLOTS = await r2.json();
-
-  const takenNow = new Set(BK.map(b => b.task + "|" + b.topic));
-  Object.keys(mine).forEach(k => { if (!takenNow.has(k)) delete mine[k]; });
-  ls.set("dl-mine", mine);
-
-  const slotsNow = new Set(SLOTS.map(s => s.task + "|" + s.slot));
-  Object.keys(mineSlots).forEach(k => { if (!slotsNow.has(k)) delete mineSlots[k]; });
-  ls.set("dl-mine-slots", mineSlots);
-
-  bkErr=false;
- }catch(e){bkErr=true}
+  const newBK = await r1.json();
+  const newSlots = await r2.json();
+  BK = newBK;
+  SLOTS = newSlots;
+  ls.set("dl-bk-cache", BK);
+  ls.set("dl-slots-cache", SLOTS);
+  ls.set("dl-bk-cache-ts", Date.now());
+  bkErr = false;
+  bkStale = false;
+ }catch(e){
+  bkErr = true;
+  const cachedBK = ls.get("dl-bk-cache", null);
+  const cachedSlots = ls.get("dl-slots-cache", null);
+  if(Array.isArray(cachedBK) && cachedBK.length){ BK = cachedBK; bkStale = true; }
+  if(Array.isArray(cachedSlots) && cachedSlots.length){ SLOTS = cachedSlots; bkStale = true; }
+ }
+ const takenNow = new Set(BK.map(b => b.task + "|" + b.topic));
+ Object.keys(mine).forEach(k => { if (!takenNow.has(k)) delete mine[k]; });
+ ls.set("dl-mine", mine);
+ const slotsNow = new Set(SLOTS.map(s => s.task + "|" + s.slot));
+ Object.keys(mineSlots).forEach(k => { if (!slotsNow.has(k)) delete mineSlots[k]; });
+ ls.set("dl-mine-slots", mineSlots);
  render();
  if($("#tdlg").open) openTaskDetail(curDetailId, true);
 }
@@ -729,10 +807,10 @@ async function book(tid,pid){
  let name=prompt("Ваше имя (так его увидит группа)",ls.get("dl-name",""));name=(name||"").trim().replace(/\s+/g," ");
  if(name.length<2)return;ls.set("dl-name",name);const owner=rnd();
  try{
-  const r=await fetch(SB_URL+"/rest/v1/rpc/book_topic",{
+  const r=await fetchT(SB_URL+"/rest/v1/rpc/book_topic",{
    method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
    body:JSON.stringify({p_task:tid,p_topic:pid,p_name:name,p_owner:owner})
-  });
+  }, FETCH_TIMEOUT);
   const result=await r.json().catch(()=>"");
   if(result==="ok"){
    Object.keys(mine).forEach(k => { if (k.startsWith(tid + "|")) delete mine[k]; });
@@ -745,7 +823,7 @@ async function book(tid,pid){
   else if(result==="has_other")toast("Вы уже заняли другую тему",3500,"bad");
   else if(result==="bad_request")toast("Проверьте введённые данные",3500,"bad");
   else toast("Не удалось занять тему",3500,"bad");
- }catch(e){toast("Сервис бронирования недоступен",3500,"bad")}
+ }catch(e){toast("Сервис бронирования недоступен (или нет ответа за 10 сек)",3500,"bad")}
  loadBookings();
 }
 
@@ -754,10 +832,10 @@ async function unbook(k){
  if(mine[k])body.p_owner=mine[k];
  else{let ak=ls.get("dl-akey","");if(!ak){ak=(prompt("Ключ администратора бронирования")||"").trim();if(!ak)return}body.p_admin=ak}
  try{
-  const r=await fetch(SB_URL+"/rest/v1/rpc/unbook_topic",{
+  const r=await fetchT(SB_URL+"/rest/v1/rpc/unbook_topic",{
    method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
    body:JSON.stringify(body)
-  });
+  }, FETCH_TIMEOUT);
   const result=await r.json().catch(()=>"");
   if(result==="ok"){delete mine[k];ls.set("dl-mine",mine);if(body.p_admin)ls.set("dl-akey",body.p_admin);toast("Бронь снята",3500,"ok")}
   else if(result==="forbidden"){if(body.p_admin)ls.del("dl-akey");toast("Нет прав снять эту бронь",3500,"bad")}
@@ -770,10 +848,10 @@ async function takeSlot(tid, slot){
  let name=prompt("Ваше имя (так его увидят все)",ls.get("dl-name",""));name=(name||"").trim().replace(/\s+/g," ");
  if(name.length<2)return;ls.set("dl-name",name);const owner=rnd();
  try{
-  const r=await fetch(SB_URL+"/rest/v1/rpc/take_speaking_slot",{
+  const r=await fetchT(SB_URL+"/rest/v1/rpc/take_speaking_slot",{
    method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
    body:JSON.stringify({p_task:tid,p_slot:slot,p_name:name,p_owner:owner})
-  });
+  }, FETCH_TIMEOUT);
   const result=await r.json().catch(()=>"");
   if(result==="ok"){
    Object.keys(mineSlots).forEach(k => { if (k.startsWith(tid + "|")) delete mineSlots[k]; });
@@ -795,10 +873,10 @@ async function freeSlot(tid, slot){
  if(mineSlots[k])body.p_owner=mineSlots[k];
  else{let ak=ls.get("dl-akey","");if(!ak){ak=(prompt("Ключ администратора")||"").trim();if(!ak)return}body.p_admin=ak}
  try{
-  const r=await fetch(SB_URL+"/rest/v1/rpc/free_speaking_slot",{
+  const r=await fetchT(SB_URL+"/rest/v1/rpc/free_speaking_slot",{
    method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
    body:JSON.stringify(body)
-  });
+  }, FETCH_TIMEOUT);
   const result=await r.json().catch(()=>"");
   if(result==="ok"){delete mineSlots[k];ls.set("dl-mine-slots",mineSlots);toast("Место освобождено",3000,"ok")}
   else if(result==="forbidden"){toast("Нет прав снять это место",3500,"bad")}
@@ -1077,20 +1155,61 @@ $("#tdetail").addEventListener("click", e => {
   }
 });
 
-function sumRows(){const rows=[];S.tasks.forEach(t=>(t.topics||[]).forEach(p=>{
- const b=BK.find(x=>x.task===t.id&&x.topic===p.id),s=S.subjects.find(x=>x.id===t.subj);
- rows.push([s?s.name:"—",t.title,p.text,b?b.name:""])}));return rows}
-$("#sumbtn").onclick=async()=>{await loadBookings();const r=sumRows();
- $("#sbody").innerHTML=r.length?r.map(x=>`<tr><td>${esc(x[0])}</td><td>${esc(x[1])}</td><td>${esc(x[2])}</td><td class="${x[3]?"ok":"free"}">${x[3]?esc(x[3]):"свободно"}</td></tr>`).join(""):'<tr><td colspan="4">Тем для бронирования пока нет</td></tr>';
- $("#sdlg").showModal()};
+/* ===== Сводка — темы + очередь выступлений ===== */
+function sumRows(){
+  const rows = [];
+  S.tasks.forEach(t => {
+    const s = S.subjects.find(x => x.id === t.subj);
+    const subjName = s ? s.name : "—";
+    // Занятые темы
+    (t.topics || []).forEach(p => {
+      const b = BK.find(x => x.task === t.id && x.topic === p.id);
+      if(b) rows.push(["Тема", subjName, t.title, p.text, b.name]);
+    });
+    // Занятые места в очереди
+    SLOTS.forEach(sl => {
+      if(sl.task === t.id) rows.push(["Выступление", subjName, t.title, "Место №"+sl.slot, sl.name]);
+    });
+  });
+  // Сортировка: по типу, потом по дисциплине, потом по заданию
+  rows.sort((a,b) => {
+    if(a[0] !== b[0]) return a[0] === "Тема" ? -1 : 1;
+    if(a[1] !== b[1]) return a[1].localeCompare(b[1]);
+    return a[2].localeCompare(b[2]);
+  });
+  return rows;
+}
+
+$("#sumbtn").onclick=async()=>{
+  await loadBookings();
+  const r=sumRows();
+  $("#sbody").innerHTML = r.length
+    ? r.map(x=>`<tr>
+        <td class="${x[0]==="Тема"?"type-topic":"type-slot"}">${esc(x[0])}</td>
+        <td>${esc(x[1])}</td>
+        <td>${esc(x[2])}</td>
+        <td>${esc(x[3])}</td>
+        <td class="ok">${esc(x[4])}</td>
+      </tr>`).join("")
+    : '<tr><td colspan="5">Пока ничего не занято</td></tr>';
+  $("#sdlg").showModal();
+};
 $("#sclose").onclick=()=>$("#sdlg").close();
-$("#scsv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"',rows=[["Дисциплина","Задание","Тема","Занял(а)"],...sumRows()];
- const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+rows.map(r=>r.map(q).join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"}));a.download="bronirovanie.csv";a.click()};
+$("#scsv").onclick=()=>{
+  const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+  const rows=[["Тип","Дисциплина","Задание","Тема / Место","Кто"],...sumRows()];
+  const csv = "\ufeff" + rows.map(r=>r.map(q).join(";")).join("\r\n");
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+  a.download="svodka.csv";
+  a.click();
+};
 
 async function openFile(m){
   if(!m) return;
   try{
-    const r=await fetch("files/"+m.id);if(!r.ok)throw 0;
+    const r=await fetchT("files/"+m.id, {}, FETCH_TIMEOUT);
+    if(!r.ok)throw 0;
     const a=document.createElement("a");a.href=URL.createObjectURL(await r.blob());a.download=m.name;a.click();
     setTimeout(()=>URL.revokeObjectURL(a.href),4000);
   }catch(e){toast("Не удалось скачать файл",3500,"bad")}
@@ -1257,8 +1376,15 @@ $("#acancel").onclick=()=>$("#adlg").close();
 $("#af").onsubmit=async()=>{
  cfg={o:$("#a-b").value.trim(),r:$("#a-k").value.trim(),t:$("#a-s").value.trim()};
  toast("Проверяю доступ…",0,"loading");
- try{await pull();await publish();ls.set("dl-admin",cfg);render();toast("Вы вошли как администратор",3500,"ok")}catch(e){cfg=null;render();toast(errMsg(e),6000,"bad")}};
-$("#logout").onclick=()=>{cfg=null;ls.del("dl-admin");exitSelectMode();render()};
+ try{
+   await pull();
+   // Пробуем записать, чтобы проверить доступ (и зафиксировать dataSha)
+   await publish();
+   ls.set("dl-admin",cfg);
+   render();
+   toast("Вы вошли как администратор",3500,"ok");
+ }catch(e){cfg=null;render();toast(errMsg(e),6000,"bad")}};
+$("#logout").onclick=()=>{cfg=null;dataSha=null;ls.del("dl-admin");exitSelectMode();render()};
 
 function urlB64ToUint8Array(base64String){
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -1283,8 +1409,8 @@ async function enablePush(){
     let sub = await reg.pushManager.getSubscription();
     if(!sub){ sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY) }); }
     const j = sub.toJSON();
-    await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY } });
-    const r = await fetch(SB_URL + "/rest/v1/push_subs", { method:"POST", headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" }, body: JSON.stringify({ endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth, name: ls.get("dl-name", null), user_agent: navigator.userAgent.slice(0, 200) }) });
+    await fetchT(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), { method: "DELETE", headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY } }, FETCH_TIMEOUT);
+    const r = await fetchT(SB_URL + "/rest/v1/push_subs", { method:"POST", headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": "application/json", "Prefer": "return=minimal" }, body: JSON.stringify({ endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth, name: ls.get("dl-name", null), user_agent: navigator.userAgent.slice(0, 200) }) }, FETCH_TIMEOUT);
     if(!r.ok) throw new Error("HTTP " + r.status);
     ls.set("dl-push-enabled", true); updatePushBtn(); toast("Уведомления включены", 4000, "ok");
   }catch(e){ toast("Не удалось включить", 5000, "bad"); }
@@ -1293,16 +1419,14 @@ async function disablePush(){
   try{
     const reg = await navigator.serviceWorker.ready;
     const sub = await reg.pushManager.getSubscription();
-    if(sub){ const j = sub.toJSON(); await fetch(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), { method: "DELETE", headers: {"apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY} }); await sub.unsubscribe(); }
+    if(sub){ const j = sub.toJSON(); await fetchT(SB_URL + "/rest/v1/push_subs?endpoint=eq." + encodeURIComponent(j.endpoint), { method: "DELETE", headers: {"apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY} }, FETCH_TIMEOUT); await sub.unsubscribe(); }
     ls.set("dl-push-enabled", false); updatePushBtn(); toast("Уведомления отключены", 3500, "info");
   }catch(e){ toast("Ошибка отключения", 4500, "bad"); }
 }
 $("#pushbtn").onclick = () => { if(ls.get("dl-push-enabled", false)) { if(confirm("Отключить?")) disablePush(); } else { enablePush(); } };
 
 /* ===== Пасхалка: Лобасов ===== */
-function isLobasov(name){
-  return /лоб[ао]с/i.test(String(name || ""));
-}
+function isLobasov(name){ return /лоб[ао]с/i.test(String(name || "")); }
 function showLobasov(){
   const dlg = $("#lobasovDlg");
   if(!dlg) return;
@@ -1341,23 +1465,3 @@ function startWarnings(){
       if(cur==="_archive") cur="all";
       COLLAPSED_GROUPS.delete("today"); saveCollapsed(); render();
       setTimeout(()=>window.scrollTo({top:0,behavior:"smooth"}),100);
-    }}),over>0?2500:700);
-  }
-}
-
-cfg=ls.get("dl-admin",null);
-(cfg?pull().catch(loadData):loadData()).then(()=>{
-  render(); loadBookings(); startWarnings();
-  if(location.hash.startsWith("#task-")){
-    const id = location.hash.slice(6);
-    setTimeout(()=>openTaskDetail(id), 600);
-  }
-});
-setInterval(()=>{if(SB_URL)loadBookings()},30000);
-
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{ navigator.serviceWorker.register('service-worker.js').then(()=>{ updatePushBtn(); }).catch(()=>{}); });
-}
-</script>
-</body>
-</html>
